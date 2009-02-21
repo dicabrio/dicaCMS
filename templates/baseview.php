@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title><?php echo $sTitle; ?></title>
+		<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8">
+		<link rel="stylesheet" href="<?php echo CSS_URL; ?>/style.css" media="screen" />
+		<?php if (isset($aScripts)) : ?>
+			<?php foreach ($aScripts as $oScript) : ?>
+				<script type="text/javascript" src="<?php echo $oScript->getSrc() ?>"></script>
+			<?php endforeach; ?>
+		<?php endif; ?>
+	</head>
+	<body>
+		<div id="header">
+			<h1>CMS</h1>
+			<?php echo $oMainMenu->getContents(); ?>
+		</div>
+		<div id="modules">
+			<?php echo $oSubMenu->getContents(); ?>
+		</div>
+		
+		<div id="main">
+			<?php if (isset($oModule)) : ?>
+			<?php echo $oModule->getContents(); ?>
+			<?php endif; ?>			
+		</div>
+		
+		<div id="footer">footer</div>
+	</body>
+</html>
