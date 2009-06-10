@@ -4,7 +4,7 @@
 	<head>
 		<title><?php echo $sTitle; ?></title>
 		<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8">
-		<link rel="stylesheet" href="<?php echo CSS_URL; ?>/style.css" media="screen" />
+		<link rel="stylesheet" href="<?php echo Conf::get('general.url.css'); ?>/style.css" media="screen" />
 		<?php if (isset($aScripts)) : ?>
 			<?php foreach ($aScripts as $oScript) : ?>
 				<script type="text/javascript" src="<?php echo $oScript->getSrc() ?>"></script>

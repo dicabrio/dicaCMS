@@ -1,42 +1,66 @@
 <?php
-/*
- * Created on 26 apr 2008
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
 
-include_once('../etc/config.inc.php');
+// define the system directory
+define('SYS_DIR', realpath('../'));
 
-// some action may only be done by post like updating or
-// ordering
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$_REQUEST['REQUEST_METHOD'] = 'POST';
-} else {
-	$_REQUEST['REQUEST_METHOD'] = 'GET';
-}
+// currentfile
+define('CURRENT_FILE', str_replace(dirname(__FILE__).'/', '', $_SERVER['SCRIPT_FILENAME']));
 
+//define the www directory. This could be different on every machine
+define('WWW_DIR', realpath('.'));
+
+define('SYS_DIR', realpath('../'));
+
+define('LIB_DIR', SYS_DIR.'/dica');
+
+$classPaths = array();
+$classPaths[] = LIB_DIR.'/controller';
+$classPaths[] = LIB_DIR.'/gui';
+$classPaths[] = LIB_DIR.'/data';
+$classPaths[] = LIB_DIR.'/data/util';
+$classPaths[] = LIB_DIR.'/data/model';
+$classPaths[] = LIB_DIR.'/util';
+$classPaths[] = LIB_DIR.'/service';
+$classPaths[] = LIB_DIR.'/modules';
+
+$includePath = implode(':', $classPaths);
+ini_set('include_path', ini_get('include_path').':'.$includePath.':');
+
+include_once(SYS_DIR.'/etc/config.inc.php');
+
+include_once('functions.inc.php');
 
 try
 {
-	$dbh = new PDO(DB_TYPE.':dbname='.DB_NAME.';host='.DB_HOST, DB_USER, DB_PASS);
-	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	// import modules
+	Util::importModules(LIB_DIR.'/modules');
+	
+	Conf::setServer(DOMAIN);
+	
+	Conf::setDirectory(CONFIG_DIR);
 
-	DataFactory::setConnection($dbh);
-	Template::setTemplateDirectory(TEMPLATES_DIR);
-	View::setTemplateDirectory(TEMPLATES_DIR);
-	Lang::setDirectory(LANG_DIR);
-	Lang::setLang(LANG);
+	$oDatabase = new PDO(Conf::get('database.type').':dbname='.Conf::get('database.name').';host='.Conf::get('database.host'), 
+						Conf::get('database.user'), 
+						Conf::get('database.pass'));
+						
+	$oDatabase->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	DataFactory::setConnection($oDatabase);
+	
+	View::setTemplateDirectory(Conf::get('general.dir.templates'));
+	
+	Lang::setDirectory(Conf::get('general.dir.templates'));
+	
+	Lang::setLang(Conf::get('general.default_lang'));
 
 }
 catch(Exception $e)
 {
-	if (DEBUG) {
+//	if (DEBUG) {
 		test($e);
-	} else {
-		Util::gotoPage(WWW_URL.'/oeps.php');
-	}
+//	} else {
+//		Util::gotoPage(WWW_URL.'/oeps.php');
+//	}
 }
 
 
-?>
