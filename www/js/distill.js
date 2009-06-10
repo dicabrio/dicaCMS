@@ -4,6 +4,7 @@
  * thanks to Bryan Price
  * requires the jQuery library : http://www.jquery.com
  */
+
 (function($) {
 	var EventClasses	= {}
 	,	EventNames		= {};
