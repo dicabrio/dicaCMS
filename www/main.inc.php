@@ -11,7 +11,7 @@ define('WWW_DIR', realpath('.'));
 
 define('SYS_DIR', realpath('../'));
 
-define('LIB_DIR', SYS_DIR.'/dica');
+define('LIB_DIR', SYS_DIR.'/lib');
 
 $classPaths = array();
 $classPaths[] = LIB_DIR.'/controller';
@@ -49,7 +49,7 @@ try
 	
 	View::setTemplateDirectory(Conf::get('general.dir.templates'));
 	
-	Lang::setDirectory(Conf::get('general.dir.templates'));
+	Lang::setDirectory(Conf::get('general.dir.lang'));
 	
 	Lang::setLang(Conf::get('general.default_lang'));
 
@@ -58,6 +58,7 @@ catch(Exception $e)
 {
 //	if (DEBUG) {
 		test($e);
+		exit;
 //	} else {
 //		Util::gotoPage(WWW_URL.'/oeps.php');
 //	}

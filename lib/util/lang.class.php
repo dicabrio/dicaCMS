@@ -5,18 +5,29 @@
  */
 class Lang
 {
-	const C_LANG_EXT = 'php';
-
 	/**
 	 * @var string
 	 */
-	private static $sDirName = '/lang';
+	const C_LANG_EXT = 'php';
+	
+	/**
+	 * @var string
+	 */
+	const C_FILE_PREFIX = 'dict';
 
 	/**
-	 * @var array
+	 * @var string 
+	 */
+	private static $sDirName = 'lang';
+
+	/**
+	 * @var array language cache
 	 */
 	private static $lang = array();
 	
+	/**
+	 * @var string default lang
+	 */
 	private static $l = 'EN';
 
 	/**
@@ -42,14 +53,16 @@ class Lang
 			$sLangFile = array_shift($aFields);
 			
 			if (!isset(self::$lang[$sLangFile])) {
-				if (!file_exists(self::$sDirName.'/'.self::$l.'/'.strtolower($sLangFile).'.'.self::C_LANG_EXT)) {
+				
+				$sFileToInclude = self::$sDirName.'/'.self::$l.'/'.self::C_FILE_PREFIX.strtolower($sLangFile).'.'.self::C_LANG_EXT; 
+				if (!file_exists($sFileToInclude)) {
 					return $psFieldname;
 				}
 				
-				require_once(self::$sDirName.'/'.self::$l.'/'.strtolower($sLangFile).'.'.self::C_LANG_EXT);
+				require_once($sFileToInclude);
 				self::$lang[$sLangFile] = $lang;
 			}
-	
+			
 			return Util::arrayPath(self::$lang, $psFieldname);
 		} else {
 			throw new InvalidArgumentException('given language is not available: '.$psFieldname);
