@@ -1,7 +1,10 @@
 <?php
 
-class RequestControllerProtocol implements ServiceProtocol
-{
+class RequestControllerProtocol implements ServiceProtocol {
+
+	/**
+	 * @var string
+	 */
 	const SUFFIX = "Controller";
 
 	/**
@@ -10,22 +13,36 @@ class RequestControllerProtocol implements ServiceProtocol
 	 */
 	const ACTION_DEFAULT 	= "_default";
 
+	/**
+	 * @var string
+	 */
 	const ACTION_INDEX 		= "_index";
 
+	/**
+	 * @var string
+	 */
 	const ACTION_404		= "_default";
 
+	/**
+	 * @var array
+	 */
 	private $arguments;
 
+	/**
+	 * @var Controller
+	 */
 	private $controller;
 
+	/**
+	 * @var string
+	 */
 	private $result;
 
 	/**
 	 * execute the stuff
 	 *
 	 */
-	public function execute()
-	{
+	public function execute() {
 
 		try
 		{
@@ -50,7 +67,7 @@ class RequestControllerProtocol implements ServiceProtocol
 				// or the default for now the index
 				$oReflMethod = $reflection->getMethod(self::ACTION_404);
 			}
-				
+
 			// we need to check if it is a valid controller
 			if (!($reflection->implementsInterface('Controller'))) {
 				throw new Exception('Not a valid Controller');
@@ -58,15 +75,12 @@ class RequestControllerProtocol implements ServiceProtocol
 			$controller = $reflection->newInstance($oReflMethod->getName());
 			$controller->setArguments($this->arguments);
 			$this->result = $oReflMethod->invokeArgs($controller, array());
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			throw new ProtocolException($e->getMessage());
 		}
 	}
 
-	public function decode($newData)
-	{
+	public function decode($newData) {
 		$this->arguments = $newData;
 	}
 
@@ -75,8 +89,7 @@ class RequestControllerProtocol implements ServiceProtocol
 	 *
 	 * @return string
 	 */
-	public function encode()
-	{
+	public function encode() {
 		return $this->result;
 	}
 
@@ -98,22 +111,14 @@ class RequestControllerProtocol implements ServiceProtocol
 		}
 	}
 
-	public function error($message)
-	{
-		echo $message;
-		exit;
-		//Util::gotoPage(WWW_URL.'/404.php');
+	public function error($message) {
+
+		if ($message instanceof Exception) {
+			throw $message;
+		} else if (is_string($message)) {
+			throw new Exception($message);
+		}
 	}
 
-	/**
-	 * let see what kind of querie I have called
-	 *
-	 */
-	public function __destruct() {
-		//test(QueryCache::$queries);
-		//test(QueryCache::$querycounts);
-	}
 }
 
-
-?>

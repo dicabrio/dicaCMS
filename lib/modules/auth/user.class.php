@@ -1,14 +1,12 @@
 <?php
 
-class User extends DataRecord
-{
+class User extends DataRecord {
 	/**
 	 * constructor
 	 *
 	 * @param int $id
 	 */
-	public function __construct($id=null)
-	{
+	public function __construct($id=null) {
 		parent::__construct(__CLASS__, $id);
 	}
 
@@ -16,8 +14,7 @@ class User extends DataRecord
 	 * define the columns of the table you want to access with this object
 	 *
 	 */
-	protected function defineColumns()
-	{
+	protected function defineColumns() {
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('email', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('username', DataTypes::VARCHAR, 30, true);
@@ -73,22 +70,19 @@ class User extends DataRecord
 			$this->active = 0;
 		}
 	}
-	
+
 	public static function getByUsernameAndPassword($sUsername, $sPassword) {
-		$oQP = new QueryPart('username = :username AND password = MD5(:password) AND active = :active');
-		$oQP->addBind('username', $sUsername);
-		$oQP->addBind('password', $sPassword);
-		$oQP->addBind('active', 1);
-		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, $oQP);
+		$oCrit = new Criteria('username = :username AND password = MD5(:password) AND active = :active');
+		$oCrit->addBind('username', $sUsername);
+		$oCrit->addBind('password', $sPassword);
+		$oCrit->addBind('active', 1);
+		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, $oCrit);
 		if (count($aReturnVals) > 0) {
 			return reset($aReturnVals);
 		}
-		
+
 		return false;
 	}
-	
+
 }
 
-
-
-?>

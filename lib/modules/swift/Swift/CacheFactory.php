@@ -17,31 +17,31 @@ require_once dirname(__FILE__) . "/ClassLoader.php";
  */
 class Swift_CacheFactory
 {
-  /**
-   * The name of the class which defines the cache
-   * @var string Case SenSITivE
-   */
-  protected static $className = "Swift_Cache_Memory";
-  
-  /**
-   * Set the name of the class which is supposed to be used
-   * This also includes the file
-   * @param string The class name
-   */
-  public static function setClassName($name)
-  {
-    Swift_ClassLoader::load($name);
-    self::$className = $name;
-  }
-  /**
-   * Return a new instance of the cache object
-   * @return Swift_Cache
-   */
-  public static function getCache()
-  {
-    $className = self::$className;
-    Swift_ClassLoader::load($className);
-    $instance = new $className();
-    return $instance;
-  }
+	/**
+	 * The name of the class which defines the cache
+	 * @var string Case SenSITivE
+	 */
+	protected static $className = "Swift_Cache_Memory";
+
+	/**
+	 * Set the name of the class which is supposed to be used
+	 * This also includes the file
+	 * @param string The class name
+	 */
+	public static function setClassName($name)
+	{
+		Swift_ClassLoader::load($name);
+		self::$className = $name;
+	}
+	/**
+	 * Return a new instance of the cache object
+	 * @return Swift_Cache
+	 */
+	public static function getCache()
+	{
+		$className = self::$className;
+		Swift_ClassLoader::load($className);
+		$instance = new $className();
+		return $instance;
+	}
 }

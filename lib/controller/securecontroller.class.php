@@ -3,9 +3,9 @@
 Util::import(LIB_DIR.'/modules/auth');
 
 class SecureController implements Controller {
-	
+
 	const C_AUTH_SESSIONNAME = 'CMS';
-	
+
 	protected $arguments;
 
 	public function __construct($sMethod) {
@@ -36,7 +36,7 @@ class SecureController implements Controller {
 	public function _default() {
 		return '_default';
 	}
-	
+
 	public function logout() {
 		Util::gotoPage(Conf::get('general.url.www').'/logout');
 	}

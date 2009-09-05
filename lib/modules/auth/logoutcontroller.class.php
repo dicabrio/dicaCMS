@@ -15,7 +15,7 @@ class LogoutController implements Controller {
 		// getting the session
 		$oSession = Session::getInstance();
 		$oSession->destroy();
-        // check for post and handle authentication
+		// check for post and handle authentication
 		$sError = '';
 		$oTpl = new Template();
 		$oTpl->setTemplateFile('/login/login.html');
@@ -23,7 +23,7 @@ class LogoutController implements Controller {
 		$oTpl->assign('username', '');
 		$oTpl->assign('error', $sError);
 		return $oTpl->getContents();
-		
+
 	}
 
 

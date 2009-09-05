@@ -16,18 +16,18 @@
  */
 interface Swift_Authenticator
 {
-  /**
-   * Try to authenticate using the username and password
-   * Returns false on failure
-   * @param string The username
-   * @param string The password
-   * @param Swift The instance of Swift this authenticator is used in
-   * @return boolean
-   */
-  public function isAuthenticated($username, $password, Swift $instance);
-  /**
-   * Return the name of the AUTH extension this is for
-   * @return string
-   */
-  public function getAuthExtensionName();
+	/**
+	 * Try to authenticate using the username and password
+	 * Returns false on failure
+	 * @param string The username
+	 * @param string The password
+	 * @param Swift The instance of Swift this authenticator is used in
+	 * @return boolean
+	 */
+	public function isAuthenticated($username, $password, Swift $instance);
+	/**
+	 * Return the name of the AUTH extension this is for
+	 * @return string
+	 */
+	public function getAuthExtensionName();
 }

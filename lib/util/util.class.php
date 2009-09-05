@@ -2,12 +2,10 @@
 
 class ClassException extends Exception {}
 
-class Util
-{
+class Util {
 	private static $url = null;
 
-	public static function validClass($className)
-	{
+	public static function validClass($className) {
 		if (!class_exists($className, true)) {
 			throw new ClassException('Specified '.$className.' cannot be found');
 		}
@@ -19,8 +17,7 @@ class Util
 	 * @param int $index the segment of the url string
 	 * @return string
 	 */
-	public static function getUrlSegment($index)
-	{
+	public static function getUrlSegment($index) {
 		if (self::$url != null && isset(self::$url[$index])) {
 
 			return self::$url[$index];
@@ -38,8 +35,7 @@ class Util
 		return "";
 	}
 
-	public static function gotoPage($sPageName)
-	{
+	public static function gotoPage($sPageName) {
 		header('location:'.$sPageName);
 		exit;
 	}
@@ -90,9 +86,12 @@ class Util
 		while (false !== ($sModule = $oDir->read())) {
 			$sImportMod = $sModuleLocation.'/'.$sModule;
 			if (is_dir($sImportMod)) {
+				//		test($sImportMod);
 				Util::import($sImportMod);
 			}
 		}
+
+		//		test(str_replace(':', "\n", ini_get('include_path')));
 	}
 }
 

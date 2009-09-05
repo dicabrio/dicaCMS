@@ -4,14 +4,14 @@
  *	The Session class
  *	This class is an extend of the Singleton class. This means that you will get only
  * 	on instance of the session class. As only one user can be logged in!.
- */ 
+ */
 class Session
 {
 	private static $m_oInstance;
-	
+
 	private $aSessionVars;
-	
-	
+
+
 	/**
 	 *	Session::__construct()
 	 *
@@ -24,10 +24,10 @@ class Session
 		// Start the session
 		session_name($sSessionName);
 		session_start();
-		$this->aSessionVars = &$_SESSION; //reference to the session object 
-		
+		$this->aSessionVars = &$_SESSION; //reference to the session object
+
 	}
-	
+
 	public function get($key)
 	{
 		if (!isset($this->aSessionVars[$key])) {
@@ -36,24 +36,24 @@ class Session
 		//return unserialize($this->aSessionVars[$key]);
 		return ($this->aSessionVars[$key]);
 	}
-	
+
 	public function set($key, $value)
 	{
 		//$this->aSessionVars[$key] = serialize($value);
 		$this->aSessionVars[$key] = ($value);
 	}
-	
-	
+
+
 	public function has($key) {
 		return isset($this->aSessionVars[$key]);
 	}
-	
+
 	public function destroy()
 	{
 		unset($_SESSION);
 		session_destroy();
 	}
-	
+
 	/**
 	 * Singleton::getInstance()
 	 *

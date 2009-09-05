@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * 
+ *
  */
 class PageDataSet implements ITableDataSet {
 
@@ -31,11 +31,11 @@ class PageDataSet implements ITableDataSet {
 			if ($oPageRecord->isFolder()) {
 				$sImage = 'icon-folder.png';
 				$sEditLink = 'editfolder';
-				$sTitle = Html::getAnchor($oPageRecord->getPagename(), Conf::get('general.url.www').'/page/folder/'.$iPageID);
+				$sTitle = Html::getAnchor($oPageRecord->getName(), Conf::get('general.url.www').'/page/folder/'.$iPageID);
 			} else {
 				$sImage = 'icon-file.png';
 				$sEditLink = 'editpage';
-				$sTitle = $oPageRecord->getPagename();
+				$sTitle = $oPageRecord->getName();
 			}
 
 			$sTitle = '<img src="'.Conf::get('general.url.images').'/'.$sImage.'" alt="" />'.$sTitle;

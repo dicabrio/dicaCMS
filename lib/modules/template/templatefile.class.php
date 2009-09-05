@@ -1,9 +1,12 @@
 <?php
 
-class TemplateFile extends DataRecord
-{
-	public function __construct($id=null)
-	{
+class TemplateFile extends DataRecord {
+
+	/**
+	 * @param int $id
+	 * @return void
+	 */
+	public function __construct($id=null) {
 		parent::__construct(__CLASS__, $id);
 
 		if ($id == 0) {
@@ -11,14 +14,16 @@ class TemplateFile extends DataRecord
 		}
 	}
 
-	protected function defineColumns()
-	{
+	/**
+	 * @return void
+	 */
+	protected function defineColumns() {
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('description', DataTypes::TEXT, 500, true);
 		parent::addColumn('filename', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('path', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('folder', DataTypes::INT, false, true);
+		parent::addColumn('isfolder', DataTypes::INT, false, true);
 		parent::addColumn('parent_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
 	}
@@ -76,7 +81,7 @@ class TemplateFile extends DataRecord
 	 * @return unknown
 	 */
 	public function isFolder() {
-		if ($this->folder == 1) {
+		if ($this->isfolder == 1) {
 			return true;
 		}
 
@@ -91,9 +96,9 @@ class TemplateFile extends DataRecord
 	public function setFolder($bFolder) {
 
 		if ($bFolder == true) {
-			$this->folder =  1;
+			$this->isfolder =  1;
 		} else if ($bFolder == false) {
-			$this->folder = 0;
+			$this->isfolder = 0;
 		}
 	}
 
@@ -130,15 +135,15 @@ class TemplateFile extends DataRecord
 	}
 
 	public static function getByParent($iParentID) {
-		return parent::findAll(__CLASS__, parent::ALL, new QueryPart(' parent_id = :parentid', array('parentid' => $iParentID)));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid', array('parentid' => $iParentID)));
 	}
 
 	public static function getAll() {
 		return parent::findAll(__CLASS__, parent::ALL);
 	}
-	
+
 	public static function getFiles() {
-		return parent::findAll(__CLASS__, parent::ALL, new QueryPart(' folder = :folder', array('folder' => 0)));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' isfolder = :folder', array('folder' => 0)));
 	}
 
 }

@@ -1,0 +1,1 @@
+<label><?php echo $sIdentifier; ?></label><textarea name="<?php echo $sIdentifier; ?>"><?php echo $sContent; ?></textarea>

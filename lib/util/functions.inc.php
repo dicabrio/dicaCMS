@@ -1,18 +1,38 @@
 <?php
 
+class RecoverableError extends Exception {}
+
+function __errorHandler($iErrorNo, $sErrorStr, $sErrorFile='', $sErrorline='', $aErrorContext='') {
+	throw new RecoverableError('An error occurred: Error '.$sErrorStr.' in file '.$sErrorFile.' on line '.$sErrorline);
+}
+
+function __exceptionHandler($oException) {
+
+	if (DEBUG === true) {
+		echo 'An Error occurred:';
+		test($oException);
+		exit;
+	} else {
+		$oView = new View('error.php');
+		echo $oView->getContents();
+		exit;
+	}
+}
+
+
 function __autoload($psClassName) {
 	if (!class_exists($psClassName)) {
 		// you also can add a class like this data.DataArguments this will be data/DataArguments accordingly
 		if (false === strpos('..', $psClassName)) {
 			$classFile = str_replace('.', '/', strtolower($psClassName)).'.class.php';
-			include_once($classFile);
+			require($classFile);
 		}
 	}
 }
 
 function test($pVar) {
 	if (is_string($pVar)) {
-		echo '>'.$pVar.'<';
+		echo '<pre>>'.$pVar.'<</pre>';
 	} else {
 		echo '<pre>';
 		print_r($pVar);

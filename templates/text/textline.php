@@ -1,0 +1,1 @@
+<label><?php echo $sIdentifier; ?>:</label><input type="text" name="<?php echo $sIdentifier; ?>" value="<?php echo $sContent; ?>" maxlength="<?php echo $sMaxLength; ?>" />

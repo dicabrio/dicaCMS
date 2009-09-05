@@ -17,10 +17,10 @@
  */
 abstract class Swift_Plugin_VerboseSending_AbstractView
 {
-  /**
-   * Paint the result of a send operation
-   * @param string The email address that was tried
-   * @param boolean True if the message was successfully sent
-   */
-  abstract public function paintResult($address, $result);
+	/**
+	 * Paint the result of a send operation
+	 * @param string The email address that was tried
+	 * @param boolean True if the message was successfully sent
+	 */
+	abstract public function paintResult($address, $result);
 }

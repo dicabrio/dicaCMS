@@ -3,17 +3,17 @@
 
 
 class Menu extends View {
-	
+
 	/**
 	 * @var array
 	 */
 	private $aMenuItems = array();
-	
+
 	/**
 	 * @var View
 	 */
 	private $oView;
-	
+
 	/**
 	 * Enter description here...
 	 *
@@ -24,21 +24,21 @@ class Menu extends View {
 		$this->oView = new View('menu/menu.php');
 		$this->oView->assign('sIdentifier', $sIdentifier);
 	}
-	
+
 	/**
 	 * @param MenuItem $oItem
 	 */
 	public function addItem(MenuItem $oItem) {
 		$this->aMenuItems[] = $oItem;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getContents() {
-		
+
 		$this->oView->assign('aMenuItems', $this->aMenuItems);
 		return $this->oView->getContents();
 	}
-	
+
 }

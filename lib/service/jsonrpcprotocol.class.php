@@ -9,7 +9,7 @@ class JsonRpcProtocol implements ServiceProtocol
 	{
 		$this->data = $pData;
 	}
-	
+
 	public function encode()
 	{
 		return json_encode($this->data);
@@ -20,8 +20,8 @@ class JsonRpcProtocol implements ServiceProtocol
 		$actionHandler = $this->data->actionHandler.'ActionHandler';
 		$handler = new $actionHandler();
 		if (!($handler instanceof ActionHandler))
-			throw new ProtocolException('Not a valid handler');
-				
+		throw new ProtocolException('Not a valid handler');
+
 		try
 		{
 			$this->data->result = $handler->execute($this->data->arguments);
@@ -33,7 +33,7 @@ class JsonRpcProtocol implements ServiceProtocol
 	}
 
 	/**
-	 * Validate the data 
+	 * Validate the data
 	 * TODO: extend with some validation lib
 	 *
 	 */
@@ -58,7 +58,7 @@ class JsonRpcProtocol implements ServiceProtocol
 			throw new ProtocolException("Method can't be found", 32601);
 		}
 	}
-	
+
 	public function error($error)
 	{
 		// contruct object

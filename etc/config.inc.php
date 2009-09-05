@@ -12,9 +12,9 @@ define('DOMAIN', $_SERVER['HTTP_HOST']);
 
 define('CONFIG_DIR', SYS_DIR.'/etc');
 
-// comment
 define('LANG', 'NL');
 
 error_reporting(E_ALL);
+
 ini_set('display_errors', 1);
 

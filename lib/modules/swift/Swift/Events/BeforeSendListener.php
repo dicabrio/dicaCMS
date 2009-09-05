@@ -17,9 +17,9 @@
  */
 interface Swift_Events_BeforeSendListener extends Swift_Events_Listener
 {
-  /**
-   * Executes just before Swift sends a message
-   * @param Swift_Events_SendEvent Information about the message being sent
-   */
-  public function beforeSendPerformed(Swift_Events_SendEvent $e);
+	/**
+	 * Executes just before Swift sends a message
+	 * @param Swift_Events_SendEvent Information about the message being sent
+	 */
+	public function beforeSendPerformed(Swift_Events_SendEvent $e);
 }

@@ -1,7 +1,20 @@
 			<h2>New Page</h2>
-			<fieldset>
-				<legend>New page</legend>
-				<form action="<?php echo WWW_URL; ?>/page/editpage/" name="newpage" method="post">
+			
+			<ul id="tabmenu">
+				<li class="active"><a href="#" class="pageinfo">Page information</a></li>
+				<li><a href="#" class="modulesinfo">Content</a></li>
+			</ul>
+					
+			<form action="<?php echo $sPageEditFormAction; ?>" name="newpage" method="post">
+				
+				<fieldset>
+					<legend>Actions</legend>
+					<input type="submit" value="save" name="action" />
+					<input type="submit" value="cancel" name="action" />
+				</fieldset>
+				
+				<fieldset class="tab" id="pageinfo">
+					<legend>Page information</legend>
 					<?php if (count($aErrors) > 0) : ?>
 					<ul class="error">
 					<?php foreach ($aErrors as $sError) : ?>
@@ -66,32 +79,33 @@
 									<label for="active">Active: </label>
 								</td>
 								<td>
-									<input type="checkbox" name="active" id="active" value="<?php echo $iActive; ?>" />
-								</td>
-							</tr>
-							<tr>
-								<td>&nbsp;</td>
-								<td>
-									<input type="submit" value="save" name="action" />
-									<input type="submit" value="cancel" name="action" />
+									<input type="checkbox" name="active" id="active" value="1"<?php if ($iActive) : ?> checked="checked" <?php endif; ?>/>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 					<input type="hidden" name="page_id" value="<?php echo $iPageID; ?>" />
-				</form>
-			</fieldset>
-			<?php if ($iPageID != 0) :?>
-			<fieldset>
-				<legend>Modules</legend>
-				<?php if (count($aModules) == 0) : ?>
-					No modules for this page
-				<?php else: ?>
-				<ul>
-				<?php foreach ($aModules as $aModule) :?>
-					<li><?php echo $aModule['id']; ?> (<?php echo $aModule['module']; ?>) <a href="#">Edit</a></li>
-				<?php endforeach; ?>
-				</ul>
-				<?php endif;?>
-			</fieldset>
-			<?php endif; ?>
+				</fieldset>
+				<?php if ($iPageID != 0) :?>
+				<fieldset class="tab" id="modulesinfo">
+					<legend>Content</legend>
+					<?php if (count($aModules) == 0) : ?>
+						No modules for this page
+					<?php else: ?>
+					
+					<?php foreach ($aModules as $oModule) :?>
+						<div class="pagemodule <?php echo $oModule->sIdentifier; ?>"><?php echo $oModule->getContents(); ?></div>
+					<?php endforeach; ?>
+					
+					
+					<?php endif;?>
+				</fieldset>
+				<?php endif; ?>
+				
+				<fieldset>
+					<legend>Actions</legend>
+					<input type="submit" value="save" name="action" />
+					<input type="submit" value="cancel" name="action" />
+				</fieldset>
+			</form>
+			

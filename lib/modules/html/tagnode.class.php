@@ -8,35 +8,35 @@
  */
 class TagNode implements Node {
 
-	private $nodeName = '';
+	private $sNodeName = '';
 
 	/**
 	 * the attributes for this Tag
 	 *
-	 * @var Collection
+	 * @var ArrayObject
 	 */
-	private $attributes;
+	private $oAttributes;
 
 	/**
 	 * Enter description here...
 	 *
-	 * @var Collection
+	 * @var ArrayObject
 	 */
-	private $children;
+	private $oChildren;
 
 	/**
 	 * TODO validate the tags given as param
 	 *
-	 * @param string $nodeName
+	 * @param string $sNodeName
 	 */
-	public function __construct($nodeName) {
-		$this->nodeName = $nodeName;
-		$this->attributes = new Collection();
-		$this->children = new Collection();
+	public function __construct($sNodeName) {
+		$this->sNodeName = $sNodeName;
+		$this->aAttributes = new ArrayObject();
+		$this->aChildren = new ArrayObject();
 	}
 
 	public function addAttribute($attr, $attrValue) {
-		$this->attributes->set($attr, $attrValue);
+		$this->aAttributes->offsetSet($attr, $attrValue);
 	}
 
 	/**
@@ -45,7 +45,7 @@ class TagNode implements Node {
 	 * @param Tag $tag
 	 */
 	public function addChild(Node $node) {
-		$this->children->set(null, $node);
+		$this->aChildren->offsetSet(null, $node);
 	}
 
 	/**
@@ -56,24 +56,24 @@ class TagNode implements Node {
 	public function __toString() {
 
 		if ($this->hasChildren()) {
-			$sNode = '<'.$this->nodeName.$this->getAttrString().'>';
+			$sNode = '<'.$this->sNodeName.$this->getAttrString().'>';
 
-			foreach ($this->children->toArray() as $node) {
+			foreach ($this->aChildren as $node) {
 				$sNode .= $node->__toString();
 			}
 
-			$sNode .= '</'.$this->nodeName.'>';
+			$sNode .= '</'.$this->sNodeName.'>';
 			return $sNode;
 		}
 
-		$sNode = '<'.$this->nodeName.$this->getAttrString().' />';
+		$sNode = '<'.$this->sNodeName.$this->getAttrString().' />';
 		return $sNode;
 	}
 
 	private function getAttrString() {
 		if ($this->hasAttributes()) {
 			$sAttrString = " ";
-			foreach ($this->attributes->toArray() as $attrName => $attrValue) {
+			foreach ($this->aAttributes as $attrName => $attrValue) {
 				$sAttrString .= $attrName.'="'.$attrValue.'" ';
 			}
 			return $sAttrString;
@@ -82,7 +82,7 @@ class TagNode implements Node {
 	}
 
 	public function hasAttributes() {
-		if ($this->attributes->size() > 0) {
+		if ($this->aAttributes->count() > 0) {
 			return true;
 		}
 
@@ -95,7 +95,7 @@ class TagNode implements Node {
 	 * @return bool
 	 */
 	public function hasChildren() {
-		if ($this->children->size() > 0) {
+		if ($this->aChildren->count() > 0) {
 			return true;
 		}
 
@@ -103,4 +103,3 @@ class TagNode implements Node {
 	}
 }
 
-?>

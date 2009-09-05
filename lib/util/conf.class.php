@@ -42,7 +42,7 @@ class Conf {
 				// the $config variable is defined in the configfile
 				self::$aConf[$sConfFile] = $config;
 			}
-				
+
 			return Util::arrayPath(self::$aConf, $psFieldname);
 		} else {
 			throw new InvalidArgumentException('given config is not available: '.$psFieldname);

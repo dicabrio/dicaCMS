@@ -2,9 +2,9 @@
 
 $config = array(
 
-	'type' => 'mysql',
-	'host' => 'localhost',
-	'name' => 'dicabrio',
-	'user' => 'dicabrio',
-	'pass' => 'robcabri',
+	'dbtype' => 'mysql',
+	'dbhost' => 'localhost',
+	'dbname' => 'dicacms',
+	'dbuser' => '****',
+	'dbpass' => '****',
 );

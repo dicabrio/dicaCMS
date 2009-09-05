@@ -1,7 +1,5 @@
 <?php
 
-Util::import(LIB_DIR.'/modules/auth');
-
 class LoginController implements Controller {
 
 	const C_AUTH_SESSIONNAME = 'CMS';
@@ -41,6 +39,7 @@ class LoginController implements Controller {
 		}
 
 		$oView = new View('login/login.php');
+		$oView->assign('sFormAction', Conf::get('general.url.www'));
 		$oView->assign('sUsername', $oReq->post('username'));
 		$oView->assign('aErrors', $aErrors);
 		return $oView->getContents();

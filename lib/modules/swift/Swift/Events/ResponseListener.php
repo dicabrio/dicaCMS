@@ -17,9 +17,9 @@
  */
 interface Swift_Events_ResponseListener extends Swift_Events_Listener
 {
-  /**
-   * Executes when Swift receives a response
-   * @param Swift_Events_ResponseEvent Information about the response
-   */
-  public function responseReceived(Swift_Events_ResponseEvent $e);
+	/**
+	 * Executes when Swift receives a response
+	 * @param Swift_Events_ResponseEvent Information about the response
+	 */
+	public function responseReceived(Swift_Events_ResponseEvent $e);
 }

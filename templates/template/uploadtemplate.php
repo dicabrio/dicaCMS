@@ -1,6 +1,6 @@
 			<fieldset>
 				<legend>Upload template</legend>
-				<form action="<?php echo WWW_URL; ?>/template/edittemplate" method="post" enctype="multipart/form-data">
+				<form action="<?php echo $formaction; ?>" method="post" enctype="multipart/form-data">
 					<?php if (count($aErrors) > 0) : ?>
 					<ul class="error">
 					<?php foreach ($aErrors as $sError) : ?>

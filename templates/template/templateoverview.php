@@ -8,13 +8,13 @@
 				<?php endforeach; ?>
 			<?php endif; ?>
 			
-			<form method="post" action="<?php echo WWW_URL.'/template/search/' ?>">
+			<form method="post" action="<?php echo $sSearchFormAction; ?>">
 			<?php if (isset($oSearch)) : ?>
 			<?php echo $oSearch->getContents(); ?>
 			<?php endif; ?>
 			</form>
 			
-			<form method="post" action="<?php echo WWW_URL.'/template/' ?>">
+			<form method="post" action="<?php echo $sShowFormAction;?>">
 			<?php if (isset($oOverview)) : ?>
 			<?php echo $oOverview->getContents(); ?>
 			<?php endif; ?>

@@ -12,7 +12,7 @@ class MediaController extends CmsController {
 	public function __construct($sMethod) {
 		// we should check for permissions
 		parent::__construct('media/'.$sMethod, 'Media');
-		
+
 		$oMainMenu = parent::getMainMenu();
 		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/editmedia', 'new Mediaitem', ''));
 		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/editfolder', 'new Folder', ''));

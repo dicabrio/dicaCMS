@@ -33,6 +33,8 @@ class View
 		if ($psFileName !== null) {
 			$this->setTemplateFile($psFileName);
 		}
+		
+		$this->assign('sTemplateDir', self::$m_sTemplateDirectory);
 	}
 
 	/**
@@ -40,14 +42,10 @@ class View
 	 *
 	 * @param string $psTemplateDirectory
 	 */
-	public static function setTemplateDirectory($psTemplateDirectory)
-	{
-		if (is_string($psTemplateDirectory) && is_dir($psTemplateDirectory))
-		{
+	public static function setTemplateDirectory($psTemplateDirectory) {
+		if (is_string($psTemplateDirectory) && is_dir($psTemplateDirectory)) {
 			self::$m_sTemplateDirectory = $psTemplateDirectory;
-		}
-		else
-		{
+		} else {
 			throw new Exception('Template directory:'.$psTemplateDirectory.' does not exist', 0);
 		}
 	}
@@ -57,8 +55,8 @@ class View
 	 * @return void
 	 * @throws FileNotFoundException if the file is not available
 	 */
-	public function setTemplateFile($psTemplateFilename)
-	{
+	public function setTemplateFile($psTemplateFilename) {
+		
 		$this->m_sTemplateFile = $psTemplateFilename;
 		$sTemplateFilename = self::$m_sTemplateDirectory.'/'.$this->m_sTemplateFile;
 
@@ -69,16 +67,16 @@ class View
 	 * @param string $psPattern Pattern that should be replaced
 	 * @param string $psVal The content the pattern should replaced with
 	 */
-	public function assign($psVariable, $pmValue)
-	{
+	public function assign($psVariable, $pmValue) {
+		
 		if ($pmValue instanceof View) {
 			$pmValue->setParent($this);
 		}
 		$this->m_aTemplateData[$psVariable] = $pmValue;
 	}
 
-	public function assignGlobal($psVariable, $psValue)
-	{
+	public function assignGlobal($psVariable, $psValue) {
+		
 		$this->m_aGlobalData[$psVariable] = $psValue;
 	}
 
@@ -108,9 +106,16 @@ class View
 
 		return ob_get_clean();
 	}
-	
+
 	public function __set($sVarname, $sValue) {
 		$this->assign($sVarname, $sValue);
+	}
+	
+	public function __get($psVariable) {
+		if (isset($this->m_aTemplateData[$psVariable])) {
+			return $this->m_aTemplateData[$psVariable];
+		}
+		return null;
 	}
 }
 

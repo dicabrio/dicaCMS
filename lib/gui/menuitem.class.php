@@ -16,7 +16,7 @@ class MenuItem {
 	private $sIdentifier = null;
 
 	private $iImagePos;
-	
+
 	private $bActive;
 
 	public function __construct($sLink, $sLabel, $sIdentifier=false, $bActive=false) {
@@ -25,7 +25,7 @@ class MenuItem {
 		if ($sIdentifier !== false) {
 			$this->sIdentifier = $sIdentifier;
 		}
-		
+
 		$this->bActive = $bActive;
 	}
 
@@ -33,7 +33,7 @@ class MenuItem {
 		$this->oImage = $oImage;
 		$this->iImagePos = $iPos;
 	}
-	
+
 	public function setActive($bActive) {
 		$this->bActive = $bActive;
 	}
@@ -53,7 +53,7 @@ class MenuItem {
 		}
 		return $sIdentifier;
 	}
-	
+
 	public function isActive() {
 		return $this->bActive;
 	}

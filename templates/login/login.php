@@ -5,7 +5,7 @@
 		<title>login</title>
 	</head>
 	<body>
-		<form action="http://test.robertcabri.nl/cms/www/login/" method="post" name="login">
+		<form action="<?php echo $sFormAction; ?>/login/" method="post" name="login">
 			<fieldset>
 
 				<legend><?php echo Lang::get('login.legend'); ?></legend>

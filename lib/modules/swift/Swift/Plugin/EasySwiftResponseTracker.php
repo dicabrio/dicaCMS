@@ -20,27 +20,27 @@ Swift_ClassLoader::load("Swift_Events_ResponseListener");
  */
 class Swift_Plugin_EasySwiftResponseTracker implements Swift_Events_ResponseListener
 {
-  /**
-   * The target object to update
-   * @var EasySwift
-   */
-  protected $target = null;
-  
-  /**
-   * Constructor
-   * @param EasySwift The instance of EasySwift to run against
-   */
-  public function __construct($obj)
-  {
-    $this->target = $obj;
-  }
-  /**
-   * Response listener method
-   * @param Swift_Events_ResponseEvent The event occured in Swift
-   */
-  public function responseReceived(Swift_Events_ResponseEvent $e)
-  {
-    $this->target->lastResponse = $e->getString();
-    $this->target->responseCode = $e->getCode();
-  }
+	/**
+	 * The target object to update
+	 * @var EasySwift
+	 */
+	protected $target = null;
+
+	/**
+	 * Constructor
+	 * @param EasySwift The instance of EasySwift to run against
+	 */
+	public function __construct($obj)
+	{
+		$this->target = $obj;
+	}
+	/**
+	 * Response listener method
+	 * @param Swift_Events_ResponseEvent The event occured in Swift
+	 */
+	public function responseReceived(Swift_Events_ResponseEvent $e)
+	{
+		$this->target->lastResponse = $e->getString();
+		$this->target->responseCode = $e->getCode();
+	}
 }

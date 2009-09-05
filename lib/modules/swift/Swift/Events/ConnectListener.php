@@ -17,9 +17,9 @@
  */
 interface Swift_Events_ConnectListener extends Swift_Events_Listener
 {
-  /**
-   * Executes when Swift initiates a connection
-   * @param Swift_Events_ConnectEvent Information about the connection
-   */
-  public function connectPerformed(Swift_Events_ConnectEvent $e);
+	/**
+	 * Executes when Swift initiates a connection
+	 * @param Swift_Events_ConnectEvent Information about the connection
+	 */
+	public function connectPerformed(Swift_Events_ConnectEvent $e);
 }

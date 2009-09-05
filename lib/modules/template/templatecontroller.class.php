@@ -14,8 +14,8 @@ class TemplateController extends CmsController {
 		parent::__construct('template/'.$sMethod, 'Templates');
 
 		$oMainMenu = parent::getMainMenu();
-		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/edittemplate', 'new Template', ''));
-		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/editfolder', 'new Folder', ''));
+		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('template.url.edittemplate'), 'new Template', ''));
+		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('template.url.editfolder'), 'new Folder', ''));
 
 	}
 
@@ -41,23 +41,24 @@ class TemplateController extends CmsController {
 		$aItems = TemplateFile::getByParent($iParentID);
 
 		$oBreadCrumb = new Menu('breadcrumb');
-		$oBreadCrumb->addItem(new MenuItem(Conf::get('general.url.www').'/template/folder/', '..'));
+		$oBreadCrumb->addItem(new MenuItem(false, 'U bent hier:'));
+		$oBreadCrumb->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('template.url.showfolder'), '..'));
 		if ($iParentID > 0) {
-			
+
 			$aBreadCrumb = array();
 			$iBreadCrumbParentID = $iParentID;
 			while ($iBreadCrumbParentID != 0) {
 				$oParentItem = new TemplateFile($iBreadCrumbParentID);
-				$aBreadCrumb[] = new MenuItem(Conf::get('general.url.www').'/template/folder/'.$oParentItem->getID(), $oParentItem->getTitle());
+				$aBreadCrumb[] = new MenuItem(Conf::get('general.url.www').Conf::get('template.url.showfolder').$oParentItem->getID(), $oParentItem->getTitle());
 				$iBreadCrumbParentID = $oParentItem->getParent();
 			}
-			
+
 			$aBreadCrumb = array_reverse($aBreadCrumb);
-			
+
 			foreach ($aBreadCrumb as $oItem) {
 				$oBreadCrumb->addItem($oItem);
 			}
-			
+
 		}
 
 		$oTemplateDataSet = new TemplateDataSet();
@@ -66,6 +67,8 @@ class TemplateController extends CmsController {
 		$oTable = new Table($oTemplateDataSet);
 
 		$oTemplateOverview = new View('template/templateoverview.php');
+		$oTemplateOverview->assign('sSearchFormAction', Conf::get('general.url.www').Conf::get('template.url.searchtemplate'));
+		$oTemplateOverview->assign('sShowFormAction', Conf::get('general.url.www').Conf::get('template.url.showtemplate'));
 		$oTemplateOverview->assign('aErrors', $aErrors);
 		$oTemplateOverview->assign('oOverview', $oTable);
 		$oTemplateOverview->assign('oBreadCrumb', $oBreadCrumb);
@@ -87,7 +90,7 @@ class TemplateController extends CmsController {
 		$iParentID = intval($oSession->get(self::C_CURRENT_FOLDER));
 			
 		if ($oReq->post('action') == 'cancel') {
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+			Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
 		}
 
 		if ($oReq->post('action') == 'save') {
@@ -126,16 +129,19 @@ class TemplateController extends CmsController {
 					// check if the file is selected
 					// if the file is selected updateit
 					if ($sError != 4) {
+						$sUploadDir = Conf::get('upload.dir.templates');
+
 						$oFileManager = new FileManager($oReq->files('templatefile.tmp_name'));
-						$oFileManager->moveTo(UPLOAD_DIR.'/templates', $sFilename);
-						$oTemplateFile->setPath(UPLOAD_DIR.'/templates');
+						$oFileManager->moveTo($sUploadDir, $sFilename);
+
+						$oTemplateFile->setPath($sUploadDir);
 						$oTemplateFile->setFilename($sFilename);
 					}
 
 					$oTemplateFile->save();
 					DataFactory::commit();
 
-					Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+					Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
 				} catch (FileNotFoundException $e) {
 					$aErrors[] = 'validation.filenotfound';
 				} catch (DirException $e) {
@@ -160,15 +166,17 @@ class TemplateController extends CmsController {
 		}
 
 		$oModuleView = new View('template/uploadtemplate.php');
+		$oModuleView->assign('formaction', Conf::get('general.url.www').Conf::get('template.url.edittemplate'));
 		$oModuleView->assign('templateid', $oReq->post('templateid', $oTemplateFile->getID()));
 		$oModuleView->assign('titlevalue', $oReq->post('titlevalue', $oTemplateFile->getTitle()));
 		$oModuleView->assign('descriptionvalue', $oReq->post('descriptionvalue', $oTemplateFile->getDescription()));
 		$oModuleView->assign('aErrors', $aErrors);
 
-		$this->oBaseView->assign('sTitle', $sTitle);
-		$this->oBaseView->assign('oModule', $oModuleView);
+		$oBaseView = parent::getBaseView();
+		$oBaseView->assign('sTitle', $sTitle);
+		$oBaseView->assign('oModule', $oModuleView);
 
-		return $this->oBaseView->getContents();
+		return $oBaseView->getContents();
 	}
 
 	public function editfolder() {
@@ -179,7 +187,7 @@ class TemplateController extends CmsController {
 		$iParentID = intval($oSession->get(self::C_CURRENT_FOLDER));
 
 		if ($oReq->post('action') == 'cancel') {
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+			Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
 		}
 
 
@@ -202,7 +210,7 @@ class TemplateController extends CmsController {
 
 				DataFactory::commit();
 
-				Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+				Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
 			} catch (RecordException $e) {
 				DataFactory::rollBack();
 				$aErrors[] = 'Record not found';
@@ -224,14 +232,16 @@ class TemplateController extends CmsController {
 
 		$oModule = new View('template/newfolder.php');
 
+		$oModule->assign('sEditFolderFormAction', Conf::get('general.www.url').Conf::get('template.url.editfolder'));
 		$oModule->assign('folderid', $oReq->post('folderid', $oTplFolder->getID()));
 		$oModule->assign('titlevalue', $oReq->post('titlevalue', $oTplFolder->getTitle()));
 		$oModule->assign('descriptionvalue', $oReq->post('descriptionvalue', $oTplFolder->getDescription()));
 		$oModule->assign('aErrors', $aErrors);
 
-		$this->oBaseView->assign('title', $sTitle);
-		$this->oBaseView->assign('oModule', $oModule);
-		return $this->oBaseView->getContents();
+		$oBaseView = parent::getBaseView();
+		$oBaseView->assign('title', $sTitle);
+		$oBaseView->assign('oModule', $oModule);
+		return $oBaseView->getContents();
 	}
 
 	public function deletetemplate() {
@@ -240,7 +250,7 @@ class TemplateController extends CmsController {
 		$oSession = Session::getInstance();
 		$iParentID = intval($oSession->get(self::C_CURRENT_FOLDER));
 
-		DataFactory::beginTransaction();
+		parent::getConnection()->beginTransaction();
 
 		try {
 
@@ -254,20 +264,24 @@ class TemplateController extends CmsController {
 			}
 
 			$oTemplate->delete();
-			DataFactory::commit();
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+			parent::getConnection()->commit();
+			Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
 
 
 		} catch (FileNotFoundException $e) {
 			$aErrors[] = 'validation.filenotexists';
+				
 			// file does exist in DB, but not on the hard drive Just delete it
-			DataFactory::rollBack();
+			if (isset($oTemplate) && $oTemplate instanceof TemplateFile) {
+				$oTemplate->delete();
+				parent::getConnection()->commit();
+			}
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';
 
 		} catch (FileException $e) {
 			$aErrors[] = 'file.fileerror';
-			DataFactory::rollBack();
+			parent::getConnection()->rollBack();
 		}
 
 		return $this->_index($aErrors);

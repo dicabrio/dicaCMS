@@ -18,10 +18,15 @@ class BaseView extends View {
 	}
 
 	/**
-	 * @param Link $oLink
+	 *
+	 * @param string $sScript
+	 * @return void
 	 */
-	public function addScript(Link $oLink) {
-		$this->aScripts[] = $oLink;
+	public function addScript($sScript) {
+		if (!is_string($sScript)) {
+			throw new CmsException('It is not allowed to add a script url of another type then string. Type is: '.getType($sScript));
+		}
+		$this->aScripts[] = $sScript;
 	}
 
 	/**

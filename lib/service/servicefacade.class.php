@@ -4,13 +4,18 @@
  * This is a service for ajax driven apps.
  *
  */
-class ServiceFacade
-{
+class ServiceFacade {
+
+	/**
+	 * @var ServiceProtocol
+	 */
 	private static $protocol = null;
 
-	public static function setProtocol(ServiceProtocol $protocol)
-	{
-		//echo'test';
+	/**
+	 * @param ServiceProtocol $protocol
+	 * @return void
+	 */
+	public static function setProtocol(ServiceProtocol $protocol) {
 		self::$protocol = $protocol;
 	}
 
@@ -21,25 +26,20 @@ class ServiceFacade
 	 * @param string $protocol
 	 * @return string
 	 */
-	public static function request($reqData)
-	{
+	public static function request($reqData) {
 		if (self::$protocol == null) {
 			throw new ServiceFacadeException('Service Handler is not set');
 		}
-		
-		try
-		{
+
+		try {
 			$prot = self::$protocol;
 			$prot->decode($reqData);
 			$prot->validate();
 			$prot->execute();
 			return $prot->encode();
-		}
-		catch(ProtocolException $e)
-		{
+		} catch(ProtocolException $e) {
 			return $prot->error($e);
 		}
 	}
-
 }
 

@@ -17,9 +17,9 @@
  */
 interface Swift_Events_BeforeCommandListener extends Swift_Events_Listener
 {
-  /**
-   * Executes just before Swift sends a command
-   * @param Swift_Events_CommandEvent Information about the being command sent
-   */
-  public function beforeCommandSent(Swift_Events_CommandEvent $e);
+	/**
+	 * Executes just before Swift sends a command
+	 * @param Swift_Events_CommandEvent Information about the being command sent
+	 */
+	public function beforeCommandSent(Swift_Events_CommandEvent $e);
 }

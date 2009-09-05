@@ -128,7 +128,7 @@ class Html {
 		$node->addChild(new TextNode($label));
 		return $node;
 	}
-	
+
 	/**
 	 * @param string $name
 	 * @param string $value
@@ -139,16 +139,16 @@ class Html {
 		// <input type="checkbox" value="1" name="checkname" checked="checked" />
 		$node = new TagNode('input');
 		$attr = array('type'=>'checkbox', 'name'=> $name, 'value'=> $value);
-		
+
 		if ($bChecked === true) {
 			$attr['checked'] = 'checked';
 		}
-		
+
 		self::addAttr($node, $attr);
-		
+
 		return $node;
 	}
-	
+
 	/**
 	 * get an anchor (a tag)
 	 *
@@ -163,7 +163,7 @@ class Html {
 		$attr = array_merge($attr, $other);
 			
 		self::addAttr($node, $attr);
-		
+
 		$node->addChild(new TextNode($sText));
 
 		return $node;

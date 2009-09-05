@@ -17,26 +17,26 @@
  */
 class Swift_Events_DisconnectEvent extends Swift_Events
 {
-  /**
-   * A reference to the connection object
-   * @var Swift_Connection
-   */
-  protected $connection = null;
-  
-  /**
-   * Constructor
-   * @param Swift_Connection The dead connection
-   */
-  public function __construct(Swift_Connection $connection)
-  {
-    $this->connection = $connection;
-  }
-  /**
-   * Get the connection object
-   * @return Swift_Connection
-   */
-  public function getConnection()
-  {
-    return $this->connection;
-  }
+	/**
+	 * A reference to the connection object
+	 * @var Swift_Connection
+	 */
+	protected $connection = null;
+
+	/**
+	 * Constructor
+	 * @param Swift_Connection The dead connection
+	 */
+	public function __construct(Swift_Connection $connection)
+	{
+		$this->connection = $connection;
+	}
+	/**
+	 * Get the connection object
+	 * @return Swift_Connection
+	 */
+	public function getConnection()
+	{
+		return $this->connection;
+	}
 }

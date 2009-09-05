@@ -1,6 +1,6 @@
 			<fieldset>
 				<legend>New template folder</legend>
-				<form action="<?php echo WWW_URL ?>/template/editfolder/" method="post">
+				<form action="<?php echo $sEditFolderFormAction; ?>" method="post">
 				
 					<?php if (count($aErrors) > 0) : ?>
 					<ul class="error">

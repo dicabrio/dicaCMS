@@ -82,7 +82,7 @@ class Template
 			throw new Exception('Content is not of the right type', 0);
 		}
 	}
-	
+
 
 	public function setContents()
 	{

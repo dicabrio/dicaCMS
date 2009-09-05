@@ -6,14 +6,14 @@
 		<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8">
 		<link rel="stylesheet" href="<?php echo Conf::get('general.url.css'); ?>/style.css" media="screen" />
 		<?php if (isset($aScripts)) : ?>
-			<?php foreach ($aScripts as $oScript) : ?>
-				<script type="text/javascript" src="<?php echo $oScript->getSrc() ?>"></script>
+			<?php foreach ($aScripts as $sScript) : ?>
+				<script type="text/javascript" src="<?php echo Conf::get('general.url.js');  ?>/<?php echo $sScript; ?>"></script>
 			<?php endforeach; ?>
 		<?php endif; ?>
 	</head>
 	<body>
 		<div id="header">
-			<h1>CMS</h1>
+			<h1>dicaCMS</h1>
 			<?php echo $oMainMenu->getContents(); ?>
 		</div>
 		<div id="modules">
@@ -26,6 +26,6 @@
 			<?php endif; ?>			
 		</div>
 		
-		<div id="footer">footer</div>
+		<div id="footer">dicaCMS</div>
 	</body>
 </html>

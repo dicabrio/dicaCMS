@@ -1,16 +1,23 @@
-*
-{
-	padding: 0; margin: 0; font-family: Helvetica, Arial;
+* {
+	padding: 0; 
+	margin: 0; 
+	font-family: Helvetica, Arial;
+	font-size: 12px;
 }
 
 body {
 	background: url('../images/BG-main.png');
 }
 
+h1 {
+	font-size: 30px;
+}
+
 #header
 {
 	padding: 10px;
-	background: #ccc;
+	background: #a9a9a9;
+	border-bottom: 1px solid #515151;
 }
 
 #headerNav li
@@ -23,20 +30,24 @@ body {
 {
 	float: left;
 	width: 150px;
-	background: gray;
+	background: #dee4ea;
+	border-right: 1px solid #b4b4b4;
+	padding: 15px 0 50px 0;
 }
 
 #modulesNav li a
 {
 	display: block;
-	padding: 5px 5px 5px 40px;
+	font-size: 12px;
+	padding: 3px 5px 3px 35px;
 	text-decoration: none;
-	background: url('../images/blocks.png') no-repeat 15px 50%;
+	background: transparent url('../images/blocks.png') no-repeat 15px 50%;
+	color: #000;
 }
 
-#modulesNav li a.selected
+#modulesNav li.active a
 {
-	background: blue url('../images/blocks.png') no-repeat 15px 50%;
+	background: #3875d7 url('../images/blocks.png') no-repeat 15px 50%;
 	color: white;
 }
 
@@ -48,21 +59,78 @@ body {
 
 #footer
 {
-	height: 20px;
 	background: gray;
+	clear: both;
+	padding: 5px;
 }
 
 table.dataset {
-	display: block;
-	border: 1px solid black;
+	
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.dataset thead td {
+	background-color: #8dbced;
+}
+
+table.dataset tr:nth-child(even) {
+	background-color: #edf3fe;
+}
+
+table.dataset td {
+	padding: 3px;
+}
+
+table.dataset tr td:nth-child(1) {
+	width: 9px;
+}
+
+table.dataset tr td:nth-child(2) {
+	width: 400px;
+}
+
+table.dataset tr td:nth-child(2) img {
+	margin: 0 5px 0 0;
+	vertical-align: middle;
 }
 
 ul#breadcrumb {
-	line-height: 26px;
-	border: 1px solid black;
 	list-style: none;
+	padding: 5px;
 }
 
 ul#breadcrumb li {
 	display: inline;
+	padding: 0 5px 0 0;
+}
+
+#tabmenu {
+	width: 100%;
+	height: 25px;
+	margin: 0 0 20px;
+	border-bottom: 1px solid black;
+}
+
+#tabmenu li {
+	list-style: none;
+	float: left;
+	height: 24px;
+	border: 1px solid black;
+	background: #ccc;
+}
+
+#tabmenu li a {
+	display: block;
+	padding: 5px;
+	text-decoration: none;
+}
+
+#tabmenu li.active {
+	border-bottom: 1px solid #fff;
+	background: #fff;
+}
+
+.tab {
+	
 }

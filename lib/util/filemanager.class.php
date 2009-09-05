@@ -33,9 +33,10 @@ class FileManager
 	public function getFullPath() {
 		return $this->path . self::SEP . $this->filename;
 	}
-	
+
 	public function getContents() {
-		return file_get_contents($this->path . self::SEP . $this->filename);
+		$sFileContents = file_get_contents($this->path . self::SEP . $this->filename);
+		return $sFileContents;
 	}
 
 	/**

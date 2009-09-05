@@ -1,43 +1,46 @@
 <?php
 
-class Page extends DataRecord
-{
+class Page extends DataRecord {
+
 	/**
 	 * @var TemplateFile
 	 */
 	private $oTemplate;
 
 	/**
+	 * @var array
+	 */
+	private $aModules;
+
+	/**
 	 * constructor
 	 *
 	 * @param int $id
 	 */
-	public function __construct($id=null)
-	{
+	public function __construct($id=null) {
 		parent::__construct(__CLASS__, $id);
 		if ($id == 0) {
 			$this->created = date("Y-m-d H:i:s");
 		}
-
 	}
 
 	/**
 	 * (non-PHPdoc)
 	 * @see data/DataRecord#defineColumns()
 	 */
-	protected function defineColumns()
-	{
+	protected function defineColumns() {
+
 		parent::addColumn('id', DataTypes::INT, false, true);
-		parent::addColumn('pagename', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('template_id', DataTypes::INT, false, true);
 		parent::addColumn('publishtime', DataTypes::DATETIME, 255, true);
 		parent::addColumn('expiretime', DataTypes::DATETIME, 255, true);
 		parent::addColumn('created', DataTypes::DATETIME, 255, true);
 		parent::addColumn('redirect', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
-
 		parent::addColumn('parent_id', DataTypes::INT, false, true);
-		parent::addColumn('folder', DataTypes::INT, false, true);
+		parent::addColumn('isfolder', DataTypes::INT, false, true);
+
 	}
 
 	/**
@@ -45,8 +48,8 @@ class Page extends DataRecord
 	 *
 	 * @return string
 	 */
-	public function getPagename() {
-		return $this->pagename;
+	public function getName() {
+		return $this->name;
 	}
 
 	/**
@@ -62,9 +65,84 @@ class Page extends DataRecord
 
 		return $this->oTemplate;
 	}
-	
+
+	/**
+	 * Return all PageModules that are linked to this page.
+	 *
+	 * @return array
+	 */
 	public function getModules() {
+		if ($this->aModules === null) {
+			$this->aModules = PageModule::getByPage($this);
+		}
+
+		return $this->aModules;
+	}
+
+	/**
+	 * add a module to this page
+	 *
+	 * @param string $oModule
+	 * @return void
+	 */
+	public function addModule(PageModule $oModule) {
+		$this->getModules(); // init
 		
+		$oModule->setPage($this);
+		
+		if ($oModule->getID() == 0) {
+			$oModule->save();
+		}
+
+		$this->aModules[$oModule->getIdentifier()] = $oModule;
+	}
+
+	/**
+	 * get a module by a given identifier. It returns NULL when the given module is not found
+	 *
+	 * @param string $sModuleIdentifier
+	 * @return PageModule
+	 */
+	public function getModule($sModuleIdentifier) {
+		$this->getModules(); // init
+
+		if (isset($this->aModules[$sModuleIdentifier])) {
+			return $this->aModules[$sModuleIdentifier];
+		}
+
+		return null;
+	}
+
+	/**
+	 * remove a certain module from the page
+	 *
+	 * @param string $sModuleIdentifier
+	 * @return void
+	 */
+	public function removeModule($sModuleIdentifier) {
+		$this->getModules();
+
+		if (isset($this->aModules[$sModuleIdentifier])) {
+			$this->aModules[$sModuleIdentifier]->delete();
+			unset($this->aModules[$sModuleIdentifier]);
+		}
+	}
+
+	/**
+	 * This method will clear the internal cache. It sets the internal filled array to an empty array.
+	 * When trying to load it will not load any new data. 
+	 * 
+	 * If you want to clear the internal cache and reload data you should give the $bReload parameter as TRUE
+	 *
+	 * @param boolean $bReload
+	 * @return void
+	 */
+	public function clearCachedModules($bReload=false) {
+		if ($bReload === true) {
+			$this->aModules = null;
+		} else {
+			$this->aModules = array();
+		}
 	}
 
 	/**
@@ -78,6 +156,11 @@ class Page extends DataRecord
 	 * @return string
 	 */
 	public function getExpireTime() {
+		
+		if ('0000-00-00 00:00:00' === $this->expiretime) {
+			return '';
+		}
+		
 		return $this->expiretime;
 	}
 
@@ -125,8 +208,8 @@ class Page extends DataRecord
 	/**
 	 * @param string $sPagename
 	 */
-	public function setPagename($sPagename) {
-		$this->pagename = $sPagename;
+	public function setName($sPagename) {
+		$this->name = $sPagename;
 	}
 
 	/**
@@ -158,9 +241,9 @@ class Page extends DataRecord
 	 * @return void
 	 */
 	public function setExpireTime($sExpireTime=null) {
-		if (!preg_match("/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/", $sExpireTime)) { //Y-m-d H:i:s
-			$sExpireTime = date("Y-m-d H:i:s");
-		}
+//		if (!preg_match("/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/", $sExpireTime)) { //Y-m-d H:i:s
+//			$sExpireTime = date("Y-m-d H:i:s");
+//		}
 		$this->expiretime = $sExpireTime;
 	}
 
@@ -185,7 +268,7 @@ class Page extends DataRecord
 	 * @return unknown
 	 */
 	public function isFolder() {
-		if ($this->folder == 1) {
+		if ($this->isfolder == 1) {
 			return true;
 		}
 
@@ -200,9 +283,9 @@ class Page extends DataRecord
 	public function setFolder($bFolder) {
 
 		if ($bFolder == true) {
-			$this->folder =  1;
+			$this->isfolder =  1;
 		} else if ($bFolder == false) {
-			$this->folder = 0;
+			$this->isfolder = 0;
 		}
 	}
 
@@ -218,21 +301,36 @@ class Page extends DataRecord
 	 * @see data/DataRecord#save()
 	 */
 	public function save() {
-		
+
 		if (!($this->oTemplate instanceof TemplateFile) || $this->oTemplate->getID() == 0) {
 			throw new PageRecordException("please provide a template for this page: ".$this->id);
+		}
+
+		if (is_array($this->aModule)) {
+			foreach ($this->aModules as $oModule) {
+				$this->aModules->save();
+			}
 		}
 
 		$this->template_id = $this->oTemplate->getID();
 		parent::save();
 	}
-	
+
 	public static function getByParent($iParentID) {
-		return parent::findAll(__CLASS__, parent::ALL, new QueryPart(' parent_id = :parentid', array('parentid' => $iParentID)));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid', array('parentid' => $iParentID)));
+	}
+	
+	public static function getByName($sPagename) {
+		$aPages = parent::findAll(__CLASS__, parent::ALL, new Criteria(' name = :name', array('name' => $sPagename)));
+		
+		if (count($aPages) > 0) {
+			return reset($aPages);
+		}
+		
+		return null;
 	}
 
 }
 
 class PageRecordException extends RecordException {}
 
-?>

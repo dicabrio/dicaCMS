@@ -17,9 +17,9 @@
  */
 interface Swift_Events_CommandListener extends Swift_Events_Listener
 {
-  /**
-   * Executes when Swift sends a command
-   * @param Swift_Events_CommandEvent Information about the command sent
-   */
-  public function commandSent(Swift_Events_CommandEvent $e);
+	/**
+	 * Executes when Swift sends a command
+	 * @param Swift_Events_CommandEvent Information about the command sent
+	 */
+	public function commandSent(Swift_Events_CommandEvent $e);
 }
