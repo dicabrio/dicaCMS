@@ -5,9 +5,14 @@
  *  
  */
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // define the system directory
 define('SYS_DIR', realpath('../'));
+
+// application directory
+define('APP_DIR', SYS_DIR.'/application');
 
 // currentfile
 define('CURRENT_FILE', str_replace(dirname(__FILE__).'/', '', $_SERVER['SCRIPT_FILENAME']));
@@ -15,20 +20,26 @@ define('CURRENT_FILE', str_replace(dirname(__FILE__).'/', '', $_SERVER['SCRIPT_F
 // define the www directory. This could be different on every machine
 define('WWW_DIR', realpath('.'));
 
-// define sys_dir
-define('SYS_DIR', realpath('../'));
-
 // define lib_dir
 define('LIB_DIR', SYS_DIR.'/lib');
 
+// configuration directory
+define('CONFIG_DIR', APP_DIR.'/etc');
+
+// domain
+define('DOMAIN', $_SERVER['HTTP_HOST']);
+
 // set include path for util
-ini_set('include_path', ini_get('include_path').':'.LIB_DIR.'/util:');
+//ini_set('include_path', ini_get('include_path').':'.LIB_DIR.'/util:');
 
 // include the main config
-require(SYS_DIR.'/etc/config.inc.php');
+require(CONFIG_DIR.'/config.inc.php');
 
 // include the main functions
-require('functions.inc.php');
+require(LIB_DIR.'/util/functions.inc.php');
+
+// utility
+require(LIB_DIR.'/util/util.class.php');
 
 // set a custom error handler
 set_error_handler('__errorHandler', E_ALL);
@@ -37,13 +48,18 @@ set_error_handler('__errorHandler', E_ALL);
 set_exception_handler('__exceptionHandler');
 
 // import modules
+Util::import(LIB_DIR.'/blabla');
 Util::import(LIB_DIR.'/controller');
-Util::import(LIB_DIR.'/gui');
+Util::import(LIB_DIR.'/presentation');
 Util::import(LIB_DIR.'/data');
-Util::import(LIB_DIR.'/data/util');
+Util::import(LIB_DIR.'/util');
 Util::import(LIB_DIR.'/service');
 
+// import lib modules
 Util::importModules(LIB_DIR.'/modules');
+
+// import application modules
+Util::importModules(APP_DIR.'/modules');
 
 // Set the Domain this is needed in order to determine the
 // correct configuration directory
@@ -74,4 +90,3 @@ setlocale(LC_ALL, Conf::get('locale.language'));
 
 // set timezone settings
 date_default_timezone_set(Conf::get('locale.timezone'));
-

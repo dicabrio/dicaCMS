@@ -2,5 +2,5 @@
 
 include_once('main.inc.php');
 
-ServiceFacade::setProtocol(new RequestControllerProtocol());
-echo ServiceFacade::request($_REQUEST);
+$serviceFacade = new ServiceFacade(new RequestControllerProtocol());
+echo $serviceFacade->execute($_REQUEST);

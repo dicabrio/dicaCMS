@@ -13,4 +13,6 @@ interface ITableDataSet {
 	public function getValueAt($piRow, $piColumn);
 
 	public function setValueAt($sValue, $piRow, $piColumn);
+
+	public function addColumn($column, $name);
 }

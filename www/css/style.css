@@ -53,7 +53,7 @@ h1 {
 
 #main 
 {
-	margin: 0 0 0 150px;
+	margin: 0 0 0 151px;
 	background: url('../images/BG-main.png');
 }
 
@@ -103,6 +103,26 @@ ul#breadcrumb {
 ul#breadcrumb li {
 	display: inline;
 	padding: 0 5px 0 0;
+}
+
+ul#actions {
+	list-style: none;
+	padding: 10px 5px 5px 5px;
+	background: #666;
+}
+
+ul#actions li {
+	display: inline;
+	padding: 0;
+	margin: 0 5px 0 0;
+	border: 1px solid #222;
+	background: #444;
+}
+
+ul#actions li a {
+	padding: 5px 10px;
+	color: #fff;
+	text-decoration: none;
 }
 
 #tabmenu {

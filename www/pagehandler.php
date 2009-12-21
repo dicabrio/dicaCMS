@@ -2,5 +2,5 @@
 
 include_once('main.inc.php');
 
-ServiceFacade::setProtocol(new ViewPageProtocol());
-echo ServiceFacade::request($_REQUEST);
+$serviceFacade = new ServiceFacade(new ViewPageProtocol());
+echo $serviceFacade->execute($_REQUEST);

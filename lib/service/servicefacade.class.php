@@ -9,14 +9,10 @@ class ServiceFacade {
 	/**
 	 * @var ServiceProtocol
 	 */
-	private static $protocol = null;
+	private $protocol = null;
 
-	/**
-	 * @param ServiceProtocol $protocol
-	 * @return void
-	 */
-	public static function setProtocol(ServiceProtocol $protocol) {
-		self::$protocol = $protocol;
+	public function __construct(ServiceProtocol $protocol) {
+		$this->protocol = $protocol;
 	}
 
 	/**
@@ -26,13 +22,13 @@ class ServiceFacade {
 	 * @param string $protocol
 	 * @return string
 	 */
-	public static function request($reqData) {
-		if (self::$protocol == null) {
+	public function execute($reqData) {
+		if ($this->protocol == null) {
 			throw new ServiceFacadeException('Service Handler is not set');
 		}
 
 		try {
-			$prot = self::$protocol;
+			$prot = $this->protocol;
 			$prot->decode($reqData);
 			$prot->validate();
 			$prot->execute();
