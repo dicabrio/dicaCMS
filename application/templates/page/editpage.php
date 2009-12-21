@@ -20,7 +20,7 @@
 		<div class="modulelabel">Pagename:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('page_id'); ?>
-			<?php echo $form->getFormElement('pagename'); ?>.php
+			<?php echo $form->getFormElement('pagename'); ?> (voorbeeld.html zonder .html)
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
@@ -42,6 +42,13 @@
 		<div class="modulelabel">Expiretime:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('expiretime'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+	<div class="pagemodule">
+		<div class="modulelabel">Title:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('title'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
@@ -76,17 +83,19 @@
 </fieldset>
 <?php if ($pageid != 0) :?>
 <fieldset class="tab" id="modulesinfo">
-	<legend>Content</legend>
-		<?php if (count($aModules) == 0) : ?>
-			No modules for this page
-		<?php else: ?>
-
-			<?php foreach ($aModules as $oModule) :?>
-	<div class="pagemodule <?php echo $oModule->sIdentifier; ?>"><?php echo $oModule->getContents(); ?></div>
-			<?php endforeach; ?>
-
-
-		<?php endif;?>
+	<?php if (count($aModules) == 0) : ?>
+	<div class="pagemodule">
+		<div class="modulelabel">No modules for this page</div>
+		<div class="modulecontent"></div>
+	</div>
+	<?php else: ?>
+	<?php foreach ($aModules as $oModule) :?>
+		<div class="pagemodule <?php echo $oModule->sIdentifier; ?>">
+			<?php echo $oModule->getContents(); ?>
+			<div class="clear">&nbsp;</div>
+		</div>
+	<?php endforeach; ?>
+	<?php endif;?>
 </fieldset>
 <?php endif; ?>
 

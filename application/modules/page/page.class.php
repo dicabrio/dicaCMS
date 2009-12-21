@@ -34,6 +34,7 @@ class Page extends DataRecord {
 
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('template_id', DataTypes::INT, false, true);
 		parent::addColumn('publishtime', DataTypes::DATETIME, 255, true);
 		parent::addColumn('expiretime', DataTypes::DATETIME, 255, true);
@@ -57,7 +58,7 @@ class Page extends DataRecord {
 	 * @param String $keywords
 	 * @param String $description
 	 */
-	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $keywords="", $description="") {
+	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $title="", $keywords="", $description="") {
 
 		if ($publishtime == '') {
 			$publishtime = new Date("now");
@@ -67,6 +68,7 @@ class Page extends DataRecord {
 		$this->setAttr('template_id', $template->getID());
 		$this->setAttr('publishtime', $publishtime->getValue());
 		$this->setAttr('expiretime', (string)$expiretime);
+		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
 
@@ -99,6 +101,15 @@ class Page extends DataRecord {
 	 */
 	public function getName() {
 		return $this->getAttr('name');
+	}
+
+	/**
+	 * get The pagename
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->getAttr('title');
 	}
 
 	/**
@@ -259,7 +270,7 @@ class Page extends DataRecord {
 
 		if (is_array($this->aModules)) {
 			foreach ($this->aModules as $oModule) {
-				$this->aModules->save();
+				$oModule->save();
 			}
 		}
 		

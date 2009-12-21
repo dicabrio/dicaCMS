@@ -1,6 +1,6 @@
 <?php
 
-class TextBlockController implements ModuleController {
+class TextblockController implements ModuleController {
 
 	/**
 	 * @var PageModule
@@ -18,15 +18,22 @@ class TextBlockController implements ModuleController {
 	private $aErrors;
 
 	/**
+	 * @var CmsController
+	 */
+	private $oCmsController;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod) {
+	public function __construct(PageModule $oMod, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
+
+		$this->oCmsController = $oCmsController;
 
 		// load the data
 		$this->load();
@@ -41,6 +48,18 @@ class TextBlockController implements ModuleController {
 	 * @see modules/Module#getEditor()
 	 */
 	public function getEditor() {
+
+		if ($this->oCmsController !== null) {
+
+			$this->oCmsController->getBaseView()->addStyle(Conf::get('general.url.js').'/yui/assets/skins/sam/skin.css');
+			$this->oCmsController->getBaseView()->addScript('yui/yahoo-dom-event/yahoo-dom-event.js');
+			$this->oCmsController->getBaseView()->addScript('yui/element/element-min.js');
+			$this->oCmsController->getBaseView()->addScript('yui/container/container_core-min.js');
+			$this->oCmsController->getBaseView()->addScript('yui/editor/simpleeditor-min.js');
+			$this->oCmsController->getBaseView()->addScript('wysiwyg-startup.js');
+		}
+
+
 		$oView = new View('text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		if ($this->oTextContent === null) {

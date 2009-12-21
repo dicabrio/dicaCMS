@@ -1,6 +1,6 @@
 <?php
 
-class TextLineController implements ModuleController {
+class TextlineController implements ModuleController {
 	
 	const MAX_LENGTH = 255;
 

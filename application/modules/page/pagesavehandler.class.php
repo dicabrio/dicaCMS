@@ -34,6 +34,7 @@ class PageSaveHandler implements FormHandler {
 	 */
 	public function handleForm(Form $oForm) {
 		try {
+			$oReq = Request::getInstance();
 
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
@@ -43,6 +44,7 @@ class PageSaveHandler implements FormHandler {
 				$this->formmapper->getModel('template_id'),
 				$this->formmapper->getModel('publishtime'),
 				$this->formmapper->getModel('expiretime'),
+				$this->formmapper->getModel('title'),
 				$this->formmapper->getModel('keywords'),
 				$this->formmapper->getModel('description'));
 
@@ -50,18 +52,18 @@ class PageSaveHandler implements FormHandler {
 			$this->folder->addPage($this->page);
 
 			$oTemplateFile = $this->page->getTemplate();
-			$oViewParser = new ViewParser($oTemplateFile->getFullPath());
+			$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
 			foreach ($oViewParser->getLabels() as $aModule) {
 
 				$sModuleClass = $aModule['module'].'Controller';
-				$oPageModule = $oPage->getModule($aModule['id']);
+				$oPageModule = $this->page->getModule($aModule['id']);
 
 				if ($oPageModule === null) {
 					$oPageModule = new PageModule();
 					$oPageModule->setType($aModule['module']);
 					$oPageModule->setIdentifier($aModule['id']);
 
-					$oPage->addModule($oPageModule);
+					$this->page->addModule($oPageModule);
 				}
 
 				$oModule = new $sModuleClass($oPageModule);

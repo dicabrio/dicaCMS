@@ -5,15 +5,15 @@
 		<meta name="description" content="<?php echo $sDescription ?>" />
 	</head>
 	<body>
-		<h1><?php echo $oTextLine_H1; ?></h1>
+		<h1><?php echo $oTextline_h1; ?></h1>
 		<p>
-			<?php echo $oTextBlock_Intro; ?>
+			<?php echo $oTextblock_intro; ?>
 		</p>
 		<p>
-			<?php echo $oTextBlock_Body; ?>
+			<?php echo $oTextBlock_body; ?>
 		</p>
 		<p>
-			<?php echo $oTextBlock_Bogus; ?>
+			<?php echo $oTextBlock_bogus; ?>
 		</p>
 	</body>
 </html>

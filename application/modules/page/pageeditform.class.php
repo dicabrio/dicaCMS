@@ -38,6 +38,11 @@ class PageEditForm extends Form {
 
 		parent::addFormElement($elPagename->getName(), $elPagename);
 
+		$elTitle = new Input('text', 'title');
+		$elTitle->setValue($this->page->getTitle());
+
+		parent::addFormElement($elTitle->getName(), $elTitle);
+
 		$elTemplate = new Select('template_id');
 		$elTemplate->setValue($this->page->getTemplate()->getID());
 		$elTemplate->addOption(0, 'Select template..');

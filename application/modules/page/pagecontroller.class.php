@@ -59,34 +59,6 @@ class PageController extends CmsController {
 	}
 
 	/**
-	 * This method will catch the post variables from the editpage method. It will handle all validation and saving of the page.
-	 * If we are on this page we allready know we wanna save the data
-	 *
-	 * @return return
-	 */
-	public function updatepage() {
-
-		try {
-
-			DataFactory::beginTransaction();
-
-			$sPath = $oTemplateFile->getPath();
-			$sFile = $oTemplateFile->getFilename();
-//			$oViewParser = new ViewParser($oTemplateFile->);
-
-			DataFactory::commit();
-			// build view and say that we successfully edited a page
-			return $this->_index(array(), $iParentID, Lang::get('page.pagesavesucces', $oPage->getName()));
-
-		} catch (RecordException $e) {
-
-			DataFactory::rollBack();
-			$aErrors[] = 'template.nosuchtemplate';
-			return $this->editpage($aErrors);
-		}
-	}
-
-	/**
 	 * edit an existing page
 	 * @return string
 	 */
@@ -130,10 +102,8 @@ class PageController extends CmsController {
 
 		try {
 			$oTemplateFile = $oPage->getTemplate();
-			$sPath = $oTemplateFile->getPath();
-			$sFile = $oTemplateFile->getFilename();
+			$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
 
-			$oViewParser = new ViewParser($sPath.FileManager::SEP.$sFile);
 			$aPageModules = array();
 			foreach ($oViewParser->getLabels() as $aModule) {
 				$sModuleClass = $aModule['module'].'Controller';
@@ -162,11 +132,6 @@ class PageController extends CmsController {
 			$aErrors[] = 'template.removedtemplate';
 			$oModuleView->assign('iTemplateID', $oReq->post('template_id', 0));
 		}
-		$oModuleView->assign('sPublishtime', $oReq->post('publishtime', $oPage->getPublishTime()));
-		$oModuleView->assign('sExpiretime', $oReq->post('expiretime', $oPage->getExpireTime()));
-		$oModuleView->assign('sRedirect', $oReq->post('redirect', $oPage->getRedirect()));
-		$oModuleView->assign('iActive', $oReq->post('active', $oPage->isActive()));
-		$oModuleView->assign('sPageEditFormAction', Conf::get('general.url.www').Conf::get('page.url.updatepage'));
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->addScript('tabbing.js');

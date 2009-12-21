@@ -30,7 +30,7 @@ class PageModule extends DataRecord {
 	 * @return string
 	 */
 	public function getIdentifier() {
-		return $this->identifier;
+		return $this->getAttr('identifier');
 	}
 
 	/**
@@ -38,30 +38,30 @@ class PageModule extends DataRecord {
 	 * @return void
 	 */
 	public function setIdentifier($sIdentifier) {
-		$this->identifier = $sIdentifier;
+		$this->setAttr('identifier', $sIdentifier);
 	}
-	
+
 	/**
 	 * @param Page $oPage
 	 * @return void
 	 */
 	public function setPage(Page $oPage) {
-		$this->page_id = $oPage->getID();
+		$this->setAttr('page_id', $oPage->getID());
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getType() {
-		return $this->type;
+		return $this->getAttr('type');
 	}
-	
+
 	/**
 	 * @param string $sType
 	 * @return void
 	 */
 	public function setType($sType) {
-		$this->type = $sType;
+		$this->setAttr('type', $sType);
 	}
 
 	/**

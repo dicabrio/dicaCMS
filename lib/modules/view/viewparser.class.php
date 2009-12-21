@@ -26,8 +26,8 @@ class ViewParser
 	 *
 	 * @param string $psFileName
 	 */
-	public function __construct($psFileName=null) {
-		$this->oTemplateFile = new FileManager($psFileName);
+	public function __construct(FileManager $file=null) {
+		$this->oTemplateFile = $file;
 	}
 
 	/**

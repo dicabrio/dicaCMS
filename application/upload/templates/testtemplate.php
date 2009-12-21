@@ -2,20 +2,18 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title><?php echo $textline_title; ?></title>
+		<title><?php echo $title; ?></title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="<?php echo $textblock_keywords; ?>" />
-		<meta name="description" content="<?php echo $textblock_description; ?>" />
-		<?php echo $stylesheet_screenstyle; ?>
-		<?php echo $stylesheet_alterstyle; ?>
+		<meta name="keywords" content="<?php echo $keywords; ?>" />
+		<meta name="description" content="<?php echo $description; ?>" />
 	</head>
 	<body>
-		<h1><?php echo $textline_h1; ?></h1>
+		<h1><?php echo $oTextline_h1; ?></h1>
 		<p>
-			<?php echo $textblock_intro; ?>
+			<?php echo $oTextblock_intro; ?>
 		</p>
 		<p>
-			<?php echo $textblock_body; ?>
+			<?php echo $oTextblock_body; ?>
 		</p>
 	</body>
 </html>

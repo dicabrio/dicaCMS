@@ -28,14 +28,14 @@ class PageText extends DataRecord {
 	 * @return void
 	 */
 	public function setPageModule(PageModule $oPageModule) {
-		$this->pagemodule_id = $oPageModule->getID();
+		$this->setAttr('pagemodule_id', $oPageModule->getID());
 	}
 	
 	/**
 	 * @return string
 	 */
 	public function getContent() {
-		return $this->content;
+		return $this->getAttr('content');
 	}
 	
 	/**
@@ -45,7 +45,7 @@ class PageText extends DataRecord {
 	 * @return void
 	 */
 	public function setContent($sContent) {
-		$this->content = $sContent;
+		$this->setAttr('content', $sContent);
 	}
 
 	/**

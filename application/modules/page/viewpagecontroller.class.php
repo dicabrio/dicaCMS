@@ -15,7 +15,7 @@ class ViewPageController {
 	}
 
 	public function show($sPagename) {
-		$oPage = Page::getByName($sPagename);
+		$oPage = Page::findByName($sPagename);
 		if ($oPage === null) {
 			return 'page cannot be found<br />';
 		}
@@ -25,18 +25,12 @@ class ViewPageController {
 		$oView = $this->getView($oPage);
 		$oView->assign('sJsUrl', Conf::get('general.url.js'));
 		$oView->assign('sCssUrl', Conf::get('general.url.css'));
+		$oView->assign('title', $oPage->getTitle());
+		$oView->assign('description', $oPage->getDescription());
+		$oView->assign('keywords', $oPage->getKeywords());
 		
 		$this->populateViewWithModules($oPage, $oView);
 		return $oView->getContents();
-
-		// debugging shizzle
-		//		echo "<strong>Pagename:</strong> {$oPage->getName()} <br />";
-		//		echo "<strong>Redirect:</strong> {$oPage->getRedirect()} <br />";
-		//		echo "<strong>Publish:</strong> {$oPage->getPublishTime()} <br />";
-		//		echo "<strong>Expire:</strong> {$oPage->getExpireTime()} <br />";
-		//		echo "<strong>Active:</strong> {$oPage->isActive()} <br />";
-		//		echo "<strong>isFolder:</strong> {$oPage->isFolder()} <br />";
-		//		echo "<strong>Template:</strong> {$oPage->getTemplate()->getTitle()} <br />";
 
 	}
 
@@ -64,13 +58,7 @@ class ViewPageController {
 			$sExpire = strtotime($sExpire);
 		}
 
-		if ($sPublish >= $sToday || $sToday >= $sExpire || !$oPage->isActive() || $oPage->isFolder() || $oPage->getTemplate() === null) {
-
-			//			var_dump($sPublish >= $sToday);
-			//			var_dump($sToday >= $sExpire);
-			//			var_dump(!$oPage->isActive());
-			//			var_dump($oPage->isFolder());
-			//			var_dump($oPage->getTemplate() === null);
+		if ($sPublish >= $sToday || $sToday >= $sExpire || !$oPage->isActive() || $oPage->getTemplate() === null) {
 
 			$this->redirect($oPage->getRedirect());
 		}
@@ -84,9 +72,7 @@ class ViewPageController {
 	private function populateViewWithModules(Page $oPage, View $oView) {
 
 		$oTemplateFile = $oPage->getTemplate();
-		$sPath = $oTemplateFile->getPath();
-		$sFile = $oTemplateFile->getFilename();
-		$oViewParser = new ViewParser($sPath.FileManager::SEP.$sFile);
+		$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
 
 		foreach ($oViewParser->getLabels() as $aModule) {
 			$sContent = '';
