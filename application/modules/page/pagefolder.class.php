@@ -35,13 +35,17 @@ class PageFolder extends DataRecord implements IFolder {
 
 	private $parent;
 
+	private $pages;
+
+	private $folders;
+
 	/**
 	 * constructor
 	 *
 	 * @param int $id
 	 */
 	protected function __construct($id=null) {
-		parent::__construct(__CLASS__, $id);
+		parent::__construct('page', $id);
 
 		$this->setAttr('isfolder', 1);
 	}
@@ -78,6 +82,12 @@ class PageFolder extends DataRecord implements IFolder {
 		$this->setAttr('name', $foldername);
 	}
 
+	public function addPage(Page $page) {
+
+		$page->setParent($this);
+		$this->pages[] = $page;
+	}
+
 
 	/**
 	 * creational method or factory method.
@@ -95,7 +105,7 @@ class PageFolder extends DataRecord implements IFolder {
 	 * @return PageFolder
 	 */
 	public static function findByName($foldername) {
-		$folders = parent::findAll(__CLASS__, parent::ALL, new Criteria(' name = :name', array('name' => $foldername)));
+		$folders = parent::findAll('page', parent::ALL, new Criteria(' name = :name', array('name' => $foldername)));
 
 		if (count($folders) > 0) {
 			return reset($folders);
@@ -105,7 +115,7 @@ class PageFolder extends DataRecord implements IFolder {
 	}
 
 	public static function findInFolder(PageFolder $folder) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid', array('parentid' => $folder->getID())));
+		return parent::findAll('page', parent::ALL, new Criteria(' parent_id = :parentid AND isfolder = :isfolder', array('isfolder' => 1, 'parentid' => $folder->getID())));
 	}
 
 
@@ -115,7 +125,13 @@ class PageFolder extends DataRecord implements IFolder {
 	 * @return string
 	 */
 	public function getName() {
-		return $this->name;
+
+		if (!$this->getAttr('name')) {
+			return 'root';
+		}
+
+
+		return $this->getAttr('name');
 	}
 
 	/**
@@ -137,7 +153,32 @@ class PageFolder extends DataRecord implements IFolder {
 
 		return true;
 	}
+
+	/**
+	 * get underlying folders
+	 * 
+	 * @return array
+	 */
+	public function getFolders() {
+		if ($this->folders == null) {
+			$this->folders = PageFolder::findInFolder($this);
+		}
+		return $this->folders;
+	}
+
+	/**
+	 * get underlying pages
+	 * 
+	 * @return array
+	 */
+	public function getPages() {
+		if ($this->pages == null) {
+			$this->pages = Page::findInFolder($this);
+		}
+		return $this->pages;
+	}
+
 }
 
-class PageRecordException extends RecordException {}
+class PageFolderRecordException extends RecordException {}
 

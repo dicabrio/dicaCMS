@@ -79,7 +79,7 @@ class Select implements FormElement {
 			$attributes .= sprintf(' %s="%s"', $attName, $attValue);
 		}
 
-		return sprintf('<select name="%s" %s>%s</select>', $this->sName, $attributes, $options);
+		return sprintf('<select name="%s" %s %s>%s</select>', $this->sName, $attributes, $this->sStyle, $options);
 	}
 
 	public function addOption($value, $label) {

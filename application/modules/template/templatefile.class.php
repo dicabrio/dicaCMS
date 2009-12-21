@@ -2,6 +2,8 @@
 
 class TemplateFile extends DataRecord implements DomainEntity {
 
+	private $parent;
+
 	/**
 	 * @param int $id
 	 * @return void
@@ -32,21 +34,22 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @return string
 	 */
 	public function getTitle() {
-		return $this->title;
+		return $this->getAttr('title');
+//		return $this->getAttr('title');
 	}
 
 	/**
 	 * @param string $sTitle
 	 */
 	public function setTitle($sTitle) {
-		$this->title = $sTitle;
+		$this->setAttr('title', $sTitle);
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDescription() {
-		return $this->description;
+		return $this->getAttr('description');
 	}
 
 	/**
@@ -54,7 +57,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @param string $sDescription
 	 */
 	public function setDescription($sDescription) {
-		$this->description = $sDescription;
+		$this->setAttr('description', $sDescription);
 	}
 
 	/**
@@ -63,7 +66,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @return string
 	 */
 	public function getFilename() {
-		return $this->filename;
+		return $this->getAttr('filename');
 	}
 
 	/**
@@ -72,7 +75,15 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @return string
 	 */
 	public function getPath() {
-		return $this->path;
+		return $this->getAttr('path');
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getFullPath() {
+		return $this->getAttr('path').FileManager::SEP.$this->getAttr('filename');
 	}
 
 	/**
@@ -81,7 +92,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @return unknown
 	 */
 	public function isFolder() {
-		if ($this->isfolder == 1) {
+		if ($this->getAttr('isfolder') == 1) {
 			return true;
 		}
 
@@ -96,9 +107,9 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	public function setFolder($bFolder) {
 
 		if ($bFolder == true) {
-			$this->isfolder =  1;
+			$this->setAttr('isfolder', 1);
 		} else if ($bFolder == false) {
-			$this->isfolder = 0;
+			$this->setAttr('isfolder', 0);
 		}
 	}
 
@@ -108,21 +119,27 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @param string $sPath
 	 */
 	public function setPath($sPath) {
-		$this->path = $sPath;
+		$this->setAttr('path', $sPath);
 	}
 
 	/**
 	 * @return int
 	 */
 	public function getParent() {
-		return $this->parent_id;
+		if ($this->parent == null) {
+			$this->parent = new TemplateFile($this->getAttr('parent_id'));
+		}
+		return $this->parent;
 	}
 
 	/**
 	 * @param int $iParentID
 	 */
-	public function setParent($iParentID) {
-		$this->parent_id = $iParentID;
+	public function setParent(TemplateFile $template) {
+		
+		$this->parent = $template;
+
+		$this->setAttr('parent_id', $template->getID());
 	}
 
 	/**
@@ -131,7 +148,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @param string $sFilename
 	 */
 	public function setFilename($sFilename) {
-		$this->filename = $sFilename;
+		$this->setAttr('filename', $sFilename);
 	}
 
 	public static function getByParent($iParentID) {

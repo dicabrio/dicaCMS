@@ -17,8 +17,13 @@ class Page extends DataRecord {
 	 *
 	 * @param int $id
 	 */
-	protected function __construct($id=null) {
+	public function __construct($id=null) {
 		parent::__construct(__CLASS__, $id);
+
+		if ($id == 0) {
+			$this->setAttr('created', date("Y-m-d H:i:s"));
+			$this->setAttr('isfolder', 0);
+		}
 	}
 
 	/**
@@ -34,32 +39,15 @@ class Page extends DataRecord {
 		parent::addColumn('expiretime', DataTypes::DATETIME, 255, true);
 		parent::addColumn('created', DataTypes::DATETIME, 255, true);
 		parent::addColumn('redirect', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('keywords', DataTypes::TEXT, false, true);
+		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
 		parent::addColumn('parent_id', DataTypes::INT, false, true);
 		parent::addColumn('isfolder', DataTypes::INT, false, true);
 
 	}
 
-	/**
-	 *
-	 * @param string $pagename
-	 * @param TemplateFile $template
-	 * @param Date $publishtime
-	 * @param Date $expiretime
-	 * @param string $keywords
-	 * @param string $description
-	 */
-	public static function create($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $keywords="", $description="") {
-		$page = new Page();
-		$page->setAttr('name', $pagename);
-		$page->setAttr('template_id', $template->getID());
-		$page->setAttr('publishtime', $publishtime);
-		$page->setAttr('expiretime', $expiretime);
-		$page->setAttr('keywords', $keywords);
-		$page->setAttr('description', $description);
-		$page->setAttr('created', date("Y-m-d H:i:s"));
-	}
-
+		
 	/**
 	 *
 	 * @param String $pagename
@@ -70,28 +58,20 @@ class Page extends DataRecord {
 	 * @param String $description
 	 */
 	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $keywords="", $description="") {
+
+		if ($publishtime == '') {
+			$publishtime = new Date("now");
+		}
+
 		$this->setAttr('name', $pagename);
 		$this->setAttr('template_id', $template->getID());
-		$this->setAttr('publishtime', $pagename);
-		$this->setAttr('expiretime', $pagename);
+		$this->setAttr('publishtime', $publishtime->getValue());
+		$this->setAttr('expiretime', (string)$expiretime);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
+
 	}
 
-
-	/**
-	 *
-	 * @param int $id
-	 * @return page
-	 */
-	public static function findByID($id) {
-		$page = new Page($id);
-		if ($id == 0) {
-			throw new RecordException('Cannot find a page with id 0');
-		}
-		
-		return $page;
-	}
 
 	/**
 	 * @param string $pagename
@@ -108,7 +88,7 @@ class Page extends DataRecord {
 	}
 
 	public static function findInFolder(PageFolder $folder) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid', array('parentid' => $folder->getID())));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid AND isfolder = :isfolder', array('isfolder' => 0, 'parentid' => $folder->getID())));
 	}
 
 
@@ -118,7 +98,7 @@ class Page extends DataRecord {
 	 * @return string
 	 */
 	public function getName() {
-		return $this->name;
+		return $this->getAttr('name');
 	}
 
 	/**
@@ -129,7 +109,7 @@ class Page extends DataRecord {
 	public function getTemplate() {
 
 		if ($this->oTemplate === null) {
-			$this->oTemplate = new TemplateFile($this->template_id);
+			$this->oTemplate = new TemplateFile($this->getAttr('template_id'));
 		}
 
 		return $this->oTemplate;
@@ -187,7 +167,7 @@ class Page extends DataRecord {
 	 * @return string
 	 */
 	public function getPublishTime() {
-		return new Date($this->publishtime);
+		return new Date($this->getAttr('publishtime'));
 	}
 
 	/**
@@ -195,25 +175,25 @@ class Page extends DataRecord {
 	 */
 	public function getExpireTime() {
 		
-		if ('0000-00-00 00:00:00' === $this->expiretime) {
+		if ('0000-00-00 00:00:00' === $this->getAttr('expiretime')) {
 			return '';
 		}
 		
-		return new Date($this->expiretime);
+		return new Date($this->getAttr('expiretime'));
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getRedirect() {
-		return $this->redirect;
+		return $this->getAttr('redirect');
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCreated() {
-		return $this->created;
+		return $this->getAttr('created');
 	}
 
 	/**
@@ -222,7 +202,7 @@ class Page extends DataRecord {
 	 * @return bool
 	 */
 	public function isActive() {
-		if ($this->active == 1) {
+		if ($this->getAttr('active') == 1) {
 			return true;
 		}
 
@@ -237,47 +217,32 @@ class Page extends DataRecord {
 	public function setActive($bActive) {
 
 		if ($bActive == true) {
-			$this->active =  1;
+			$this->setAttr('active', 1);
 		} else if ($bActive == false) {
-			$this->active = 0;
+			$this->setAttr('active', 0);
 		}
 	}
 
 	/**
-	 * @return Page
+	 * @return PageFolder
 	 */
 	public function getParent() {
 		
-		$page = new Page($this->getAttr('parent_id'));
+		$page = new PageFolder($this->getAttr('parent_id'));
 
 		return $page;
 	}
 
-	/**
-	 * check wether this object is a folder
-	 *
-	 * @return unknown
-	 */
-	public function isFolder() {
-		if ($this->isfolder == 1) {
-			return true;
-		}
-
-		return false;
+	public function getDescription() {
+		return $this->getAttr('description');
 	}
 
-	/**
-	 * Set the image active or not
-	 *
-	 * @param bool $bActive
-	 */
-	public function setFolder($bFolder) {
+	public function getKeywords() {
+		return $this->getAttr('keywords');
+	}
 
-		if ($bFolder == true) {
-			$this->isfolder =  1;
-		} else if ($bFolder == false) {
-			$this->isfolder = 0;
-		}
+	public function setParent(PageFolder $folder) {
+		$this->setAttr('parent_id', $folder->getID());
 	}
 
 	/**
@@ -287,18 +252,19 @@ class Page extends DataRecord {
 	public function save() {
 
 		if ($this->getAttr('template_id') == 0) {
-			throw new PageFolderRecordException("please provide a template for this page: ".$this->id);
+			throw new PageRecordException("error-template");
 		}
 
-		if (is_array($this->aModule)) {
+		parent::save();
+
+		if (is_array($this->aModules)) {
 			foreach ($this->aModules as $oModule) {
 				$this->aModules->save();
 			}
 		}
-
-		parent::save();
+		
 	}
 }
 
-class PageFolderRecordException extends RecordException {}
+class PageRecordException extends RecordException {}
 

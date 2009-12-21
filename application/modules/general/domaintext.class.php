@@ -11,9 +11,9 @@
  */
 class DomainText implements DomainEntity {
 
-	/**
-	 * @var string
-	 */
+/**
+ * @var string
+ */
 	private $sValue;
 
 	/**

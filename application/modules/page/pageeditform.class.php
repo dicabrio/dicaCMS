@@ -62,6 +62,16 @@ class PageEditForm extends Form {
 
 		parent::addFormElement($elRedirect->getName(), $elRedirect);
 
+		$elKeywords = new TextArea('keywords');
+		$elKeywords->setValue($this->page->getKeywords());
+
+		parent::addFormElement($elKeywords->getName(), $elKeywords);
+
+		$elDescription = new TextArea('description');
+		$elDescription->setValue($this->page->getDescription());
+
+		parent::addFormElement($elDescription->getName(), $elDescription);
+
 		$elActive = new CheckboxInput('active');
 		$elActive->setValue($this->page->isActive());
 
