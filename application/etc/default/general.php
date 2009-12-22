@@ -10,11 +10,11 @@ $config = array(
 	),
 
 	'url' => array(
-		'www' => 'http://'.DOMAIN.'/dicacms/www',
-		'images' => 'http://'.DOMAIN.'/dicacms/www/images',
-		'upload' => 'http://'.DOMAIN.'/dicacms/www/upload',
-		'css' => 'http://'.DOMAIN.'/dicacms/www/css',
-		'js' => 'http://'.DOMAIN.'/dicacms/www/js',
+		'www' => 'http://'.DOMAIN,
+		'images' => 'http://'.DOMAIN.'/images',
+		'upload' => 'http://'.DOMAIN.'/upload',
+		'css' => 'http://'.DOMAIN.'/css',
+		'js' => 'http://'.DOMAIN.'/js',
 	),
 
 	'default_lang' => 'NL',

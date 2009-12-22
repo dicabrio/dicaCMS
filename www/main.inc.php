@@ -48,7 +48,7 @@ set_error_handler('__errorHandler', E_ALL);
 set_exception_handler('__exceptionHandler');
 
 // import modules
-Util::import(LIB_DIR.'/blabla');
+Util::import(LIB_DIR.'/blabla');// HACK
 Util::import(LIB_DIR.'/controller');
 Util::import(LIB_DIR.'/presentation');
 Util::import(LIB_DIR.'/data');
