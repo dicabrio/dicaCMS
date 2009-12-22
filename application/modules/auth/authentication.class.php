@@ -53,16 +53,17 @@ class Authentication {
 	public function login($p_sUsername, $p_sPassword) {
 		try {
 			$oUser = User::getByUsernameAndPassword($p_sUsername, $p_sPassword);
-			if ($oUser) {
+//			test($oUser);
+			if ($oUser instanceof User) {
 				self::$oSession->set(self::KEY_LOGGEDIN, true);
-				self::$oSession->set(self::KEY_USERID, $oUser->id);
+				self::$oSession->set(self::KEY_USERID, $oUser->getID());
 				self::$oSession->set(self::KEY_IP, $_SERVER['REMOTE_ADDR']);
 
 				return true;
 			} else {
 				return false;
 			}
-		} catch(Exception $e) {
+		} catch(RecordException $e) {
 			return false;
 		}
 	}

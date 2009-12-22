@@ -15,19 +15,17 @@ class LogoutController implements Controller {
 		// getting the session
 		$oSession = Session::getInstance();
 		$oSession->destroy();
-		// check for post and handle authentication
-		$sError = '';
-		$oTpl = new Template();
-		$oTpl->setTemplateFile('/login/login.html');
-		$oTpl->assign('formaction', WWW_URL.'/login/');
-		$oTpl->assign('username', '');
-		$oTpl->assign('error', $sError);
-		return $oTpl->getContents();
+
+		$this->_redirect('login');
 
 	}
 
 
 	public function _default() {
 		return 'this is the default method';
+	}
+
+	public function _redirect($url) {
+		Util::gotoPage(Conf::get('general.url.www').'/'.$url);
 	}
 }

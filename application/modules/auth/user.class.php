@@ -81,7 +81,7 @@ class User extends DataRecord {
 			return reset($aReturnVals);
 		}
 
-		return false;
+		return null;
 	}
 
 }

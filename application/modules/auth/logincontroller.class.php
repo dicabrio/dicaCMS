@@ -28,9 +28,12 @@ class LoginController implements Controller {
 				$sRedirect = $oSession->get('redirect');
 
 				if (empty($sRedirect)) {
-					Util::gotoPage(Conf::get('general.url.www').'/'.Conf::get('secure.default_secure_page'));
+					$this->_redirect('dashboard');
+//					Util::gotoPage(Conf::get('general.url.www').'/'.Conf::get('secure.default_secure_page'));
 				} else {
-					Util::gotoPage($sRedirect);
+					echo $sRedirect; exit;
+					$this->_redirect('dashboard');
+//					Util::gotoPage($sRedirect);
 				}
 
 			} else {
@@ -57,6 +60,6 @@ class LoginController implements Controller {
 	}
 
 	public function _redirect($url) {
-		Util::gotoPage(DOMAIN.$url);
+		Util::gotoPage(Conf::get('general.url.www').'/'.$url);
 	}
 }
