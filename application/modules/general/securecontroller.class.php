@@ -18,8 +18,9 @@ class SecureController implements Controller {
 			$sMethod = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $sMethod);
 			// set a redirect
 			$oSession = Session::getInstance();
-			$oSession->set('redirect', Conf::get('general.url.www').'/'.$sMethod);
-			Util::gotoPage(Conf::get('general.url.www').'/login');
+			$oSession->set('redirect', $sMethod);
+
+			$this->_redirect('login');
 		}
 	}
 
@@ -37,11 +38,26 @@ class SecureController implements Controller {
 		return '_default';
 	}
 
+	/**
+	 * redirect to the logout page
+	 */
 	public function logout() {
-		Util::gotoPage(Conf::get('general.url.www').'/logout');
+		$this->_redirect('logout');
 	}
 
-	public function _redirect($url) {
-		Util::gotoPage(DOMAIN.$url);
+	/**
+	 * redirect to a certain page. No host prefix.
+	 *
+	 * example:
+	 *	- dashboard
+	 *	- pages
+	 *
+	 * NOT:
+	 *	- http://domain.com/test/
+	 *
+	 * @param string $page
+	 */
+	public function _redirect($page) {
+		Util::gotoPage(Conf::get('general.url.www').'/'.$page);
 	}
 }

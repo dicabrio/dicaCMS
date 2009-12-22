@@ -71,6 +71,13 @@ class User extends DataRecord {
 		}
 	}
 
+	/**
+	 * find user by username and password. It finds only users that are active
+	 *
+	 * @param string $sUsername
+	 * @param string $sPassword
+	 * @return User
+	 */
 	public static function getByUsernameAndPassword($sUsername, $sPassword) {
 		$oCrit = new Criteria('username = :username AND password = MD5(:password) AND active = :active');
 		$oCrit->addBind('username', $sUsername);

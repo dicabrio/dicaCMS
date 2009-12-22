@@ -5,11 +5,9 @@
 		<title>login</title>
 	</head>
 	<body>
-		<form action="<?php echo $sFormAction; ?>/login/" method="post" name="login">
+		<?php echo $form->begin(); ?>
 			<fieldset>
-
 				<legend><?php echo Lang::get('login.legend'); ?></legend>
-				
 				<?php if (count($aErrors) > 0) : ?>
 					<ul class="error">
 					<?php foreach ($aErrors as $sError) : ?>
@@ -18,14 +16,13 @@
 					</ul>
 				<?php endif; ?>
 				<label for="username"><?php echo Lang::get('login.username'); ?>:</label>
-				<input type="text" name="username" value="<?php echo $sUsername; ?>" /><br />
+				<?php echo $form->getFormElement('username'); ?><br />
 				
 				<label for="password"><?php echo Lang::get('login.password'); ?>:</label>
-				<input type="password" name="password" /><br />
-				
-				<input type="submit" name="submit" value="<?php echo Lang::get('login.button'); ?>" />
-			</fieldset>
+				<?php echo $form->getFormElement('password'); ?><br />
 
-		</form>
+				<?php echo $form->getSubmitButton('login'); ?>
+			</fieldset>
+		<?php echo $form->end(); ?>
 	</body>
 </html>

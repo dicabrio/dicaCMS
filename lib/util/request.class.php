@@ -151,6 +151,16 @@ class Request
 		return strtolower($_SERVER['REQUEST_METHOD']);
 	}
 
+	/**
+	 * redirect to the given url.
+	 * 
+	 * @param string $url
+	 */
+	public function redirect($url) {
+		header('location:'.$url);
+		exit;
+	}
+
 	public function setStrictCleanUp( $p_bStrict )
 	{
 		$this->m_bStrict = $p_bStrict;
@@ -227,4 +237,3 @@ class Request
 		return $p_sIn;
 	}
 }
-?>
