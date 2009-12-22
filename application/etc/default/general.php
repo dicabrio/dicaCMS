@@ -4,18 +4,18 @@ $config = array(
 
 	'dir' => array(
 		'www' => SYS_DIR.'/www',
-		'templates' => SYS_DIR.'/templates',
-		'upload' => SYS_DIR.'/upload',
-		'lang' => SYS_DIR.'/lang',
+		'templates' => APP_DIR.'/templates',
+		'upload' => APP_DIR.'/upload',
+		'lang' => APP_DIR.'/lang',
 	),
 
 	'url' => array(
-		'www' => 'http://'.DOMAIN.'/',
-		'images' => 'http://'.DOMAIN.'/images',
-		'upload' => 'http://'.DOMAIN.'/upload',
-		'css' => 'http://'.DOMAIN.'/css',
-		'js' => 'http://'.DOMAIN.'/js',
+		'www' => 'http://'.DOMAIN.'/dicacms/www',
+		'images' => 'http://'.DOMAIN.'/dicacms/www/images',
+		'upload' => 'http://'.DOMAIN.'/dicacms/www/upload',
+		'css' => 'http://'.DOMAIN.'/dicacms/www/css',
+		'js' => 'http://'.DOMAIN.'/dicacms/www/js',
 	),
 
-	'default_lang' => 'EN',
+	'default_lang' => 'NL',
 );

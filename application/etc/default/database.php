@@ -3,8 +3,8 @@
 $config = array(
 
 	'dbtype' => 'mysql',
-	'dbhost' => 'localhost',
-	'dbname' => 'dicacms',
-	'dbuser' => '****',
-	'dbpass' => '****',
+	'dbhost' => '127.0.0.1',
+	'dbname' => 'dicabrio',
+	'dbuser' => 'root',
+	'dbpass' => '',
 );
