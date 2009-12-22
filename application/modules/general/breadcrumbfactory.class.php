@@ -25,7 +25,8 @@ class BreadcrumbFactory {
 	public function build() {
 
 		if (!$this->build) {
-			$this->breadcrumb->addItem(new MenuItem($this->baseurl, 'root'));
+			$this->breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
+			$this->breadcrumb->addItem(new MenuItem($this->baseurl, Lang::get('breadcrumb.root')));
 
 			$breadcrumbFolders = array();
 			$folder = $this->currentfolder;

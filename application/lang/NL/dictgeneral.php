@@ -5,5 +5,8 @@ $lang = array (
 		'edit' => 'wijzig',
 		'delete' => 'verwijder'
 	),
+
+	'logout' => 'Uitloggen',
+	'dashboard' => 'Dashboard',
 );
 

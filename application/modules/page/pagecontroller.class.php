@@ -6,7 +6,7 @@ class PageController extends CmsController {
 
 	public function __construct($sMethod) {
 		// we should check for permissions
-		parent::__construct('page/'.$sMethod, 'Pages');
+		parent::__construct('page/'.$sMethod, Lang::get('page.title'));
 
 //		$oMainMenu = parent::getMainMenu();
 //		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('page.url.editpage'), 'new Page', ''));
@@ -34,8 +34,8 @@ class PageController extends CmsController {
 		$breadcrumb = $breadcrumbFac->build();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', 'new Page'));
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', 'new Folder'));
+		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', Lang::get('page.button.newpage')));
+		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($subfolders);
@@ -59,6 +59,8 @@ class PageController extends CmsController {
 	}
 
 	/**
+	 * @TODO create a pageview object that will populate the view with variables and such
+	 *
 	 * edit an existing page
 	 * @return string
 	 */
@@ -83,7 +85,12 @@ class PageController extends CmsController {
 		$form->listen();
 
 		$breadcrumb = new Menu('breadcrumb');
-		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$pagefolder->getID(), $pagefolder->getName()));
+		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
+		$folderName = $pagefolder->getName();
+		if ($folderName == 'root') {
+			$folderName = Lang::get('breadcrumb.root');
+		}
+		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$pagefolder->getID(), $folderName));
 
 		$breadcrumbname = 'edit Page';
 		if ($oPage->getID() == 0) {

@@ -40,13 +40,14 @@ class CmsController extends SecureController {
 		$this->oMainMenu = new Menu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
-//		$this->oMainMenu->addItem(new MenuItem('#', 'Settings', '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
 		
 		$this->oSubMenu = new Menu('modulesNav');
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/page/', 'Pages', 'pages', ($sActive == 'page')));
+		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/page/', Lang::get('page.menuname'), 'pages', ($sActive == 'page')));
 //		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/', 'Media', 'media', ($sActive == 'media')));
 //		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/user/', 'Users', 'users', ($sActive == 'user')));
 //		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/', 'Templates', 'templates', ($sActive == 'template')));
