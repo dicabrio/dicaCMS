@@ -3,7 +3,7 @@
 
 class Conf {
 
-	private static $sDefaultServer = 'localhost';
+	private static $sDefaultLocation = 'default';
 
 	private static $sDirName;
 
@@ -32,7 +32,7 @@ class Conf {
 			if (!isset(self::$aConf[$sConfFile])) {
 				$sConfigFile = self::$sDirName.'/'.self::$sServer.'/'.strtolower($sConfFile).'.php';
 				if (!file_exists($sConfigFile)) {
-					$sConfigFile = self::$sDirName.'/'.self::$sDefaultServer.'/'.strtolower($sConfFile).'.php';
+					$sConfigFile = self::$sDirName.'/'.self::$sDefaultLocation.'/'.strtolower($sConfFile).'.php';
 					if (!file_exists($sConfigFile)) {
 						throw new InvalidArgumentException('Config file cannot be found: '.$sConfigFile);
 					}
