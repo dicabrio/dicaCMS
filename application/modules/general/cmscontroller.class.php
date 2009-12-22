@@ -38,17 +38,18 @@ class CmsController extends SecureController {
 		$this->oBaseView = new BaseView('baseview.php', $sTitle);
 
 		$this->oMainMenu = new Menu('headerNav');
-		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', ''));
-		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', ''));
+//		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
+//		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
+//		$this->oMainMenu->addItem(new MenuItem('#', 'Settings', '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
 		
 		$this->oSubMenu = new Menu('modulesNav');
 		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/page/', 'Pages', 'pages', ($sActive == 'page')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/', 'Media', 'media', ($sActive == 'media')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/user/', 'Users', 'users', ($sActive == 'user')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/', 'Templates', 'templates', ($sActive == 'template')));
+//		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/', 'Media', 'media', ($sActive == 'media')));
+//		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/user/', 'Users', 'users', ($sActive == 'user')));
+//		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/', 'Templates', 'templates', ($sActive == 'template')));
 
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);

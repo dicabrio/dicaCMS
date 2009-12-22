@@ -3,8 +3,8 @@
 $config = array(
 
 	'dbtype' => 'mysql',
-	'dbhost' => 'localhost',
+	'dbhost' => '127.0.0.1',
 	'dbname' => 'dicabrio',
 	'dbuser' => 'root',
-	'dbpass' => 'DCrob1981',
+	'dbpass' => '',
 );
