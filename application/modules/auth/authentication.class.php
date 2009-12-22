@@ -53,7 +53,6 @@ class Authentication {
 	public function login($p_sUsername, $p_sPassword) {
 		try {
 			$oUser = User::getByUsernameAndPassword($p_sUsername, $p_sPassword);
-//			test($oUser);
 			if ($oUser instanceof User) {
 				self::$oSession->set(self::KEY_LOGGEDIN, true);
 				self::$oSession->set(self::KEY_USERID, $oUser->getID());
