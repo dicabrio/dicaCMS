@@ -26,6 +26,10 @@ h1 {
 	margin: 0 5px 0 0;
 }
 
+#modmod {
+	overflow: hidden;
+}
+
 #modules
 {
 	float: left;
@@ -33,6 +37,8 @@ h1 {
 	background: #dee4ea;
 	border-right: 1px solid #b4b4b4;
 	padding: 15px 0 50px 0;
+	margin-bottom: -32767px !important;
+	padding-bottom: 32767px !important;
 }
 
 #modulesNav li a

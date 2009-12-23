@@ -16,16 +16,17 @@
 			<h1>dicaCMS</h1>
 			<?php echo $oMainMenu->getContents(); ?>
 		</div>
-		<div id="modules">
-			<?php echo $oSubMenu->getContents(); ?>
-		</div>
+		<div id="modmod">
+			<div id="modules">
+				<?php echo $oSubMenu->getContents(); ?>
+			</div>
 		
-		<div id="main">
-			<?php if (isset($oModule)) : ?>
-			<?php echo $oModule->getContents(); ?>
-			<?php endif; ?>			
-		</div>
-		
+			<div id="main">
+				<?php if (isset($oModule)) : ?>
+				<?php echo $oModule->getContents(); ?>
+				<?php endif; ?>			
+			</div>
+		</div>	
 		<div id="footer">dicaCMS</div>
 	</body>
 </html>
