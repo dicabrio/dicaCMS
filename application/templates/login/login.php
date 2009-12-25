@@ -18,7 +18,8 @@
 			}
 
 			input[type='text'], input[type='password'] {
-				border: 1px solid #36615d;
+
+				border: 1px solid rgba(54,97,93,0.5); 
 				background-color: rgba(54, 97, 93, 0.10);
 				width: 145px;
 				padding: 3px 5px;
@@ -26,7 +27,7 @@
 			}
 
 			input[type='submit'] {
-				border: 1px solid #36615d;
+				border: 1px solid rgba(54,97,93,0.5); 
 				padding: 5px 15px;
 				-moz-border-radius: <?php echo $borderrad; ?>px;
 				-webkit-border-radius: <?php echo $borderrad; ?>px;
@@ -72,7 +73,7 @@
 			}
 
 			#loginpanel fieldset {
-				border: 1px solid #36615d;
+				border: 1px solid rgba(54,97,93,0.3);
 				padding: 5px 10px 10px 10px;
 			}
 
