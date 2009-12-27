@@ -15,23 +15,32 @@ h1 {
 
 #header
 {
-	padding: 10px;
-	background: #a9a9a9;
+	background-image: -moz-linear-gradient(left, right, from(rgb(200,200,200)), to(rgb(169,169,169)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(200,200,200)),
+				color-stop(0.00, rgb(169,169,169))
+				);
+	background-color: rgb(169,169,169);
+	border-top: 1px solid rgba(255,255,255,0.5);
 	border-bottom: 1px solid #515151;
+	padding: 10px;
+	text-shadow: rgba(255,255,255,1) 0px 1px 0px;
 }
 
 #headerNav li
 {
 	display: inline;
 	margin: 0 5px 0 0;
+	text-shadow: none;
 }
 
 #modmod {
 	overflow: hidden;
 }
 
-#modules
-{
+#modules {
 	float: left;
 	width: 150px;
 	background: #dee4ea;
@@ -39,35 +48,50 @@ h1 {
 	padding: 15px 0 50px 0;
 	margin-bottom: -32767px !important;
 	padding-bottom: 32767px !important;
+	min-height: 300px;
 }
 
-#modulesNav li a
-{
+#modulesNav li a {
 	display: block;
 	font-size: 12px;
 	padding: 3px 5px 3px 35px;
 	text-decoration: none;
-	background: transparent url('../images/blocks.png') no-repeat 15px 50%;
 	color: #000;
 }
 
-#modulesNav li.active a
-{
-	background: #3875d7 url('../images/blocks.png') no-repeat 15px 50%;
+#modulesNav li.active a {
+	background-image: -moz-linear-gradient(left, right, from(rgb(178,189,215)), to(rgb(135,151,184)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(178,189,215)),
+				color-stop(0.00, rgb(135,151,184))
+				);
+	background-color: #3875d7;
+	border-top: 1px solid rgb(164,175,203);
 	color: white;
+	text-shadow: rgba(0,0,0,1) 0px 1px 0px;
 }
 
-#main 
-{
+#main {
 	margin: 0 0 0 151px;
 	background: url('../images/BG-main.png');
 }
 
-#footer
-{
-	background: gray;
+#footer {
+	background-image: -moz-linear-gradient(left, right, from(rgb(200,200,200)), to(rgb(169,169,169)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(200,200,200)),
+				color-stop(0.00, rgb(169,169,169))
+				);
+	background-color: rgb(169,169,169);
+	border-top: 1px solid #515151;
 	clear: both;
 	padding: 5px;
+	text-align: center;
+	text-shadow: rgba(255,255,255,0.7) 0px 1px 0px;
 }
 
 table.dataset {
@@ -104,6 +128,15 @@ table.dataset tr td:nth-child(2) img {
 ul#breadcrumb {
 	list-style: none;
 	padding: 5px;
+	background-image: -moz-linear-gradient(left, right, from(rgb(253,253,253)), to(rgb(223,223,223)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(253,253,253)),
+				color-stop(0.00, rgb(223,223,223))
+				);
+	background-color: rgb(223,223,223);
+	border-bottom: 1px solid rgb(100,100,100);
 }
 
 ul#breadcrumb li {
@@ -113,50 +146,95 @@ ul#breadcrumb li {
 
 ul#actions {
 	list-style: none;
-	padding: 10px 5px 5px 5px;
+	padding: 5px 5px 5px 5px;
 	background: #666;
+	background-image: -moz-linear-gradient(left, right, from(rgb(80,80,80)), to(rgb(50,50,50)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(120,120,120)),
+				color-stop(0.00, rgb(70,70,70))
+				);
+	border-top: 1px solid rgba(255,255,255,0.5);
 }
 
 ul#actions li {
 	display: inline;
 	padding: 0;
 	margin: 0 5px 0 0;
-	border: 1px solid #222;
-	background: #444;
 }
 
 ul#actions li a {
-	padding: 5px 10px;
+	display: inline-block;
+	padding: 2px 10px;
 	color: #fff;
 	text-decoration: none;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-opera-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	background: #444;
+	border: 1px solid #222;
+	background-image: -moz-linear-gradient(left, right, from(rgb(80,80,80)), to(rgb(50,50,50)));
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, rgb(120,120,120)),
+				color-stop(0.00, rgb(70,70,70))
+				);
+	-webkit-box-shadow: rgba(255,255,255,0.3) 0 1px 0;
+	-moz-box-shadow: rgba(255,255,255,0.3) 0 1px 0;
 }
 
 #tabmenu {
 	width: 100%;
-	height: 25px;
-	padding: 10px 0 0 20px;
+	height: 23px;
 	margin: 0 0 20px;
-	border-bottom: 1px solid black;
-	background: #666;
+	list-style: none;
+	padding: 10px 5px 0 20px;
+	background: rgb(67,74,93);
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(0, rgb(34,37,48)),
+				color-stop(20%, rgb(67,74,93)),
+				color-stop(90%, rgb(67,74,93)),
+				color-stop(1, rgb(34,37,48))
+				);
 }
 
 #tabmenu li {
-	list-style: none;
 	float: left;
-	height: 24px;
-	border: 1px solid black;
-	background: #ccc;
+	height: 23px;
+	margin: 0 2px 0 0;
+	background-color: rgb(138,157,185);
+	border-radius: 5px 5px 0 0;
+	background-image: -webkit-gradient(linear,
+				left top,
+				left bottom,
+				color-stop(0, rgb(138,157,185)),
+				color-stop(0.8, rgb(138,157,185)),
+				color-stop(1, rgba(0,0,0,0.5))
+				);
 }
 
 #tabmenu li a {
 	display: block;
-	padding: 5px;
+	padding: 6px 20px;
 	text-decoration: none;
+	color: #fff;
+	font-weight: bold;
+	
 }
 
 #tabmenu li.active {
 	border-bottom: 1px solid #fff;
 	background: #fff;
+}
+
+#tabmenu li.active a {
+	color: #000;
 }
 
 .tab {
