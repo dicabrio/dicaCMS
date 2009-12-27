@@ -209,6 +209,9 @@ ul#actions li a {
 	height: 23px;
 	margin: 0 2px 0 0;
 	background-color: rgb(138,157,185);
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0;
 	background-image: -webkit-gradient(linear,
 				left top,
