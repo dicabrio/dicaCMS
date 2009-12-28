@@ -8,5 +8,6 @@ $lang = array (
 
 	'logout' => 'Uitloggen',
 	'dashboard' => 'Dashboard',
+	'settings' => 'Settings',
 );
 

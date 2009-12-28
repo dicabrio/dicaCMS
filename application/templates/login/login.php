@@ -9,75 +9,76 @@
 			* {
 				font-family:sans-serif;
 				font-size: 12px;
-			padding: 0;
-			margin: 0;
-		}
+				padding: 0;
+				margin: 0;
+			}
 
-		html {
-			height: 100%;
-		}
+			html {
+				height: 100%;
+			}
 
-		input[type='text'], input[type='password'] {
+			input[type='text'], input[type='password'] {
 
-			border: 1px solid rgba(54,97,93,0.5); 
-			background-color: rgba(54, 97, 93, 0.10);
-			width: 145px;
-			padding: 3px 5px;
-			margin: 0 0 5px 0;
-		}
+				border: 1px solid rgba(54,97,93,0.5);
+				background-color: rgba(54, 97, 93, 0.10);
+				width: 145px;
+				padding: 3px 5px;
+				margin: 0 0 5px 0;
+			}
 
-		input[type='submit'] {
-			border: 1px solid rgba(54,97,93,0.5); 
-			padding: 5px 15px;
-			-moz-border-radius: <?php echo $borderrad; ?>px;
-			-webkit-border-radius: <?php echo $borderrad; ?>px;
-			-opera-border-radius: <?php echo $borderrad; ?>px;
-			-khtml-border-radius: <?php echo $borderrad; ?>px;
-			border-radius: <?php echo $borderrad; ?>px;
-			background-image: -webkit-gradient(linear,
-				left bottom,
-				left top,
-				color-stop(1.00, #efefef),
-				color-stop(0.00, #b9b9b9)
-				);
-			text-shadow: rgba(255,255,255,1) 0px 1px 0px;
-		}
+			input[type='submit'] {
+				border: 1px solid rgba(54,97,93,0.5);
+				padding: 5px 15px;
+				-moz-border-radius: <?php echo $borderrad; ?>px;
+				-webkit-border-radius: <?php echo $borderrad; ?>px;
+				-opera-border-radius: <?php echo $borderrad; ?>px;
+				-khtml-border-radius: <?php echo $borderrad; ?>px;
+				border-radius: <?php echo $borderrad; ?>px;
+				background-image: -webkit-gradient(linear,
+					left bottom,
+					left top,
+					color-stop(1.00, #efefef),
+					color-stop(0.00, #b9b9b9)
+					);
+				text-shadow: rgba(255,255,255,1) 0px 1px 0px;
+				cursor: pointer;
+			}
 
-		body {
-			background-image: -moz-linear-gradient(left, right, from(rgb(54,97,93)), to(rgb(52,168,161)));
-			background-image: -webkit-gradient(linear,
-				left bottom,
-				left top,
-				color-stop(1.00, rgb(54,97,93)),
-				color-stop(0.00, rgb(52,168,161))
-				);
-			background-color: rgb(54,97,93);
-			background-repeat: no-repeat;
-			height: 100%;
+			body {
+				background-image: -moz-linear-gradient(left, right, from(rgb(54,97,93)), to(rgb(52,168,161)));
+				background-image: -webkit-gradient(linear,
+					left bottom,
+					left top,
+					color-stop(1.00, rgb(54,97,93)),
+					color-stop(0.00, rgb(52,168,161))
+					);
+				background-color: rgb(54,97,93);
+				background-repeat: no-repeat;
+				height: 100%;
 
-		}
+			}
 
-		#login {
-			height: 100%;
-			width: 100%;
-		}
+			#login {
+				height: 100%;
+				width: 100%;
+			}
 
-		#login #loginpanel {
-			width: 300px;
-			margin: 0 auto;
-			background: #fff;
-			padding: 25px 30px 33px 30px;
-			box-shadow: 10px 10px 5px #000;
-			-moz-box-shadow: 0 0 1em #000;
-			-webkit-box-shadow: 0 0 1em #000;
-		}
+			#login #loginpanel {
+				width: 300px;
+				margin: 0 auto;
+				background: #fff;
+				padding: 25px 30px 33px 30px;
+				box-shadow: 10px 10px 5px #000;
+				-moz-box-shadow: 0 0 1em #000;
+				-webkit-box-shadow: 0 0 1em #000;
+			}
 
-		#loginpanel fieldset {
-			border: 1px solid rgba(54,97,93,0.3);
-			padding: 5px 10px 10px 10px;
-		}
+			#loginpanel fieldset {
+				border: 1px solid rgba(54,97,93,0.3);
+				padding: 5px 10px 10px 10px;
+			}
 
-		#loginpanel fieldset legend {
+			#loginpanel fieldset legend {
 				padding: 0px 5px;
 				font-weight: bold;
 				font-size: 13px;

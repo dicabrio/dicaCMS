@@ -7,10 +7,6 @@ class PageController extends CmsController {
 	public function __construct($sMethod) {
 		// we should check for permissions
 		parent::__construct('page/'.$sMethod, Lang::get('page.title'));
-
-//		$oMainMenu = parent::getMainMenu();
-//		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('page.url.editpage'), 'new Page', ''));
-		//		$oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').Conf::get('page.url.editfolder'), 'new Folder', ''));
 	}
 
 	/**
@@ -54,6 +50,8 @@ class PageController extends CmsController {
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $oPageOverview);
+		$oBaseView->addScript('page.js');
+		$oBaseView->addScript('general.js');
 
 		return $oBaseView->getContents();
 	}
@@ -64,7 +62,7 @@ class PageController extends CmsController {
 	 * edit an existing page
 	 * @return string
 	 */
-	public function editpage($aErrors = array(), $aModuleErrors=array()) {
+	public function editpage() {
 
 		$oReq = Request::getInstance();
 		$oSession = Session::getInstance();
@@ -145,6 +143,47 @@ class PageController extends CmsController {
 		$oBaseView->assign('oModule', $oModuleView);
 
 		return $oBaseView->getContents();
+	}
+
+	public function editfolder() {
+		$req = Request::getInstance();
+		$session = Session::getInstance();
+
+		$parentPageFolder = PageFolder::findByID($session->get(self::C_CURRENT_FOLDER));
+		$currentPageFolder = new PageFolder(Util::getUrlSegment(2));
+
+		$button = new ActionButton('Save');
+
+		$form = new PageFolderEditForm($req, $currentPageFolder);
+		$formmapper = new PageFolderMapper($form);
+		$form->addSubmitButton('save', $button, new PageFolderSaveHandler($formmapper, $currentPageFolder, $parentPageFolder));
+		$form->listen();
+
+		$breadcrumb = new Menu('breadcrumb');
+		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
+		$folderName = $parentPageFolder->getName();
+		if ($folderName == 'root') {
+			$folderName = Lang::get('breadcrumb.root');
+		}
+		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$parentPageFolder->getID(), $folderName));
+
+		$breadcrumbname = 'edit Page';
+		if ($currentPageFolder->getID() == 0) {
+			$breadcrumbname = 'new Page';
+		}
+
+		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
+
+		$oModuleView = new View('page/editpagefolder.php');
+		$oModuleView->assign('form', $form);
+		$oModuleView->assign('folderid', $parentPageFolder->getID());
+		$oModuleView->assign('pageid', $currentPageFolder->getID());
+		$oModuleView->assign('breadcrumb', $breadcrumb);
+		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
+
+		$view = parent::getBaseView();
+		$view->assign('oModule', $oModuleView);
+		return $view->getContents();
 	}
 
 

@@ -81,6 +81,7 @@ class Input implements FormElement {
 	 */
 	public function addAttribute($attribute, $value) {
 		$this->attributes[$attribute] = $value;
+		return $this;
 	}
 
 	/**
@@ -88,6 +89,7 @@ class Input implements FormElement {
 	 */
 	public function notMapped() {
 		$this->sStyle = ' style="border: 1px solid red;"';
+		return $this;
 	}
 
 	public function isSelected() {

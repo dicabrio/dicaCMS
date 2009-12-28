@@ -127,7 +127,8 @@ table.dataset tr td:nth-child(2) img {
 
 ul#breadcrumb {
 	list-style: none;
-	padding: 5px;
+	
+	height: 25px;
 	background-image: -moz-linear-gradient(left, right, from(rgb(253,253,253)), to(rgb(223,223,223)));
 	background-image: -webkit-gradient(linear,
 				left bottom,
@@ -137,16 +138,22 @@ ul#breadcrumb {
 				);
 	background-color: rgb(223,223,223);
 	border-bottom: 1px solid rgb(100,100,100);
+	padding: 0 0 0 5px;
 }
 
 ul#breadcrumb li {
-	display: inline;
-	padding: 0 5px 0 0;
+	height: 25px;
+	background-image: url(../images/BG-breadcrumb.png);
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+	display: inline-block;
+	line-height: 25px;
+	padding: 0 20px 0 5px;
 }
 
 ul#actions {
 	list-style: none;
-	padding: 5px 5px 5px 5px;
+	padding: 5px 5px 5px 10px;
 	background: #666;
 	background-image: -moz-linear-gradient(left, right, from(rgb(80,80,80)), to(rgb(50,50,50)));
 	background-image: -webkit-gradient(linear,
@@ -286,11 +293,38 @@ input[type=text], textarea, select {
 }
 
 
-.actions .save {
-	background: transparent url('../images/button.png') no-repeat 0 0;
-	border: none;
-	width: 95px;
-	height: 27px;
+.actions .button {
+	padding: 5px 20px;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	-opera-border-radius: 7px;
+	-khtml-border-radius: 7px;
+	border-radius: 7px;
+}
+
+.button {
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px solid #000;
+	padding: 0 10px;
+	text-decoration: none;
+	color: #000;
+	cursor: pointer;
+
+	border: 1px solid rgba(54,97,93,0.5);
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-opera-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	background-image: -webkit-gradient(linear,
+				left bottom,
+				left top,
+				color-stop(1.00, #efefef),
+				color-stop(0.00, #b9b9b9)
+				);
+	text-shadow: rgba(255,255,255,1) 0px 1px 0px;
+
 }
 
 .clear {
