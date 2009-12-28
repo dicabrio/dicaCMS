@@ -45,9 +45,11 @@ class PageFolder extends DataRecord implements IFolder {
 	 * @param int $id
 	 */
 	protected function __construct($id=null) {
-		parent::__construct('page', $id);
+		parent::__construct(__CLASS__, $id);
 
-		$this->setAttr('isfolder', 1);
+		if ($id == 0) {
+			$this->setAttr('created', date("Y-m-d H:i:s"));
+		}
 	}
 
 	/**
@@ -58,20 +60,20 @@ class PageFolder extends DataRecord implements IFolder {
 
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, 255, true);
 		parent::addColumn('parent_id', DataTypes::INT, false, true);
-		parent::addColumn('isfolder', DataTypes::INT, false, true);
 
 	}
 
 	/**
-	 *
 	 * @param string $foldername
+	 * @return PageFolder
 	 */
-	public static function create($foldername) {
-		$page = new PageFolder();
-		$page->setAttr('name', $foldername);
-		$page->setAttr('created', date("Y-m-d H:i:s"));
+	public function update($foldername, $description) {
+		$this->setAttr('name', $foldername);
+		$this->setAttr('description', $description);
+		return $this;
 	}
 
 	/**
@@ -82,12 +84,30 @@ class PageFolder extends DataRecord implements IFolder {
 		$this->setAttr('name', $foldername);
 	}
 
+	/**
+	 * @param Page $page
+	 * @return PageFolder
+	 */
 	public function addPage(Page $page) {
 
 		$page->setParent($this);
 		$this->pages[] = $page;
+		return $this;
+		
 	}
 
+	/**
+	 *
+	 * @param PageFolder $folder
+	 * @return PageFolder
+	 */
+	public function addPageFolder(PageFolder $folder) {
+
+		$folder->setParent($this);
+		$this->folders[] = $folder;
+		return $this;
+
+	}
 
 	/**
 	 * creational method or factory method.
@@ -105,7 +125,7 @@ class PageFolder extends DataRecord implements IFolder {
 	 * @return PageFolder
 	 */
 	public static function findByName($foldername) {
-		$folders = parent::findAll('page', parent::ALL, new Criteria(' name = :name', array('name' => $foldername)));
+		$folders = parent::findAll(__CLASS__, parent::ALL, new Criteria(' name = :name', array('name' => $foldername)));
 
 		if (count($folders) > 0) {
 			return reset($folders);
@@ -115,7 +135,7 @@ class PageFolder extends DataRecord implements IFolder {
 	}
 
 	public static function findInFolder(PageFolder $folder) {
-		return parent::findAll('page', parent::ALL, new Criteria(' parent_id = :parentid AND isfolder = :isfolder', array('isfolder' => 1, 'parentid' => $folder->getID())));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' pagefolder = :parentid', array('parentid' => $folder->getID())));
 	}
 
 
@@ -177,6 +197,23 @@ class PageFolder extends DataRecord implements IFolder {
 		}
 		return $this->pages;
 	}
+
+	public function __toString() {
+		return $this->getAttr('id');
+	}
+
+	public function equals($object) {
+		if (!($object instanceof PageFolder)) {
+			return false;
+		}
+
+		if ($object->getID() != $this->getAttr('id')) {
+			return false;
+		}
+
+		return true;
+	}
+
 
 }
 
