@@ -6,6 +6,8 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	private $path;
 
+	private $oldtplname;
+
 	/**
 	 * @param int $id
 	 * @return void
@@ -41,6 +43,9 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @param string $sTitle
 	 */
 	public function setTitle($sTitle) {
+
+		$this->oldtplname = $this->getAttr('title');
+
 		$this->setAttr('title', $sTitle);
 	}
 
@@ -126,11 +131,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	public function save() {
 
 		parent::save();
+		$format = "%s/%s-%s.php";
+		$oldfile = sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id'));
+		if (file_exists($oldfile)) {
+			unlink($oldfile);
+		}
 
 		$source = $this->getAttr('source');
 		$title = $this->getAttr('title');
 
-		file_put_contents($this->path.'/'.$title.'-'.$this->getID().'.php', $source);
+		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));
+		file_put_contents($newfile, $source);
 		
 	}
 

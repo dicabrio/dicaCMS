@@ -75,7 +75,10 @@ class TextArea implements FormElement {
 	 * @param string $value
 	 */
 	public function addAttribute($attribute, $value) {
+
 		$this->attributes[$attribute] = $value;
+		return $this;
+		
 	}
 
 	/**

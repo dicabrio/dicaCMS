@@ -108,7 +108,7 @@ class PageController extends CmsController {
 
 			$aPageModules = array();
 			foreach ($oViewParser->getLabels() as $aModule) {
-				$sModuleClass = $aModule['module'].'Controller';
+				$sModuleClass = $aModule['module'].'Module';
 
 				$oPageModule = $oPage->getModule($aModule['id']);
 				if ($oPageModule === null) {

@@ -80,7 +80,7 @@ class ViewPageController {
 			$oModule = $oPage->getModule($aModule['id']);
 			if ($oModule !== null) {
 
-				$sModuleClass = $oModule->getType().'Controller';
+				$sModuleClass = $oModule->getType().'Module';
 				$oModuleController = new $sModuleClass($oModule);
 
 				$sContent = $oModuleController->getContents();

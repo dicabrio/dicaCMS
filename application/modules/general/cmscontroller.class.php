@@ -52,6 +52,7 @@ class CmsController extends SecureController {
 //		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/', 'Media', 'media', ($sActive == 'media')));
 //		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/user/', 'Users', 'users', ($sActive == 'user')));
 		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/', Lang::get('template.menuname'), 'templates', ($sActive == 'template')));
+		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/', Lang::get('static.menuname'), 'staticblock', ($sActive == 'staticblock')));
 
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);

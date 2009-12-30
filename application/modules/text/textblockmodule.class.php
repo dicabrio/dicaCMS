@@ -1,8 +1,6 @@
 <?php
 
-class TextlineController implements ModuleController {
-	
-	const MAX_LENGTH = 255;
+class TextblockModule implements ModuleController {
 
 	/**
 	 * @var PageModule
@@ -20,15 +18,22 @@ class TextlineController implements ModuleController {
 	private $aErrors;
 
 	/**
+	 * @var CmsController
+	 */
+	private $oCmsController;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod) {
+	public function __construct(PageModule $oMod, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
+
+		$this->oCmsController = $oCmsController;
 
 		// load the data
 		$this->load();
@@ -37,25 +42,25 @@ class TextlineController implements ModuleController {
 	private function load() {
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 	}
-	
-	/**
-	 * @return string
-	 */
-	public function getContents() {
-		if ($this->oTextContent === null) {
-			return '';
-		}
-		
-		return $this->oTextContent->getContent();
-	}
 
 	/**
 	 * (non-PHPdoc)
 	 * @see modules/Module#getEditor()
 	 */
 	public function getEditor() {
-		$oView = new View('text/textline.php');
-		$oView->sMaxLength = self::MAX_LENGTH;
+
+		if ($this->oCmsController !== null) {
+
+			$this->oCmsController->getBaseView()->addStyle(Conf::get('general.url.js').'/yui/assets/skins/sam/skin.css');
+			$this->oCmsController->getBaseView()->addScript('yui/yahoo-dom-event/yahoo-dom-event.js');
+			$this->oCmsController->getBaseView()->addScript('yui/element/element-min.js');
+			$this->oCmsController->getBaseView()->addScript('yui/container/container_core-min.js');
+			$this->oCmsController->getBaseView()->addScript('yui/editor/simpleeditor-min.js');
+			$this->oCmsController->getBaseView()->addScript('wysiwyg-startup.js');
+		}
+
+
+		$oView = new View('text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		if ($this->oTextContent === null) {
 			$oView->sContent = '';
@@ -65,15 +70,22 @@ class TextlineController implements ModuleController {
 		return $oView;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getContents() {
+		if ($this->oTextContent === null) {
+			return '';
+		}
+
+		return $this->oTextContent->getContent();
+	}
+
 	/* (non-PHPdoc)
 	 * @see modules/Module#validate()
-	 * TODO make UT8 compliant
 	 */
 	public function validate($mData) {
-		if (is_string($mData) && strlen($mData) <= self::MAX_LENGTH) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/**

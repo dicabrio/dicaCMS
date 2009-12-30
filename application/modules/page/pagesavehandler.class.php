@@ -54,10 +54,9 @@ class PageSaveHandler implements FormHandler {
 			$oTemplateFile = $this->page->getTemplate();
 			$view = new View();
 			$oViewParser = new ViewParser($oTemplateFile);
-//			$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
 			foreach ($oViewParser->getLabels() as $aModule) {
 
-				$sModuleClass = $aModule['module'].'Controller';
+				$sModuleClass = $aModule['module'].'Module';
 				$oPageModule = $this->page->getModule($aModule['id']);
 
 				if ($oPageModule === null) {
