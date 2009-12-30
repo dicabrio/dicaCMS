@@ -281,11 +281,6 @@ ul#actions li a {
 	width: 400px;
 }
 
-textarea.moduletextblock {
-	width: 600px;
-	height: 300px;
-}
-
 input[type=text], textarea, select {
 	padding: 3px;
 	font-size: 13px;
@@ -335,4 +330,17 @@ ul.error {
 	background-color: red;
 	color: #fff;
 	padding: 5px 0 5px 30px;
+}
+
+.modulecontent textarea {
+	width: 500px;
+}
+
+.modulecontent #source {
+	width: 700px;
+	height: 500px;
+}
+
+.modulecontent .moduletextblock {
+	height: 300px;
 }

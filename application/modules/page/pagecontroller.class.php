@@ -104,7 +104,7 @@ class PageController extends CmsController {
 
 		try {
 			$oTemplateFile = $oPage->getTemplate();
-			$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
+			$oViewParser = new ViewParser($oTemplateFile);
 
 			$aPageModules = array();
 			foreach ($oViewParser->getLabels() as $aModule) {

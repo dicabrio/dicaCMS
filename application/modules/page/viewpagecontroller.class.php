@@ -72,7 +72,7 @@ class ViewPageController {
 	private function populateViewWithModules(Page $oPage, View $oView) {
 
 		$oTemplateFile = $oPage->getTemplate();
-		$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));
+		$oViewParser = new ViewParser($oTemplateFile);
 
 		foreach ($oViewParser->getLabels() as $aModule) {
 			$sContent = '';

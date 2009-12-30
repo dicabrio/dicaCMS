@@ -17,17 +17,17 @@ class ViewParser
 	const MOD_VAR_BUILDER = 'o%s_%s'; 
 
 	/**
-	 * @var FileManager
+	 * @var TemplateFile
 	 */
-	private $oTemplateFile;
+	private $viewFile;
 
 	/**
 	 * construct the view if given a template filename it will check if it exists
 	 *
 	 * @param string $psFileName
 	 */
-	public function __construct(FileManager $file=null) {
-		$this->oTemplateFile = $file;
+	public function __construct(TemplateFile $file=null) {
+		$this->viewFile = $file;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class ViewParser
 	 * @return array
 	 */
 	public function getLabels() {
-		$sFileContents = $this->oTemplateFile->getContents();
+		$sFileContents = $this->viewFile->getSource();
 		preg_match_all(self::MOD_PATTERN, $sFileContents, $aMatches);
 
 		$aModuleNames = $aMatches[1];

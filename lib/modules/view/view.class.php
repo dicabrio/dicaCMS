@@ -17,6 +17,8 @@ class View
 
 	private $m_aTemplateData = array();
 
+	private $source = "";
+
 	private $m_aGlobalData = array();
 
 	/**
@@ -63,6 +65,10 @@ class View
 		$oFile = new FileManager($sTemplateFilename);
 	}
 
+	public function defineSource($source) {
+		$this->source = $source;
+	}
+
 	/**
 	 * @param string $psPattern Pattern that should be replaced
 	 * @param string $psVal The content the pattern should replaced with
@@ -91,8 +97,7 @@ class View
 	/**
 	 * @return string Parsed template
 	 */
-	public function getContents()
-	{
+	public function getContents() {
 		ob_start();
 
 		if ($this->m_oParentView !== null) {

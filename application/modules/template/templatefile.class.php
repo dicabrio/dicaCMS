@@ -4,6 +4,8 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	private $parent;
 
+	private $path;
+
 	/**
 	 * @param int $id
 	 * @return void
@@ -23,11 +25,9 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('description', DataTypes::TEXT, 500, true);
-		parent::addColumn('filename', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('path', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('source', DataTypes::TEXT, false, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
-		parent::addColumn('source', DataTypes::TEXT, false, true);
 	}
 
 	/**
@@ -70,39 +70,13 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		return $this->getAttr('source');
 	}
 
-	/**
-	 * get The filename of the image
-	 *
-	 * @return string
-	 */
+	public function setPath($path) {
+		$this->path = $path;
+	}
+
 	public function getFilename() {
-		return $this->getAttr('filename');
-	}
-
-	/**
-	 * get the Path where this image is stored
-	 *
-	 * @return string
-	 */
-	public function getPath() {
-		return $this->getAttr('path');
-	}
-
-	/**
-	 *
-	 * @return string
-	 */
-	public function getFullPath() {
-		return $this->getAttr('path').FileManager::SEP.$this->getAttr('filename');
-	}
-
-	/**
-	 * set the path to the image where it is stored
-	 *
-	 * @param string $sPath
-	 */
-	public function setPath($sPath) {
-		$this->setAttr('path', $sPath);
+		$title = $this->getAttr('title');
+		return $title.'-'.$this->getID().'.php';
 	}
 
 	/**
@@ -119,27 +93,14 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @param int $iParentID
 	 */
 	public function setParent(TemplateFileFolder $template) {
-		
+
 		$this->parent = $template;
 
 		$this->setAttr('folder_id', $template->getID());
 	}
 
-	/**
-	 * set the filename of the image
-	 *
-	 * @param string $sFilename
-	 */
-	public function setFilename($sFilename) {
-		$this->setAttr('filename', $sFilename);
-	}
-
 	public static function findInFolder(TemplateFileFolder $folder) {
 		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $folder->getID())));
-	}
-
-	public static function getByParent($iParentID) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $iParentID)));
 	}
 
 	public static function getFiles() {
@@ -160,6 +121,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		}
 
 		return true;
+	}
+
+	public function save() {
+
+		parent::save();
+
+		$source = $this->getAttr('source');
+		$title = $this->getAttr('title');
+
+		file_put_contents($this->path.'/'.$title.'-'.$this->getID().'.php', $source);
+		
 	}
 
 }

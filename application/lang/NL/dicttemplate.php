@@ -7,7 +7,8 @@ $lang = array(
 
 	'suredeletetemplate' => 'Weet je zeker dat je deze template wilt verwijderen. Er kunnen pagina zijn die nog gebruikmaken van deze template',
 
-	'name-nothing-set' => 'Je hebt geen foldernaam opgegeven',
+	'title-nothing-set' => 'Je hebt geen foldernaam opgegeven',
+	'title-contains-spaces' => 'De titel bevat spaties. Dit is niet toegestaan',
 
 	'button' => array(
 		'newfolder' => 'Nieuwe folder',
