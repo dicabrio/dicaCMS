@@ -147,6 +147,7 @@ abstract class Form {
 	public function addSubmitButton($sButtonIdentifier, FormElement $oElement, FormHandler $oHandler) {
 		
 		$this->aSubmitButtonsAndHandlers[$sButtonIdentifier] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
+		
 	}
 
 	/**

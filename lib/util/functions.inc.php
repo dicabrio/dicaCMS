@@ -7,11 +7,11 @@ function __errorHandler($iErrorNo, $sErrorStr, $sErrorFile='', $sErrorline='', $
 	throw new RecoverableError('An error occurred: Error '.$sErrorStr.' in file '.$sErrorFile.' on line '.$sErrorline);
 }
 
-function __exceptionHandler($oException) {
+function __exceptionHandler(Exception $oException) {
 
 	if (DEBUG === true) {
-		echo 'An Error occurred:';
-		test($oException);
+		echo 'An Error occurred: '.$oException->getMessage();
+		test($oException->getTraceAsString());
 		exit;
 	} else {
 		$oView = new View('error.php');

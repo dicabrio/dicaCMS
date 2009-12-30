@@ -49,7 +49,7 @@ class PageSaveHandler implements FormHandler {
 				$this->formmapper->getModel('description'));
 
 			$this->page->setActive($this->formmapper->getModel('active'));
-			$this->folder->addPage($this->page);
+			$this->folder->addChild($this->page);
 
 			$oTemplateFile = $this->page->getTemplate();
 			$oViewParser = new ViewParser(new FileManager($oTemplateFile->getFullPath()));

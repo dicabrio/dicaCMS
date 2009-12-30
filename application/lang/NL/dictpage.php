@@ -21,4 +21,12 @@ $lang = array(
 		'deletefolder' => 'Verwijder',
 	),
 
+	'breadcrumb' => array(
+		'editpagefolder' => '"%s" bewerken',
+		'newpagefolder' => 'Folder aanmaken',
+
+		'editpage' => '"%s" bewerken',
+		'newpage' => 'Pagina aanmaken',
+	)
+
 );

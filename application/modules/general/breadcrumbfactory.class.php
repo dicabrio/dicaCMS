@@ -22,18 +22,30 @@ class BreadcrumbFactory {
 		$this->baseurl = $baseurl;
 	}
 
+	private function buildMenuItem($url, $name) {
+
+		if ($name == "") {
+			$url = $this->baseurl;
+			$name = Lang::get('breadcrumb.root');
+		}
+
+		return new MenuItem($url, $name);
+		
+	}
+
 	public function build() {
 
 		if (!$this->build) {
+			
 			$this->breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
-			$this->breadcrumb->addItem(new MenuItem($this->baseurl, Lang::get('breadcrumb.root')));
 
 			$breadcrumbFolders = array();
 			$folder = $this->currentfolder;
 			while ($folder->hasParent()) {
-			// it has a parent
+				
 				$parentFolder = $folder->getParent();
-				$breadcrumbFolders[] = new MenuItem($this->baseurl.'/folder/'.$parentFolder->getID(), $parentFolder->getName());
+				$breadcrumbFolders[] = $this->buildMenuItem($this->baseurl.'/folder/'.$parentFolder->getID(), $parentFolder->getName());
+
 				$folder = $parentFolder;
 			}
 
@@ -44,6 +56,8 @@ class BreadcrumbFactory {
 					$this->breadcrumb->addItem($menuItem);
 				}
 			}
+			
+			$this->breadcrumb->addItem($this->buildMenuItem(false, $this->currentfolder->getName()));
 		}
 		
 		return $this->breadcrumb;

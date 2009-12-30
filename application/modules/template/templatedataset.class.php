@@ -3,87 +3,95 @@
  *
  *
  */
-class TemplateDataSet implements ITableDataSet {
+class TemplateDataSet extends AbstractTableDataSet {
 
-	private $aColumns = array();
+	/**
+	 *
+	 * @var int
+	 */
+	private $iRecordCount = 0;
 
-	private $iColumnCount = false;
-
-	private $iRowCount = false;
-
-	private $aData = array();
-
+	/**
+	 * constructor. Define the columns for the table
+	 */
 	public function __construct() {
-		$this->aColumns[] = new Link('', Html::getCheckbox('selectall', 'all'));
-		$this->aColumns[] = new Link(Conf::get('general.url.www').'/template/', 'title');
-		$this->aColumns[] = new Link('', 'actions');
+
+		$this->iRecordCount = 0;
+
+		$this->addColumn(0, Html::getCheckbox('selectall', 'all'));
+		$this->addColumn(1, 'title');
+		$this->addColumn(2, 'actions');
+
+	}
+
+	private function constuctTitle($image, $title) {
+
+		return '<img src="'.Conf::get('general.url.images').'/'.$image.'" alt="" />'.$title;
+		
+	}
+
+	private function constructFolderLine(Folder $folder) {
+
+		$folderid = $folder->getID();
+		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.url.www').'/template/folder/'.$folder->getID()));
+
+		$this->constructLine($folderid, $sTitle, array('editfolder', 'deletefolder'));
+
+	}
+
+	private function constructItemLine(TemplateFile $template) {
+
+		$pageid = $template->getID();
+		$sTitle = $this->constuctTitle('icon-file.png', $template->getTitle());
+
+		$this->constructLine($pageid, $sTitle, array('edittemplate', 'deletetemplate'));
+
 	}
 
 	/**
+	 *
+	 * @param int $pid
+	 * @param string $title
+	 * @param array $actions
+	 */
+	private function constructLine($pid, $title, $actions) {
+
+		$this->setValueAt(Html::getCheckbox('select[]', $pid), $this->iRecordCount, 0);
+		$this->setValueAt($title, $this->iRecordCount, 1);
+
+		$actionstring = "";
+		foreach ($actions as $action) {
+
+			$attributes = array('class' => 'button '.$action);
+			if (in_array($action, array('deletetemplate','deletefolder'))) {
+				$attributes['confirm'] = Lang::get('template.suredeletetemplate');
+			}
+
+			$actionstring .= Html::getAnchor(	Lang::get('template.button.'.$action),
+												Conf::get('general.url.www').'/template/'.$action.'/'.$pid,
+												$attributes).'&nbsp;';
+		}
+
+		$this->setValueAt($actionstring, $this->iRecordCount, 2);
+		
+	}
+
+	/**
+	 *
 	 * @param array $aTemplateRecords
 	 */
 	public function setValues($aTemplateRecords) {
-		$iRecordCount = 0;
 
-		foreach ($aTemplateRecords as $oTemplateRecord) {
+		foreach ($aTemplateRecords as $itemrecord) {
 
-			if ($oTemplateRecord->isFolder()) {
-				$sImage = 'icon-folder.png';
-				$sEditLink = 'editfolder';
-				$sTitle = Html::getAnchor($oTemplateRecord->getTitle(), Conf::get('general.url.www').'/template/folder/'.$oTemplateRecord->getID());
+			if ($itemrecord instanceof Folder) {
+				$this->constructFolderLine($itemrecord);
 			} else {
-				$sImage = 'icon-file.png';
-				$sEditLink = 'edittemplate';
-				$sTitle = $oTemplateRecord->getTitle();
+				$this->constructItemLine($itemrecord);
 			}
 
-			$sTitle = '<img src="'.Conf::get('general.url.images').'/'.$sImage.'" alt="" />'.$sTitle;
-
-			$sDoEdit = Html::getAnchor(Lang::get('general.button.edit'), Conf::get('general.url.www').'/template/'.$sEditLink.'/'.$oTemplateRecord->getID());
-			$sDoDelete = Html::getAnchor(Lang::get('general.button.delete'), Conf::get('general.url.www').'/template/deletetemplate/'.$oTemplateRecord->getID());
-
-			$this->setValueAt(Html::getCheckbox('select[]', $oTemplateRecord->getID()), $iRecordCount, 0);
-			$this->setValueAt($sTitle, $iRecordCount, 1);
-			$this->setValueAt($sDoEdit.' | '.$sDoDelete, $iRecordCount, 2);
-
-			$iRecordCount++;
-		}
-	}
-
-	public function getColumnName($piColumn) {
-		if (isset($this->aColumns[$piColumn])) {
-			if ($this->aColumns[$piColumn] instanceof Link) {
-				return $this->aColumns[$piColumn]->getLabel();
-			}
-		}
-		return "";
-	}
-
-	public function getColumnCount() {
-		if ($this->iColumnCount === false) {
-			$this->iColumnCount = count($this->aColumns);
+			$this->iRecordCount++;
 		}
 
-		return $this->iColumnCount;
-	}
-
-	public function getRowCount() {
-		if ($this->iRowCount === false) {
-			$this->iRowCount = count($this->aData);
-		}
-
-		return $this->iRowCount;
-	}
-
-	public function getValueAt($piRow, $piColumn) {
-		if (isset($this->aData[$piRow]) && isset($this->aData[$piRow][$piColumn])) {
-			return $this->aData[$piRow][$piColumn];
-		}
-
-		return "";
-	}
-
-	public function setValueAt($sValue, $piRow, $piColumn) {
-		$this->aData[$piRow][$piColumn] = $sValue;
 	}
 }

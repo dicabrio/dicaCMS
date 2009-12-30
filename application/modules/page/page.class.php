@@ -22,7 +22,6 @@ class Page extends DataRecord {
 
 		if ($id == 0) {
 			$this->setAttr('created', date("Y-m-d H:i:s"));
-			$this->setAttr('isfolder', 0);
 		}
 	}
 
@@ -43,8 +42,7 @@ class Page extends DataRecord {
 		parent::addColumn('keywords', DataTypes::TEXT, false, true);
 		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
-		parent::addColumn('parent_id', DataTypes::INT, false, true);
-		parent::addColumn('isfolder', DataTypes::INT, false, true);
+		parent::addColumn('folder_id', DataTypes::INT, false, true);
 
 	}
 
@@ -90,7 +88,7 @@ class Page extends DataRecord {
 	}
 
 	public static function findInFolder(PageFolder $folder) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid AND isfolder = :isfolder', array('isfolder' => 0, 'parentid' => $folder->getID())));
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid ', array('parentid' => $folder->getID())));
 	}
 
 
@@ -239,7 +237,7 @@ class Page extends DataRecord {
 	 */
 	public function getParent() {
 		
-		$page = new PageFolder($this->getAttr('parent_id'));
+		$page = new PageFolder($this->getAttr('folder_id'));
 
 		return $page;
 	}
@@ -253,7 +251,7 @@ class Page extends DataRecord {
 	}
 
 	public function setParent(PageFolder $folder) {
-		$this->setAttr('parent_id', $folder->getID());
+		$this->setAttr('folder_id', $folder->getID());
 	}
 
 	/**

@@ -28,8 +28,9 @@ class TextArea implements FormElement {
 	 * @param string $sType
 	 * @param string $sName
 	 */
-	public function __construct($sName) {
+	public function __construct($sName, $value = null) {
 		$this->sName = $sName;
+		$this->sValue = $value;
 	}
 
 	/**

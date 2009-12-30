@@ -12,7 +12,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		parent::__construct(__CLASS__, $id);
 
 		if ($id == 0) {
-			$this->created = date('Y-m-d H:i:s');
+			$this->setAttr('created', date('Y-m-d H:i:s'));
 		}
 	}
 
@@ -25,9 +25,9 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		parent::addColumn('description', DataTypes::TEXT, 500, true);
 		parent::addColumn('filename', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('path', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('isfolder', DataTypes::INT, false, true);
-		parent::addColumn('parent_id', DataTypes::INT, false, true);
+		parent::addColumn('folder_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
+		parent::addColumn('source', DataTypes::TEXT, false, true);
 	}
 
 	/**
@@ -35,7 +35,6 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 */
 	public function getTitle() {
 		return $this->getAttr('title');
-//		return $this->getAttr('title');
 	}
 
 	/**
@@ -58,6 +57,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 */
 	public function setDescription($sDescription) {
 		$this->setAttr('description', $sDescription);
+	}
+
+	public function setSource(DomainText $source) {
+		$this->setAttr('source', $source);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSource() {
+		return $this->getAttr('source');
 	}
 
 	/**
@@ -87,33 +97,6 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	}
 
 	/**
-	 * check wether this object is a folder
-	 *
-	 * @return unknown
-	 */
-	public function isFolder() {
-		if ($this->getAttr('isfolder') == 1) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Set the image active or not
-	 *
-	 * @param bool $bActive
-	 */
-	public function setFolder($bFolder) {
-
-		if ($bFolder == true) {
-			$this->setAttr('isfolder', 1);
-		} else if ($bFolder == false) {
-			$this->setAttr('isfolder', 0);
-		}
-	}
-
-	/**
 	 * set the path to the image where it is stored
 	 *
 	 * @param string $sPath
@@ -127,7 +110,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 */
 	public function getParent() {
 		if ($this->parent == null) {
-			$this->parent = new TemplateFile($this->getAttr('parent_id'));
+			$this->parent = new TemplateFileFolder($this->getAttr('folder_id'));
 		}
 		return $this->parent;
 	}
@@ -135,11 +118,11 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	/**
 	 * @param int $iParentID
 	 */
-	public function setParent(TemplateFile $template) {
+	public function setParent(TemplateFileFolder $template) {
 		
 		$this->parent = $template;
 
-		$this->setAttr('parent_id', $template->getID());
+		$this->setAttr('folder_id', $template->getID());
 	}
 
 	/**
@@ -151,16 +134,16 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		$this->setAttr('filename', $sFilename);
 	}
 
-	public static function getByParent($iParentID) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' parent_id = :parentid', array('parentid' => $iParentID)));
+	public static function findInFolder(TemplateFileFolder $folder) {
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $folder->getID())));
 	}
 
-	public static function getAll() {
-		return parent::findAll(__CLASS__, parent::ALL);
+	public static function getByParent($iParentID) {
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $iParentID)));
 	}
 
 	public static function getFiles() {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' isfolder = :folder', array('folder' => 0)));
+		return parent::findAll(__CLASS__, parent::ALL);
 	}
 
 	public function __toString() {

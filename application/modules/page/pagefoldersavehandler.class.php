@@ -24,15 +24,18 @@ class PageFolderSaveHandler implements FormHandler {
 	 * @param PageFolder $folder
 	 */
 	public function __construct(FormMapper $formmapper, PageFolder $pagefolder, PageFolder $folder) {
+
 		$this->formmapper = $formmapper;
 		$this->pagefolder = $pagefolder;
 		$this->parentfolder = $folder;
+
 	}
 
 	/**
 	 * @param Form $oForm
 	 */
 	public function handleForm(Form $oForm) {
+
 		try {
 			$oReq = Request::getInstance();
 
@@ -41,7 +44,7 @@ class PageFolderSaveHandler implements FormHandler {
 
 			$this->formmapper->constructModelsFromForm();
 			$this->pagefolder->update($this->formmapper->getModel('name'), $this->formmapper->getModel('description'));
-			$this->parentfolder->addPageFolder($this->pagefolder);
+			$this->parentfolder->addChild($this->pagefolder);
 			$this->pagefolder->save();
 
 			$data->commit();
@@ -53,6 +56,7 @@ class PageFolderSaveHandler implements FormHandler {
 		} catch (FormMapperException $e) {
 			$data->rollBack();
 		}
+		
 	}
 
 }

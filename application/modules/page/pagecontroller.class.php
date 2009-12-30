@@ -5,7 +5,7 @@ class PageController extends CmsController {
 	const C_CURRENT_FOLDER = 'currentPageFolder';
 
 	public function __construct($sMethod) {
-		// we should check for permissions
+	// we should check for permissions
 		parent::__construct('page/'.$sMethod, Lang::get('page.title'));
 	}
 
@@ -19,12 +19,11 @@ class PageController extends CmsController {
 
 	public function _index($aErrors = array(), $iParentID=0, $sSuccess = false) {
 
-		$oSession = Session::getInstance();
-		$oSession->set(self::C_CURRENT_FOLDER, $iParentID);
+		$session = Session::getInstance();
+		$session->set(self::C_CURRENT_FOLDER, $iParentID);
 
-		$folder = PageFolder::findByID($iParentID);
-		$pages = $folder->getPages();
-		$subfolders = $folder->getFolders();
+		$folder = new PageFolder($iParentID);
+		$stuff = $folder->getChildren();
 
 		$breadcrumbFac = new BreadcrumbFactory($folder, Conf::get('general.url.www').'/page');
 		$breadcrumb = $breadcrumbFac->build();
@@ -34,8 +33,7 @@ class PageController extends CmsController {
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
-		$oPageDataSet->setValues($subfolders);
-		$oPageDataSet->setValues($pages);
+		$oPageDataSet->setValues($stuff);
 
 		$oTable = new Table($oPageDataSet);
 
@@ -51,7 +49,6 @@ class PageController extends CmsController {
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $oPageOverview);
 		$oBaseView->addScript('page.js');
-		$oBaseView->addScript('general.js');
 
 		return $oBaseView->getContents();
 	}
@@ -67,13 +64,13 @@ class PageController extends CmsController {
 		$oReq = Request::getInstance();
 		$oSession = Session::getInstance();
 
-		$pagefolder = PageFolder::findByID($oSession->get(self::C_CURRENT_FOLDER));
+		$pagefolder = new PageFolder($oSession->get(self::C_CURRENT_FOLDER));
 		$oPage = new Page(Util::getUrlSegment(2));
-		
+
 		$aTemplates = TemplateFile::getFiles();
 
 		$form = new PageEditForm($oReq, $oPage, $aTemplates);
-		
+
 		$formmapper = new PageMapper($form);
 
 		$button = new ActionButton('Save');
@@ -85,14 +82,14 @@ class PageController extends CmsController {
 		$breadcrumb = new Menu('breadcrumb');
 		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
 		$folderName = $pagefolder->getName();
-		if ($folderName == 'root') {
+		if ($folderName == '') {
 			$folderName = Lang::get('breadcrumb.root');
 		}
 		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$pagefolder->getID(), $folderName));
 
-		$breadcrumbname = 'edit Page';
+		$breadcrumbname = Lang::get('page.breadcrumb.editpage', $oPage->getName());
 		if ($oPage->getID() == 0) {
-			$breadcrumbname = 'new Page';
+			$breadcrumbname = Lang::get('page.breadcrumb.newpage');
 		}
 
 		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
@@ -149,7 +146,7 @@ class PageController extends CmsController {
 		$req = Request::getInstance();
 		$session = Session::getInstance();
 
-		$parentPageFolder = PageFolder::findByID($session->get(self::C_CURRENT_FOLDER));
+		$parentPageFolder = new PageFolder($session->get(self::C_CURRENT_FOLDER));
 		$currentPageFolder = new PageFolder(Util::getUrlSegment(2));
 
 		$button = new ActionButton('Save');
@@ -162,14 +159,14 @@ class PageController extends CmsController {
 		$breadcrumb = new Menu('breadcrumb');
 		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
 		$folderName = $parentPageFolder->getName();
-		if ($folderName == 'root') {
+		if ($folderName == '') {
 			$folderName = Lang::get('breadcrumb.root');
 		}
 		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$parentPageFolder->getID(), $folderName));
 
-		$breadcrumbname = 'edit Page';
+		$breadcrumbname = Lang::get('page.breadcrumb.editpagefolder', $currentPageFolder->getName());
 		if ($currentPageFolder->getID() == 0) {
-			$breadcrumbname = 'new Page';
+			$breadcrumbname = Lang::get('page.breadcrumb.newpagefolder');
 		}
 
 		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));

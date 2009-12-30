@@ -2,9 +2,9 @@
 
 class RequestControllerProtocol implements ServiceProtocol {
 
-	/**
-	 * @var string
-	 */
+/**
+ * @var string
+ */
 	const SUFFIX = "Controller";
 
 	/**
@@ -44,40 +44,35 @@ class RequestControllerProtocol implements ServiceProtocol {
 	 */
 	public function execute() {
 
-		try
-		{
-			$controllerClass = ucfirst($this->controller).self::SUFFIX;
-			$reflection = new ReflectionClass($controllerClass);
+		$controllerClass = ucfirst($this->controller).self::SUFFIX;
+		$reflection = new ReflectionClass($controllerClass);
 
-			$method = Util::getUrlSegment(1);
+		$method = Util::getUrlSegment(1);
 
-			if (empty($method)) {
-				// no metod is called zo we provide the _index()
-				$method = self::ACTION_INDEX;
-			}
-
-			try {
-				$oReflMethod = $reflection->getMethod($method);
-				if ($oReflMethod->isPrivate() || $oReflMethod->isProtected()) {
-					// sorry this method is not accessable
-					throw new ReflectionException('Not allowed to access this method');
-				}
-			} catch (ReflectionException $e) {
-				// the method is not found so we go to the index
-				// or the default for now the index
-				$oReflMethod = $reflection->getMethod(self::ACTION_404);
-			}
-
-			// we need to check if it is a valid controller
-			if (!($reflection->implementsInterface('Controller'))) {
-				throw new Exception('Not a valid Controller');
-			}
-			$controller = $reflection->newInstance($oReflMethod->getName());
-			$controller->setArguments($this->arguments);
-			$this->result = $oReflMethod->invokeArgs($controller, array());
-		} catch (Exception $e) {
-			throw new ProtocolException($e->getMessage());
+		if (empty($method)) {
+		// no metod is called zo we provide the _index()
+			$method = self::ACTION_INDEX;
 		}
+
+		try {
+			$oReflMethod = $reflection->getMethod($method);
+			if ($oReflMethod->isPrivate() || $oReflMethod->isProtected()) {
+			// sorry this method is not accessable
+				throw new ReflectionException('Not allowed to access this method');
+			}
+		} catch (ReflectionException $e) {
+		// the method is not found so we go to the index
+		// or the default for now the index
+			$oReflMethod = $reflection->getMethod(self::ACTION_404);
+		}
+
+		// we need to check if it is a valid controller
+		if (!($reflection->implementsInterface('Controller'))) {
+			throw new Exception('Not a valid Controller');
+		}
+		$controller = $reflection->newInstance($oReflMethod->getName());
+		$controller->setArguments($this->arguments);
+		$this->result = $oReflMethod->invokeArgs($controller, array());
 	}
 
 	public function decode($newData) {
@@ -93,20 +88,16 @@ class RequestControllerProtocol implements ServiceProtocol {
 		return $this->result;
 	}
 
-	public function validate()
-	{
-		// check if request data is ok
+	public function validate() {
+	// check if request data is ok
 		$this->controller = Util::getUrlSegment(0);
 		if (empty($this->controller)) {
 			throw new ProtocolException('No controller defined');
 		}
 
-		try
-		{
+		try {
 			Util::validClass(ucfirst($this->controller).self::SUFFIX);
-		}
-		catch (ClassException $e)
-		{
+		} catch (ClassException $e) {
 			throw new ProtocolException("Controller cannot be found");
 		}
 	}
@@ -114,11 +105,11 @@ class RequestControllerProtocol implements ServiceProtocol {
 	public function error($message) {
 
 		if ($message instanceof Exception) {
-			throw $message;
+			return $message->getTraceAsString();
 		} else if (is_string($message)) {
-			throw new Exception($message);
+			return $message;
 		}
 	}
-
 }
+
 

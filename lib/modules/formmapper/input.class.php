@@ -33,9 +33,10 @@ class Input implements FormElement {
 	 * @param string $sType
 	 * @param string $sName
 	 */
-	public function __construct($sType, $sName) {
+	public function __construct($sType, $sName, $value = null) {
 		$this->sName = $sName;
 		$this->sType = $sType;
+		$this->sValue = $value;
 	}
 
 	/**
