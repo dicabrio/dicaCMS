@@ -133,8 +133,12 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		parent::save();
 		$format = "%s/%s-%s.php";
 		$oldfile = sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id'));
-		if (file_exists($oldfile)) {
-			unlink($oldfile);
+
+		try {
+			$file = new FileManager($oldfile);
+			$file->delete();
+		} catch (FileNotFoundException $e) {
+			// no problem if the file is not found
 		}
 
 		$source = $this->getAttr('source');
@@ -142,7 +146,23 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));
 		file_put_contents($newfile, $source);
-		
+
+	}
+
+	public function delete() {
+
+		$format = "%s/%s-%s.php";
+		$filepath = sprintf($format, $this->path, $this->getAttr('title'), $this->getAttr('id'));
+
+		try {
+			$file = new FileManager($filepath);
+			$file->delete();
+		} catch (FileNotFoundException $e) {
+			// file cannot be found. This isn't problem just delete the record
+		}
+
+		parent::delete();
+
 	}
 
 }

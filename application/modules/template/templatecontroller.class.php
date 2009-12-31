@@ -121,46 +121,58 @@ class TemplateController extends CmsController {
 	}
 
 	public function deletetemplate() {
+		
 		$iItemID = intval(Util::getUrlSegment(2));
 		$aErrors = array();
-		$oSession = Session::getInstance();
-		$iParentID = intval($oSession->get(self::C_CURRENT_FOLDER));
+		$session = Session::getInstance();
+		$iParentID = intval($session->get(self::C_CURRENT_FOLDER));
 
-		parent::getConnection()->beginTransaction();
+		$data = parent::getConnection();
+		$data->beginTransaction();
 
 		try {
 
-			$oTemplate = new TemplateFile($iItemID);
+			$template = new TemplateFile($iItemID);
+			$template->setPath(Conf::get('upload.dir.templates'));
+			$template->delete();
 
-			// a folder has no reference to a file on the disc
-			if (!$oTemplate->isFolder()) {
-				$sFile = $oTemplate->getPath().'/'.$oTemplate->getFilename();
-				$oFile = new FileManager($sFile);
-				$oFile->delete();
-			}
+			$data->commit();
+			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
 
-			$oTemplate->delete();
-			parent::getConnection()->commit();
-			Util::gotoPage(Conf::get('general.url.www').Conf::get('template.url.showfolder').$iParentID);
-
-
-		} catch (FileNotFoundException $e) {
-			$aErrors[] = 'validation.filenotexists';
-				
-			// file does exist in DB, but not on the hard drive Just delete it
-			if (isset($oTemplate) && $oTemplate instanceof TemplateFile) {
-				$oTemplate->delete();
-				parent::getConnection()->commit();
-			}
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';
 
 		} catch (FileException $e) {
 			$aErrors[] = 'file.fileerror';
-			parent::getConnection()->rollBack();
 		}
+		
+		$data->rollBack();
 
 		return $this->_index($aErrors);
+	}
+
+	public function deletefolder() {
+		
+		$iItemID = intval(Util::getUrlSegment(2));
+		$aErrors = array();
+		$session = Session::getInstance();
+		$iParentID = intval($session->get(self::C_CURRENT_FOLDER));
+
+		$data = parent::getConnection();
+		$data->beginTransaction();
+
+		try {
+
+			$template = new TemplateFileFolder($iItemID);
+			$template->delete();
+
+			$data->commit();
+			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+
+		} catch (RecordException $e) {
+			$aErrors[] = 'database.recordnotexists';
+		}
+
 	}
 
 	public function _default() {

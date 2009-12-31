@@ -64,7 +64,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 
 			$attributes = array('class' => 'button '.$action);
 			if (in_array($action, array('deletetemplate','deletefolder'))) {
-				$attributes['confirm'] = Lang::get('template.suredeletetemplate');
+				$attributes['confirm'] = Lang::get('template.sure'.$action);
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('template.button.'.$action),
