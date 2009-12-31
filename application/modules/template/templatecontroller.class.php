@@ -153,7 +153,6 @@ class TemplateController extends CmsController {
 
 	public function deletefolder() {
 		
-		$iItemID = intval(Util::getUrlSegment(2));
 		$aErrors = array();
 		$session = Session::getInstance();
 		$iParentID = intval($session->get(self::C_CURRENT_FOLDER));
@@ -163,7 +162,7 @@ class TemplateController extends CmsController {
 
 		try {
 
-			$template = new TemplateFileFolder($iItemID);
+			$template = new TemplateFileFolder(intval(Util::getUrlSegment(2)));
 			$template->delete();
 
 			$data->commit();
@@ -172,6 +171,9 @@ class TemplateController extends CmsController {
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';
 		}
+
+		$data->rollBack();
+		return $this->_index($aErrors);
 
 	}
 

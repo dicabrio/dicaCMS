@@ -273,6 +273,16 @@ class Page extends DataRecord {
 		}
 		
 	}
+
+	public function delete() {
+
+		foreach ($this->getModules() as $module) {
+			$module->delete();
+		}
+
+		parent::delete();
+
+	}
 }
 
 class PageRecordException extends RecordException {}

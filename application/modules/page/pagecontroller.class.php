@@ -183,6 +183,54 @@ class PageController extends CmsController {
 		return $view->getContents();
 	}
 
+	public function deletepage() {
+
+		$aErrors = array();
+		$data = parent::getConnection();
+		$data->beginTransaction();
+
+		try {
+			$page = new Page(intval(Util::getUrlSegment(2)));
+			$page->delete();
+
+			$data->commit();
+			
+			$session = Session::getInstance();
+			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
+		} catch (RecordException $e) {
+			$aErrors[] = 'page.somthingwrong';
+			$aErrors[] = $e->getMessage();
+		}
+
+		$data->rollBack();
+		return $this->_index($aErrors);
+		
+	}
+
+	public function deletefolder() {
+
+		$aErrors = array();
+		$data = parent::getConnection();
+		$data->beginTransaction();
+
+		try {
+
+			$pageFolder = new PageFolder(intval(Util::getUrlSegment(2)));
+			$pageFolder->delete();
+
+			$data->commit();
+			
+			$session = Session::getInstance();
+			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
+
+		} catch (RecordException $e) {
+			$aErrors[] = 'database.recordnotexists';
+		}
+
+		$data->rollBack();
+		return $this->_index($aErrors);
+	}
+
 
 	public function _default() {
 		return 'PageController';

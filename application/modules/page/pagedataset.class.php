@@ -53,7 +53,7 @@ class PageDataSet extends AbstractTableDataSet {
 
 			$attributes = array('class' => 'button '.$action);
 			if (in_array($action, array('deletepage','deletefolder'))) {
-				$attributes['confirm'] = Lang::get('page.suredeletepage');
+				$attributes['confirm'] = Lang::get('page.sure'.$action);
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('page.button.'.$action),
