@@ -1,42 +1,88 @@
 <?php
-
-class FileManager
-{
-	const 	SEP					= '/';
-
-	private $filename			= null;
-
-	private $newFilename		= null;
-
-	private $path				= null;
-
-	private $accessibleFiles 	= array();
+/**
+ * handle stuff with files with this class
+ *
+ */
+class FileManager {
 
 	/**
+	 * @var const
+	 */
+	const SEP = '/';
+
+	/**
+	 *
+	 * @var string
+	 */
+	private $filename;
+
+	/**
+	 *
+	 * @var string
+	 */
+	private $path;
+
+	/**
+	 *
+	 * @var string
+	 */
+	private $extension;
+
+	/**
+	 * Constructor checks if the given file exists
+	 *
 	 * @param string $pFile
 	 * @throws FileNotFoundException
 	 */
-	public function __construct($pFile)
-	{
+	public function __construct($pFile) {
+
 		$this->breakFileName($pFile);
 		$this->validateFile();
+
 	}
 
 	public function getPath() {
+
 		return $this->path;
+
 	}
 
 	public function getFilename() {
+
 		return $this->filename;
+
 	}
 
+	/**
+	 *
+	 *
+	 * @return string
+	 */
 	public function getFullPath() {
+
 		return $this->path . self::SEP . $this->filename;
+
 	}
 
+	/**
+	 * get the extension of the file
+	 *
+	 * @return string
+	 */
+	public function getExtension() {
+
+		return $this->extension;
+
+	}
+
+	/**
+	 * @return get the contents of the file
+	 */
 	public function getContents() {
+
 		$sFileContents = file_get_contents($this->path . self::SEP . $this->filename);
 		return $sFileContents;
+
 	}
 
 	/**
@@ -48,72 +94,83 @@ class FileManager
 	 * @return boolean
 	 * @throws DirException
 	 */
-	public function moveTo($destination, $rename=null)
-	{
+	public function moveTo($destination, $rename=null) {
+
 		$sFilename = $this->filename;
 		$this->validateDestination($destination);
 		if ($rename != null) {
 			$sFilename = $rename;
 		}
 
-		if (!move_uploaded_file($this->path.self::SEP.$this->filename, $destination.self::SEP.$sFilename)) {
-			throw new FileException('problem while moving uploaded file');
+		if (is_uploaded_file($this->getFullPath())) {
+			if (!move_uploaded_file($this->getFullPath(), $destination.self::SEP.$sFilename)) {
+				throw new FileException('problem while moving uploaded file');
+			}
+		} else {
+			rename($this->getFullPath(), $destination.self::SEP.$sFilename);
 		}
 
 		$this->path = $destination;
 		$this->filename = $sFilename;
+
 	}
 
 	/**
-	 * renamin the file to new filename
+	 * returns the mimetype of the file
 	 *
-	 * @param string $newFilename
+	 * @return string
 	 */
-	public function rename($newFilename)
-	{
-		// rename the file
-		//use rename() function
+	public function getMimeType() {
+
+		$fileinfo = new finfo(FILEINFO_MIME);
+		return $fileinfo->file($this->getFullPath());
+
 	}
 
 	/**
 	 * delete the filename
 	 * @throws
 	 */
-	public function delete()
-	{
+	public function delete() {
+
 		$this->validateFile();
 		if (!unlink($this->path.self::SEP.$this->filename)) {
 			throw new FileException('File: '.$this->path.self::SEP.$this->filename.' cannot be deleted');
 		}
 
 		return true;
+		
 	}
 
 	/**
+	 * breaks the filestring apart to path filename extension (filename is with extension included)
 	 * @param string $filename
 	 */
 	private function breakFileName($filename) {
+
 		if (false !== ($pos = strpos($filename, self::SEP))) {
+			// get filename
 			$afilename = explode(self::SEP, $filename);
 			$this->filename = array_pop($afilename);
+			// get path
 			$this->path = implode(self::SEP, $afilename);
-		}
-		else
-		{
+			// get extension
+			$afile = explode('.',$this->filename);
+			$this->extension = array_pop($afile);
+		} else {
 			$this->filename = $filename;
 		}
+
 	}
 
 	/**
+	 * Validate if file exists
 	 * @throws FileNotFoundException
-	 *
 	 */
-	private function validateFile()
-	{
-		// check if file exists
-		if (!file_exists($this->path.self::SEP.$this->filename))
-		{
-			throw new FileNotFoundException('File '.$this->path.self::SEP.$this->filename.' cannot be found');
+	private function validateFile() {
+
+		if (!file_exists($this->getFullPath())) {
+			throw new FileNotFoundException('File '.$this->getFullPath().' cannot be found');
 		}
 
 	}
@@ -122,8 +179,8 @@ class FileManager
 	 *	Validate the given destination
 	 *	@throws DirException
 	 */
-	private function validateDestination($destination)
-	{
+	private function validateDestination($destination) {
+		
 		if (!is_dir($destination)) {
 			throw new DirException('Given destination "'.$destination.'" is not a directory');
 		}
@@ -132,7 +189,6 @@ class FileManager
 			throw new DirNotWritableException('Directory '.$destination.' is not writable');
 		}
 
-		// we passed the validation stuff!
 	}
 }
 

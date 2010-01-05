@@ -27,6 +27,6 @@
 				<?php endif; ?>			
 			</div>
 		</div>	
-		<div id="footer">dicaCMS</div>
+		<div id="footer">&copy; dicaCMS</div>
 	</body>
 </html>

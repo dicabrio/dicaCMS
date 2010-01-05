@@ -122,6 +122,10 @@ class View
 		}
 		return null;
 	}
+
+	public function __toString() {
+		return $this->getContents();
+	}
 }
 
 //class FileNotFoundException extends Exception {}

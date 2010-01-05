@@ -113,6 +113,15 @@ abstract class Form {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getFormElements() {
+
+		return $this->aFormElementsByIdentifier;
+
+	}
+
+	/**
 	 *
 	 * @param string $sFormElementName
 	 * @return FormElement
