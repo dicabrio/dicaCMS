@@ -4,7 +4,7 @@
  *
  * @author robertcabri
  */
-abstract class FormMapper {
+class FormMapper {
 
 
 	/**
@@ -39,7 +39,8 @@ abstract class FormMapper {
 	/**
 	 * setup rules for form to domainentities mapping
 	 */
-	abstract protected function defineFormElementToDomainEntityMapping();
+//	abstract protected function defineFormElementToDomainEntityMapping();
+	protected function defineFormElementToDomainEntityMapping();
 
 	/**
 	 * @param string $sFormElementName
