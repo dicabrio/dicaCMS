@@ -5,9 +5,14 @@
  *
  * usage:
  *
+ * $form = new Form(....);
+ * $mapper = new FormMapper($form);
+ * $mapper->addFormElementToDomainEntityMapping('name', 'DomainText');
  * try {
- *  $form = new Form(....);
- *	$mapper = new FormMapper($form);
+ *		$mapper->constructModelsFromForm();
+ * } catch (FormMapperException $e) {
+ *		print_r($mapper->getMappingErrors());
+ * }
  *
  * @author robertcabri
  */
