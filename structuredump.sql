@@ -3,9 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2010 at 09:21 AM
--- Server version: 5.1.38
--- PHP Version: 5.3.0
+-- Generatie Tijd: 03 Feb 2010 om 08:48
+-- Server versie: 5.1.38
+-- PHP Versie: 5.3.0
+
+SET FOREIGN_KEY_CHECKS=0;
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,7 +18,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `folder`
+-- Tabel structuur voor tabel `folder`
 --
 
 CREATE TABLE IF NOT EXISTS `folder` (
@@ -32,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `folder` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `media`
+-- Tabel structuur voor tabel `media`
 --
 
 CREATE TABLE IF NOT EXISTS `media` (
@@ -50,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `media` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `page`
+-- Tabel structuur voor tabel `page`
 --
 
 CREATE TABLE IF NOT EXISTS `page` (
@@ -72,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `page` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pagemodule`
+-- Tabel structuur voor tabel `pagemodule`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule` (
@@ -86,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pagemodule_staticblock`
+-- Tabel structuur voor tabel `pagemodule_staticblock`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
@@ -99,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pagemodule_upload`
+-- Tabel structuur voor tabel `pagemodule_upload`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule_upload` (
@@ -112,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_upload` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pagetext`
+-- Tabel structuur voor tabel `pagetext`
 --
 
 CREATE TABLE IF NOT EXISTS `pagetext` (
@@ -125,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `pagetext` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `staticblock`
+-- Tabel structuur voor tabel `staticblock`
 --
 
 CREATE TABLE IF NOT EXISTS `staticblock` (
@@ -139,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `staticblock` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `templatefile`
+-- Tabel structuur voor tabel `templatefile`
 --
 
 CREATE TABLE IF NOT EXISTS `templatefile` (
@@ -155,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `templatefile` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Tabel structuur voor tabel `user`
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -166,3 +168,5 @@ CREATE TABLE IF NOT EXISTS `user` (
   `active` int(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+SET FOREIGN_KEY_CHECKS=1;
