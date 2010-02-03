@@ -24,7 +24,7 @@ class PageEditForm extends Form {
 	}
 
 	/**
-	 * @TODO add modules of the page as form element. 
+	 * @TODO add modules of the page as form element.
 	 */
 	protected function defineFormElements() {
 
