@@ -1,6 +1,13 @@
 <?php
 /**
  * FormMapper is a class that maps FormElements to DomainEntities
+ * You specify the formelement name as a key and give DomainObject to map to.
+ *
+ * usage:
+ *
+ * try {
+ *  $form = new Form(....);
+ *	$mapper = new FormMapper($form);
  *
  * @author robertcabri
  */
@@ -40,7 +47,7 @@ class FormMapper {
 	 * setup rules for form to domainentities mapping
 	 */
 //	abstract protected function defineFormElementToDomainEntityMapping();
-	protected function defineFormElementToDomainEntityMapping();
+	protected function defineFormElementToDomainEntityMapping() {}
 
 	/**
 	 * @param string $sFormElementName
