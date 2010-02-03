@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generatie Tijd: 30 Dec 2009 om 21:40
--- Server versie: 5.1.38
--- PHP Versie: 5.3.0
+-- Generation Time: Jan 05, 2010 at 09:21 AM
+-- Server version: 5.1.38
+-- PHP Version: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `folder`
+-- Table structure for table `folder`
 --
 
 CREATE TABLE IF NOT EXISTS `folder` (
@@ -32,7 +32,25 @@ CREATE TABLE IF NOT EXISTS `folder` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `page`
+-- Table structure for table `media`
+--
+
+CREATE TABLE IF NOT EXISTS `media` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `extension` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `mimetype` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `page`
 --
 
 CREATE TABLE IF NOT EXISTS `page` (
@@ -54,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `page` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `pagemodule`
+-- Table structure for table `pagemodule`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule` (
@@ -68,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `pagemodule_staticblock`
+-- Table structure for table `pagemodule_staticblock`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
@@ -81,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `pagemodule_upload`
+-- Table structure for table `pagemodule_upload`
 --
 
 CREATE TABLE IF NOT EXISTS `pagemodule_upload` (
@@ -94,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_upload` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `pagetext`
+-- Table structure for table `pagetext`
 --
 
 CREATE TABLE IF NOT EXISTS `pagetext` (
@@ -107,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `pagetext` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `staticblock`
+-- Table structure for table `staticblock`
 --
 
 CREATE TABLE IF NOT EXISTS `staticblock` (
@@ -121,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `staticblock` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `templatefile`
+-- Table structure for table `templatefile`
 --
 
 CREATE TABLE IF NOT EXISTS `templatefile` (
@@ -137,27 +155,7 @@ CREATE TABLE IF NOT EXISTS `templatefile` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `upload`
---
-
-CREATE TABLE IF NOT EXISTS `upload` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created` datetime NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `secure` int(1) NOT NULL,
-  `isfolder` int(1) NOT NULL,
-  `editable` int(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
