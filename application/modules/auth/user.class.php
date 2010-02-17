@@ -26,35 +26,35 @@ class User extends DataRecord {
 	 * @return string
 	 */
 	public function getEmail() {
-		return $this->email;
+		return $this->getAttr('email');
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getUsername() {
-		return $this->username;
+		return $this->getAttr('username');
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function isActive() {
-		return $this->active;
+		return $this->getAttr('active');
 	}
 
 	/**
 	 * @param email $sEmail
 	 */
-	public function setEmail($sEmail) {
-		$this->email = $sEmail;
+	public function setEmail(Email $sEmail) {
+		$this->setAttr('email', $sEmail);
 	}
 
 	/**
 	 * @param string $sUsername
 	 */
-	public function setUsername($sUsername) {
-		$this->username = $sUsername;
+	public function setUsername(Username $sUsername) {
+		$this->setAttr('username', $sUsername);
 	}
 
 	/**
@@ -65,10 +65,19 @@ class User extends DataRecord {
 	public function setActive($bActive) {
 
 		if ($bActive == true) {
-			$this->active =  1;
+			$this->setAttr('active',  1);
 		} else if ($bActive == false) {
-			$this->active = 0;
+			$this->setAttr('active', 0);
 		}
+	}
+	
+	/**
+	 * set the password for the User
+	 * 
+	 * @param Password $sPassword
+	 */
+	public function setPassword(Password $sPassword) {
+		$this->setAttr('password', md5($sPassword->getValue()));
 	}
 
 	/**
@@ -78,7 +87,7 @@ class User extends DataRecord {
 	 * @param string $sPassword
 	 * @return User
 	 */
-	public static function getByUsernameAndPassword($sUsername, $sPassword) {
+	public static function getByUsernameAndPassword(Username $sUsername, Password $sPassword) {
 		$oCrit = new Criteria('username = :username AND password = MD5(:password) AND active = :active');
 		$oCrit->addBind('username', $sUsername);
 		$oCrit->addBind('password', $sPassword);

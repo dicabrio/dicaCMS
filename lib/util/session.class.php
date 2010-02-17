@@ -5,8 +5,8 @@
  *	This class is an extend of the Singleton class. This means that you will get only
  * 	on instance of the session class. As only one user can be logged in!.
  */
-class Session
-{
+class Session {
+
 	private static $m_oInstance;
 
 	private $aSessionVars;
@@ -19,8 +19,7 @@ class Session
 	 *
 	 *	@return	void
 	 */
-	private function __construct($sSessionName='default')
-	{
+	private function __construct($sSessionName='default') {
 		// Start the session
 		session_name($sSessionName);
 		session_start();
@@ -28,8 +27,7 @@ class Session
 
 	}
 
-	public function get($key)
-	{
+	public function get($key) {
 		if (!isset($this->aSessionVars[$key])) {
 			return null;
 		}
@@ -37,8 +35,7 @@ class Session
 		return ($this->aSessionVars[$key]);
 	}
 
-	public function set($key, $value)
-	{
+	public function set($key, $value) {
 		//$this->aSessionVars[$key] = serialize($value);
 		$this->aSessionVars[$key] = ($value);
 	}
@@ -48,8 +45,7 @@ class Session
 		return isset($this->aSessionVars[$key]);
 	}
 
-	public function destroy()
-	{
+	public function destroy() {
 		unset($_SESSION);
 		session_destroy();
 	}
@@ -60,8 +56,7 @@ class Session
 	 * the getInstance() method returns a single instance of the object
 	 * @return Session
 	 */
-	public static function getInstance($sSessionName='default')
-	{
+	public static function getInstance($sSessionName='default') {
 		if (!isset(self::$m_oInstance))
 		{
 			$object = __CLASS__;
@@ -71,4 +66,3 @@ class Session
 		return self::$m_oInstance;
 	}
 }
-?>

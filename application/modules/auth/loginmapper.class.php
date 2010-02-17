@@ -1,6 +1,5 @@
 <?php
 
-
 class LoginMapper extends FormMapper {
 
 	public function defineFormElementToDomainEntityMapping() {
