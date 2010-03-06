@@ -29,7 +29,7 @@ class StaticBlockHandler implements FormHandler {
 			$data = DataFactory::getInstance();
 			$data->beginTransaction();
 
-			$this->mapper->constructModelsFromForm();
+			$this->mapper->constructModelsFromForm($form);
 
 			$this->block->update($this->mapper->getModel('identifier'), $this->mapper->getModel('content'));
 			$this->block->save();

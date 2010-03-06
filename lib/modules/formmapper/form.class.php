@@ -4,7 +4,7 @@
  *
  * @author robertcabri
  */
-abstract class Form {
+class Form {
 
 	/**
 	 * @var Request
@@ -65,7 +65,7 @@ abstract class Form {
 	/**
 	 * In this method you should define the form. This is done to force you adding elements
 	 */
-	abstract protected function defineFormElements();
+	protected function defineFormElements() {}
 
 	/**
 	 * @param string $sRequestKey
@@ -86,7 +86,7 @@ abstract class Form {
 	 * @param string $sIdentifier
 	 * @param FormElement $oFormElement
 	 */
-	protected function addFormElement($sIdentifier, FormElement $oFormElement) {
+	public function addFormElement($sIdentifier, FormElement $oFormElement) {
 
 		$sFormElementName = $oFormElement->getName();
 

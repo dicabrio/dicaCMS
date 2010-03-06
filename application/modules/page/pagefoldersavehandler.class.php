@@ -42,7 +42,7 @@ class PageFolderSaveHandler implements FormHandler {
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
 
-			$this->formmapper->constructModelsFromForm();
+			$this->formmapper->constructModelsFromForm($oForm);
 			$this->pagefolder->update($this->formmapper->getModel('name'), $this->formmapper->getModel('description'));
 			$this->parentfolder->addChild($this->pagefolder);
 			$this->pagefolder->save();

@@ -469,6 +469,27 @@ abstract class DataRecord {
 		return self::findBySql($sTableName, $sql, $aBindings, $sDbConnectionName);
 	}
 
+	public function  __toString() {
+
+	}
+
+	public function equals($object) {
+
+		if ($object === null) {
+			return false;
+		}
+
+		if (!is_a($object, get_class($this))) {
+			return false;
+		}
+
+		if ($object->getID() !== $this->getID()) {
+			return false;
+		}
+
+		return true;
+	}
+
 }
 
 

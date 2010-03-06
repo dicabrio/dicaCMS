@@ -31,7 +31,7 @@ class LoginHandler implements FormHandler {
 	public function handleForm(Form $form) {
 
 		try {
-			$this->mapper->constructModelsFromForm();
+			$this->mapper->constructModelsFromForm($form);
 
 			$oAuth = Authentication::getInstance(self::C_AUTH_SESSIONNAME);
 			if ($oAuth->login($this->mapper->getModel('username'), $this->mapper->getModel('password'))) {

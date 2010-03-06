@@ -40,7 +40,7 @@ class TemplateFileSaveHandler implements FormHandler {
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
 
-			$this->formmapper->constructModelsFromForm();
+			$this->formmapper->constructModelsFromForm($oForm);
 			
 			$this->template->setTitle($this->formmapper->getModel('title'));
 			$this->template->setDescription($this->formmapper->getModel('description'));
