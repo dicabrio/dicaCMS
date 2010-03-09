@@ -57,7 +57,7 @@ class Util {
 		if (false !== strpos($sPath, '.')) {
 			$aFields = explode('.', $sPath);
 		} else {
-			$aFields[] = $p_sFieldname;
+			$aFields[] = $sPath;
 		}
 
 		foreach ($aFields as $sField) {

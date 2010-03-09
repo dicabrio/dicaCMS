@@ -71,13 +71,21 @@ class Form {
 	 * @param string $sRequestKey
 	 * @return mixed
 	 */
-	private function getValueFromRequest($sRequestKey) {
-		
-		if ($this->sFormMethod == 'post') {
-			return $this->oRequest->post($sRequestKey);
+	private function getValueFromRequest(FormElement $formElement) {
+	
+		$formElementName = $formElement->getName();
+	
+		if ($formElement->getType() == 'file') {
+			return $this->oRequest->files($formElementName);
+		} else {
+			return $this->oRequest->request($formElementName);
 		}
+		
+		//if ($this->sFormMethod == 'post') {
+		//	return $this->oRequest->post($sRequestKey);
+		//}
 
-		return $this->oRequest->get($sRequestKey);
+		//return $this->oRequest->get($sRequestKey);
 	}
 
 	/**
@@ -180,7 +188,7 @@ class Form {
 			$oButton = $aSingleSubmitButtonAndHandler['FormElement'];
 			$oHandler = $aSingleSubmitButtonAndHandler['FormHandler'];
 
-			$sValueFromRequest = $this->getValueFromRequest($oButton->getName());
+			$sValueFromRequest = $this->getValueFromRequest($oButton);
 
 			if ($sValueFromRequest == $oButton->getValue()) {
 				$this->populateFormElementsWithRequestData();
@@ -195,7 +203,7 @@ class Form {
 	private function populateFormElementsWithRequestData() {
 		
 		foreach ($this->aFormElementsByIdentifier as $oFormElement) {
-			$oFormElement->setValue($this->getValueFromRequest($oFormElement->getName()));
+			$oFormElement->setValue($this->getValueFromRequest($oFormElement));
 		}
 	}
 

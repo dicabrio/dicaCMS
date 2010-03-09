@@ -62,7 +62,7 @@ class Request
 	 */
 	public function post($p_sParameter, $overwrite=null)
 	{
-		return $this->request($this->m_aPost, $p_sParameter, $overwrite);
+		return $this->getParamFromPool($this->m_aPost, $p_sParameter, $overwrite);
 	}
 
 	/**
@@ -74,7 +74,13 @@ class Request
 	 */
 	public function get($p_sParameter, $overwrite=null)
 	{
-		return $this->request($this->m_aGet, $p_sParameter, $overwrite);
+		return $this->getParamFromPool($this->m_aGet, $p_sParameter, $overwrite);
+	}
+	
+	public function request($param, $overwrite=null) {
+
+		return $this->getParamFromPool($this->m_aRequest, $param, $overwrite);
+		
 	}
 
 	/**
@@ -85,7 +91,7 @@ class Request
 	 * @return mixed
 	 */
 	public function cookie($param, $overwrite=null) {
-		return $this->request($this->m_aCookie, $param, $overwrite);
+		return $this->getParamFromPool($this->m_aCookie, $param, $overwrite);
 	}
 
 	/**
@@ -96,7 +102,7 @@ class Request
 	 * @param unknown_type $overwrite
 	 * @return unknown
 	 */
-	private function request($pool, $param, $overwrite) {
+	private function getParamFromPool($pool, $param, $overwrite) {
 		if ($overwrite !== null) {
 			return $overwrite;
 		}

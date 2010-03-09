@@ -81,7 +81,9 @@ class FormMapper {
 
 		$oFormElement = $this->oForm->getFormElementByName($sFormElementName);
 		try {
+		
 			return $this->constructModel($sDomainEntity, array($oFormElement->getValue()));
+			
 		} catch (Exception $e) {
 
 			$oFormElement->notMapped();

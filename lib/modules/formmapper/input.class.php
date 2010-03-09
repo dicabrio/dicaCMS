@@ -13,4 +13,5 @@ class Input extends FormElementImpl {
 
 		parent::addAttribute('type', $sType);
 	}
+	
 }
