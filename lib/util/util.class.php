@@ -90,8 +90,6 @@ class Util {
 				Util::import($sImportMod);
 			}
 		}
-
-		//		test(str_replace(':', "\n", ini_get('include_path')));
 	}
 }
 

@@ -31,6 +31,11 @@ class MediaSaveHandler implements FormHandler {
 
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
+			
+			$this->formmapper->addFormElementToDomainEntityMapping('media_id', 'Media');
+			$this->formmapper->addFormElementToDomainEntityMapping('title', 'RequiredTextLine');
+			$this->formmapper->addFormElementToDomainEntityMapping('description', 'DomainText');
+			$this->formmapper->addFormElementToDomainEntityMapping('media', 'Upload');
 
 			$this->formmapper->constructModelsFromForm($oForm);
 
