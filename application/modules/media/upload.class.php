@@ -31,17 +31,25 @@ class Upload implements DomainEntity {
 
 	public function __construct($fileInfo) {
 	
-		$this->validateError($fileInfo['error']);
-	
-	
+		$this->name = $fileInfo['name'];
+		$this->type = $fileInfo['type'];
+		$this->tmp_name = $fileInfo['tmp_name'];
+		$this->error = $fileInfo['error'];
+		$this->size = $fileInfo['size'];
+		
 		test($fileInfo);
+		$this->validateError();
+		$this->validateFileType();
+	
+	
+		
 	}
 	
 	/**
 	 *
-	 * @param int $sizeInKB
+	 * @param int $sizeInBytes
 	 */
-	public static function setMaxUploadSize($sizeInKB) {
+	public static function setMaxUploadSize($sizeInBytes) {
 	
 		self::$maxUploadSize = $sizeInKB;
 	
@@ -53,13 +61,20 @@ class Upload implements DomainEntity {
 		
 	}
 	
+	private function validateFileType() {
+		
+		self::$allowedFileTypes
+		
+		throw new InvalidArgumentException('just-for-fun');
+		
+	}
 	
-	private function validateError($errorNumber) {
+	private function validateError() {
 	
 		$message = false;
 		
-		if (isset(self::$errorMessages[$errorNumber])) {
-			$message = self::$errorMessages[$errorNumber];
+		if (isset(self::$errorMessages[$this->error])) {
+			$message = self::$errorMessages[$this->error];
 		}
 		
 		if ($message !== false) {
