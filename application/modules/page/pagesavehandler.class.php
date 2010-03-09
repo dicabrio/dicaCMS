@@ -39,7 +39,7 @@ class PageSaveHandler implements FormHandler {
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
 
-			$this->formmapper->constructModelsFromForm();
+			$this->formmapper->constructModelsFromForm($oForm);
 			$this->page->update($this->formmapper->getModel('pagename'),
 				$this->formmapper->getModel('template_id'),
 				$this->formmapper->getModel('publishtime'),

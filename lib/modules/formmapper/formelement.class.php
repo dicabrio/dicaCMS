@@ -41,12 +41,4 @@ interface FormElement {
 	 */
 	public function notMapped();
 
-	/**
-	 * Declare the mapping for this form element. If no mapping is define it will return the mapping
-	 * defined for this element
-	 *
-	 * @param string $sModelName
-	 * @return mixed
-	 */
-	public function mapTo($sModelName=null);
 }

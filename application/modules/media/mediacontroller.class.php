@@ -36,7 +36,21 @@ class MediaController extends CmsController {
 
 		$req = Request::getInstance();
 		$mediaItem = new Media(intval(Util::getUrlSegment(2)));
+		
+		$mediaMapper = new FormMapper();
+		$mediaMapper->addFormElementToDomainEntityMapping('media_id', 'Media');
+		$mediaMapper->addFormElementToDomainEntityMapping('title', 'TextLine');
+		$mediaMapper->addFormElementToDomainEntityMapping('description', 'DomainText');
+		$mediaMapper->addFormElementToDomainEntityMapping('media', 'Upload');
+
+		$saveButton = new ActionButton('Save');
+		$saveHandler = new MediaSaveHandler($mediaMapper, $mediaItem);
+
 		$form = new MediaForm($req, $mediaItem);
+		$form->addSubmitButton('save', $saveButton, $saveHandler);
+
+		$form->listen();
+
 
 		$view = new View('media/uploadmedia.php');
 		$view->assign('form', $form);

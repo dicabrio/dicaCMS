@@ -41,7 +41,7 @@ class TemplateFolderSaveHandler implements FormHandler {
 			$data =  DataFactory::getInstance();
 			$data->beginTransaction();
 
-			$this->formmapper->constructModelsFromForm();
+			$this->formmapper->constructModelsFromForm($oForm);
 			$this->templateFolder->update($this->formmapper->getModel('name'), $this->formmapper->getModel('description'));
 
 			$this->parentfolder->addChild($this->templateFolder);

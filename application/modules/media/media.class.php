@@ -1,6 +1,6 @@
 <?php
 
-class Media extends DataRecord {
+class Media extends DataRecord implements DomainEntity {
 
 	/**
 	 * @param int $id
@@ -50,6 +50,10 @@ class Media extends DataRecord {
 	public function getDescription() {
 
 		return $this->getAttr('description');
+
+	}
+
+	public function update() {
 
 	}
 
