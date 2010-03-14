@@ -53,7 +53,11 @@ class Media extends DataRecord implements DomainEntity {
 
 	}
 
-	public function update() {
+	public function update(TextLine $title, $description, $filename) {
+
+		$this->setAttr('title', $title);
+		$this->setAttr('description', $description);
+		$this->setAttr('filename', $filename);
 
 	}
 

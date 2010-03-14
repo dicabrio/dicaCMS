@@ -37,11 +37,14 @@ class Upload implements DomainEntity {
 		$this->error = $fileInfo['error'];
 		$this->size = $fileInfo['size'];
 		
-		test($fileInfo);
 		$this->validateError();
 		$this->validateFileType();
-	
-	
+	}
+
+	public function moveTo($newLocation) {
+
+		$file = new FileManager($this->tmp_name);
+		$file->moveTo($newLocation, $this->name);
 		
 	}
 	
@@ -62,11 +65,16 @@ class Upload implements DomainEntity {
 	}
 	
 	private function validateFileType() {
-		
-		self::$allowedFileTypes
-		
-		throw new InvalidArgumentException('just-for-fun');
-		
+		// filetypes
+		// extensions
+		if (self::$allowedFileTypes === null) {
+			// all are allowed
+		} else if (isset(self::$allowedFileTypes[$this->type])) {
+			// if it is allowed
+		} else {
+			// it is not allwed
+			throw new InvalidArgumentException('file type is not allowed');
+		}
 	}
 	
 	private function validateError() {
@@ -78,7 +86,7 @@ class Upload implements DomainEntity {
 		}
 		
 		if ($message !== false) {
-			throw new InvalidArgumentException($message);
+			throw new InvalidArgumentException($message, 10);
 		}
 	}
 
@@ -86,7 +94,7 @@ class Upload implements DomainEntity {
 	 *
 	 */
 	public function __toString() {
-		return 'Upload file: ';
+		return 'Upload file: '.$this->name;
 	}
 
 	public function equals($object) {
