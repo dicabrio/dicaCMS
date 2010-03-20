@@ -12,6 +12,12 @@ class Upload implements DomainEntity {
 	private $error;
 	
 	private $size;
+
+	/**
+	 *
+	 * @var FileManager
+	 */
+	private $file;
 	
 	private static $errorMessages = array(
 		UPLOAD_ERR_NO_FILE => 'no-file-uploaded',
@@ -28,7 +34,11 @@ class Upload implements DomainEntity {
 	
 	private static $allowedFileTypes;
 
-
+	/**
+	 * given parameter should be the $_FILES
+	 *
+	 * @param array $fileInfo
+	 */
 	public function __construct($fileInfo) {
 	
 		$this->name = $fileInfo['name'];
@@ -39,13 +49,29 @@ class Upload implements DomainEntity {
 		
 		$this->validateError();
 		$this->validateFileType();
+
+		$this->file = new FileManager($this->tmp_name);
+		
 	}
 
+	/**
+	 *
+	 * @param string $newLocation
+	 */
 	public function moveTo($newLocation) {
 
-		$file = new FileManager($this->tmp_name);
-		$file->moveTo($newLocation, $this->name);
+		$this->file->moveTo($newLocation, $this->name);
 		
+	}
+
+	/**
+	 *
+	 * @return FileManager
+	 */
+	public function getFile() {
+
+		return $this->file;
+
 	}
 	
 	/**

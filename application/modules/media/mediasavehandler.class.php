@@ -39,10 +39,10 @@ class MediaSaveHandler implements FormHandler {
 
 			$this->formmapper->constructModelsFromForm($oForm);
 
-			$upload = $this->formmapper->getModel('Upload');
-//			$upload->moveTo(Conf::get());
+			$upload = $this->formmapper->getModel('media');
+			$upload->moveTo(Conf::get('upload.dir.general'));
 
-//			$this->mediaItem->update($this->formmapper->getModel('title'), $this->formmapper->getModel('description'), );
+			$this->mediaItem->update($this->formmapper->getModel('title'), $this->formmapper->getModel('description'), $upload->getFile());
 
 			$this->mediaItem->save();
 

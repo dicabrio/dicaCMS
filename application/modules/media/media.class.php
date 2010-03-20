@@ -53,11 +53,22 @@ class Media extends DataRecord implements DomainEntity {
 
 	}
 
-	public function update(TextLine $title, $description, $filename) {
+	/**
+	 *
+	 * @param RequiredTextLine $title
+	 * @param string $description
+	 * @param FileManager $file
+	 */
+	public function update(RequiredTextLine $title, $description, FileManager $file) {
+
+		test($file->getMimeType());
 
 		$this->setAttr('title', $title);
 		$this->setAttr('description', $description);
-		$this->setAttr('filename', $filename);
+		$this->setAttr('filename', $file->getFilename());
+		$this->setAttr('extension', $file->getExtension());
+		$this->setAttr('mimetype', $file->getMimeType());
+		$this->setAttr('folder_id', 0);
 
 	}
 
