@@ -18,6 +18,7 @@ class MediaController extends CmsController {
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/media/editmedia', Lang::get('media.button.newitem')));
 
 		$tableDataSet = new MediaDataSet();
+		$tableDataSet->setValues($media);
 		$table = new Table($tableDataSet);
 
 		$overview = new View('media/mediaoverview.php');

@@ -7,5 +7,7 @@ $lang = array(
 
 	'button'=> array(
 		'newitem' => 'Nieuwe bestand',
+		'editmedia' => 'Wijzig',
+		'deletemedia' => 'Verwijder',
 	),
 );

@@ -71,7 +71,10 @@ class FileManager {
 	 */
 	public function getExtension() {
 
-		return $this->extension;
+		$afile = explode('.',$this->filename);
+		$extension = array_pop($afile);
+
+		return $extension;
 
 	}
 
@@ -112,6 +115,8 @@ class FileManager {
 
 		$this->path = $destination;
 		$this->filename = $sFilename;
+
+
 
 	}
 
@@ -156,7 +161,7 @@ class FileManager {
 			$this->path = implode(self::SEP, $afilename);
 			// get extension
 			$afile = explode('.',$this->filename);
-			$this->extension = array_pop($afile);
+			$this->extension = $this->getExtension();
 		} else {
 			$this->filename = $filename;
 		}
