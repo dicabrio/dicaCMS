@@ -46,8 +46,9 @@ CREATE TABLE IF NOT EXISTS `media` (
   `mimetype` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `folder_id` int(11) NOT NULL,
+  `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -168,5 +169,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `active` int(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 SET FOREIGN_KEY_CHECKS=1;
