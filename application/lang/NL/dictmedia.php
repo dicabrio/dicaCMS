@@ -10,4 +10,6 @@ $lang = array(
 		'editmedia' => 'Wijzig',
 		'deletemedia' => 'Verwijder',
 	),
+
+	'file-not-found' => 'Bestand kan niet worden gevonden op de server',
 );

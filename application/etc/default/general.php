@@ -12,7 +12,6 @@ $config = array(
 	'url' => array(
 		'www' => 'http://'.DOMAIN,
 		'images' => 'http://'.DOMAIN.'/images',
-		'upload' => 'http://'.DOMAIN.'/upload',
 		'css' => 'http://'.DOMAIN.'/css',
 		'js' => 'http://'.DOMAIN.'/js',
 	),

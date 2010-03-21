@@ -9,4 +9,8 @@ $config = array(
 				'js' => WWW_DIR.'/js',
 				'css' => WWW_DIR.'/css',
 		),
+
+		'url' => array(
+				'general' => '/upload',
+		)
 );

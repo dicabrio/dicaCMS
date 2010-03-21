@@ -73,7 +73,6 @@ class Media extends DataRecord implements DomainEntity {
 
 		if ($this->file === null) {
 			$this->file = new FileManager($this->getAttr('location').'/'.$this->getAttr('filename'));
-//			$this->file = new FileManager(Conf::get('upload.dir.general').'/'.$this->getAttr('filename'));
 		}
 
 		return $this->file;

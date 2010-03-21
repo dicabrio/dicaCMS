@@ -42,6 +42,16 @@
 		<div class="clear">&nbsp;</div>
 	</div>
 
+	<?php if ($updatemode) : ?>
+	<div class="pagemodule">
+		<div class="modulelabel">Filename:</div>
+		<div class="modulecontent">
+			<?php echo $filename; ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+	<?php endif; ?>
+
 </fieldset>
 <fieldset class="actions">
 	<div class="pagemodule">

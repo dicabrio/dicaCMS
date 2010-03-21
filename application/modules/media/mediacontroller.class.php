@@ -48,8 +48,23 @@ class MediaController extends CmsController {
 
 		$form->listen();
 
+		try {
+			$file = $mediaItem->getFile();
+			$filename = Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$file->getFilename();
+		} catch (FileNotFoundException $e) {
+			$file = null;
+			$filename = Lang::get('media.file-not-found');
+		}
+
+		$updatemode = true;
+		if ($mediaItem->getID() == 0) {
+			$updatemode = false;
+		}
+
 		$view = new View('media/uploadmedia.php');
 		$view->assign('form', $form);
+		$view->assign('filename', $filename);
+		$view->assign('updatemode', $updatemode);
 		$view->assign('aErrors', $mediaMapper->getMappingErrors());
 
 		$baseview = parent::getBaseView();
