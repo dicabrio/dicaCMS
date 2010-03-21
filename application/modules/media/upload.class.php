@@ -20,7 +20,7 @@ class Upload implements DomainEntity {
 	private $file;
 	
 	private static $errorMessages = array(
-		UPLOAD_ERR_NO_FILE => 'no-file-uploaded',
+		/*UPLOAD_ERR_NO_FILE => 'no-file-uploaded',*/
 		UPLOAD_ERR_PARTIAL => 'partial-file-uploaded',
 		UPLOAD_ERR_FORM_SIZE => 'max-file-size-uplooaded',
 		UPLOAD_ERR_INI_SIZE => 'max-file-size-system-uploaded',
@@ -54,13 +54,11 @@ class Upload implements DomainEntity {
 		
 	}
 
-	/**
-	 *
-	 * @param string $newLocation
-	 */
 	public function moveTo($newLocation) {
 
-		$this->file->moveTo($newLocation, $this->name);
+		if ($this->error != UPLOAD_ERR_NO_FILE) {
+			$this->file->moveTo($newLocation, $this->name);
+		}
 		
 	}
 
@@ -69,6 +67,10 @@ class Upload implements DomainEntity {
 	 * @return FileManager
 	 */
 	public function getFile() {
+
+		if ($this->error == UPLOAD_ERR_NO_FILE) {
+			return null;
+		}
 
 		return $this->file;
 

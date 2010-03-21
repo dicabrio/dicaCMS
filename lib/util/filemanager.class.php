@@ -88,6 +88,12 @@ class FileManager {
 
 	}
 
+	public function exists() {
+
+		return (file_exists($this->getFullPath()));
+		
+	}
+
 	/**
 	 * Move the given file to the specified destination
 	 * TODO: check on if it is a uploaded file. We should be able te move not uploaded files

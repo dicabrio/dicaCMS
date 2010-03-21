@@ -3,11 +3,17 @@
 class Media extends DataRecord implements DomainEntity {
 
 	/**
+	 *
+	 * @var FileManager
+	 */
+	private $file;
+
+	/**
 	 * @param int $id
 	 * @return void
 	 */
 	public function __construct($id=null) {
-		
+
 		parent::__construct(__CLASS__, $id);
 
 		if ($id == 0) {
@@ -20,7 +26,7 @@ class Media extends DataRecord implements DomainEntity {
 	 * @return void
 	 */
 	protected function defineColumns() {
-		
+
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('description', DataTypes::TEXT, 500, true);
@@ -29,18 +35,19 @@ class Media extends DataRecord implements DomainEntity {
 		parent::addColumn('mimetype', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
+		parent::addColumn('location', DataTypes::VARCHAR, 255, true);
 
 	}
 
 	/**
 	 * get the title
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getTitle() {
 
 		return $this->getAttr('title');
-		
+
 	}
 
 	/**
@@ -54,33 +61,57 @@ class Media extends DataRecord implements DomainEntity {
 	}
 
 	/**
+	 * @return boolean
+	 */
+	public function valid() {
+
+		return true;
+
+	}
+
+	public function getFile() {
+
+		if ($this->file === null) {
+			$this->file = new FileManager($this->getAttr('location').'/'.$this->getAttr('filename'));
+//			$this->file = new FileManager(Conf::get('upload.dir.general').'/'.$this->getAttr('filename'));
+		}
+
+		return $this->file;
+
+	}
+
+	/**
 	 *
 	 * @param RequiredTextLine $title
 	 * @param string $description
 	 * @param FileManager $file
 	 */
-	public function update(RequiredTextLine $title, $description, FileManager $file) {
+	public function update(RequiredTextLine $title, $description, FileManager $file=null) {
 
-		test($file->getMimeType());
+		if ($file !== null) {
+			$this->file = $file;
+
+			$this->setAttr('filename', $file->getFilename());
+			$this->setAttr('location', $file->getPath());
+			$this->setAttr('extension', $file->getExtension());
+			$this->setAttr('mimetype', $file->getMimeType());
+		}
 
 		$this->setAttr('title', $title);
 		$this->setAttr('description', $description);
-		$this->setAttr('filename', $file->getFilename());
-		$this->setAttr('extension', $file->getExtension());
-		$this->setAttr('mimetype', $file->getMimeType());
 		$this->setAttr('folder_id', 0);
 
 	}
 
 	/**
 	 * find all media items
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function find() {
 
 		return parent::findAll(__CLASS__, parent::ALL);
-		
+
 	}
 }
 
