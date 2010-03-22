@@ -37,7 +37,7 @@ class MediaController extends CmsController {
 
 		$req = Request::getInstance();
 		$mediaItem = new Media(intval(Util::getUrlSegment(2)));
-		
+
 		$mediaMapper = new FormMapper();
 
 		$saveButton = new ActionButton('Save');
@@ -71,10 +71,32 @@ class MediaController extends CmsController {
 		$baseview->assign('oModule', $view);
 
 		return $baseview->getContents();
-		
+
+	}
+
+	public function deletemedia() {
+
+		$data = DataFactory::getInstance();
+		try {
+
+			$data->beginTransaction();
+
+			$mediaItem = new Media(intval(Util::getUrlSegment(2)));
+			$mediaItem->delete();
+
+			$data->commit();
+
+			Util::gotoPage(Conf::get('general.url.www').'/media');
+
+		} catch (RecordException $e) {
+			$data->rollBack();
+
+			return $this->_index(array('media.'.$e->getMessage()));
+		}
 	}
 
 	public function _default() {
 		return __CLASS__;
 	}
 }
+

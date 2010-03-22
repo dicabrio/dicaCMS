@@ -102,6 +102,21 @@ class Media extends DataRecord implements DomainEntity {
 
 	}
 
+	public function delete() {
+
+		try {
+
+			$file = $this->getFile();
+			$file->delete();
+
+		} catch (FileNotFoundException $e) {
+			// no problem just delete it
+		}
+
+		parent::delete();
+		
+	}
+
 	/**
 	 * find all media items
 	 *
@@ -112,5 +127,6 @@ class Media extends DataRecord implements DomainEntity {
 		return parent::findAll(__CLASS__, parent::ALL);
 
 	}
+
 }
 

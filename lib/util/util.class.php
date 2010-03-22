@@ -78,7 +78,13 @@ class Util {
 	 * @return void
 	 */
 	public static function import($sPackageLocation) {
-		ini_set('include_path', ini_get('include_path').$sPackageLocation.':');
+
+		$sep = ':';
+		if (false !== strpos(PHP_OS, 'WINNT')) {
+			$sep = ';';
+		}
+
+		ini_set('include_path', ini_get('include_path').$sPackageLocation.$sep);
 	}
 
 	public static function importModules($sModuleLocation) {
@@ -86,7 +92,6 @@ class Util {
 		while (false !== ($sModule = $oDir->read())) {
 			$sImportMod = $sModuleLocation.'/'.$sModule;
 			if (is_dir($sImportMod)) {
-				//		test($sImportMod);
 				Util::import($sImportMod);
 			}
 		}
