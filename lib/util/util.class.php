@@ -80,7 +80,7 @@ class Util {
 	public static function import($sPackageLocation) {
 
 		$sep = ':';
-		if (false !== strpos(PHP_OS, 'WINNT')) {
+		if (false !== strpos(PHP_OS, 'WIN')) {
 			$sep = ';';
 		}
 

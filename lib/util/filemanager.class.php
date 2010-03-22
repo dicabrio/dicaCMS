@@ -60,6 +60,10 @@ class FileManager {
 	 */
 	public function getFullPath() {
 
+		if (empty($this->path)) {
+			return $this->filename;
+		}
+
 		return $this->path . self::SEP . $this->filename;
 
 	}
@@ -83,7 +87,7 @@ class FileManager {
 	 */
 	public function getContents() {
 
-		$sFileContents = file_get_contents($this->path . self::SEP . $this->filename);
+		$sFileContents = file_get_contents($this->getFullPath());
 		return $sFileContents;
 
 	}
@@ -145,8 +149,8 @@ class FileManager {
 	public function delete() {
 
 		$this->validateFile();
-		if (!unlink($this->path.self::SEP.$this->filename)) {
-			throw new FileException('File: '.$this->path.self::SEP.$this->filename.' cannot be deleted');
+		if (!unlink($this->getFullPath())) {
+			throw new FileException('File: '.$this->getFullPath().' cannot be deleted');
 		}
 
 		return true;
