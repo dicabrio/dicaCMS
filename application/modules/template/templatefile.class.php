@@ -65,7 +65,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	}
 
 	public function setSource(DomainText $source) {
-		$this->setAttr('source', $source);
+		$this->setAttr('source', $source->getValue());
 	}
 
 	/**
@@ -141,7 +141,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 			// no problem if the file is not found
 		}
 
-		$source = $this->getAttr('source');
+		$source = (get_magic_quotes_gpc()) ? stripslashes($this->getAttr('source')) : $this->getAttr('source');
 		$title = $this->getAttr('title');
 
 		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));

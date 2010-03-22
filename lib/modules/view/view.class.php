@@ -127,5 +127,3 @@ class View
 		return $this->getContents();
 	}
 }
-
-//class FileNotFoundException extends Exception {}

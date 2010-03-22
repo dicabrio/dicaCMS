@@ -23,8 +23,10 @@ class ViewPageController {
 		$this->mayShow($oPage);
 
 		$oView = $this->getView($oPage);
-		$oView->assign('sJsUrl', Conf::get('general.url.js'));
-		$oView->assign('sCssUrl', Conf::get('general.url.css'));
+		$oView->assign('WWW_URL', Conf::get('general.url.www'));
+		$oView->assign('IMAGES_URL', Conf::get('general.url.images'));
+		$oView->assign('JS_URL', Conf::get('general.url.js'));
+		$oView->assign('CSS_URL', Conf::get('general.url.css'));
 		$oView->assign('title', $oPage->getTitle());
 		$oView->assign('description', $oPage->getDescription());
 		$oView->assign('keywords', $oPage->getKeywords());

@@ -146,7 +146,7 @@ abstract class DataRecord {
 		$this->defineColumns();
 
 		$this->setAttr('id', intval($id));
-		
+
 		$this->loadRecord();
 	}
 
@@ -161,7 +161,7 @@ abstract class DataRecord {
 	/**
 	 * define validations for the object.
 	 * It is not defined abstract because it is optional. If you want to use it override it.
-	 * 
+	 *
 	 * @returnn void
 	 */
 	protected function defineValidations() {
@@ -179,7 +179,7 @@ abstract class DataRecord {
 
 	/**
 	 * retrieve rawdata (arrays)
-	 * 
+	 *
 	 * @param bool $bRaw
 	 */
 	protected function setRetrieveRawData($bRaw) {
@@ -222,7 +222,7 @@ abstract class DataRecord {
 		}
 
 		return true;
-		
+
 	}
 
 	private function insert() {
@@ -286,7 +286,11 @@ abstract class DataRecord {
 
 			if (count($row) > 0) {
 				foreach ($row as $attribute => $value) {
-					$this->setAttr($attribute, $value);
+					if (get_magic_quotes_gpc() == true) {
+						$this->setAttr($attribute, stripslashes($value));
+					} else {
+						$this->setAttr($attribute, $value);
+					}
 				}
 			}
 
@@ -350,7 +354,7 @@ abstract class DataRecord {
 	 * @param <type> $oValidator
 	 */
 	protected function addValidator(ColumnValidator $oValidator) {
-		
+
 	}
 
 	/**
@@ -360,7 +364,7 @@ abstract class DataRecord {
 	protected function getAttr($columnname) {
 
 		return $this->oColumns->$columnname;
-		
+
 	}
 
 
@@ -370,7 +374,7 @@ abstract class DataRecord {
 	 * @return DataRecord
 	 */
 	public function setAttr($oColumnName, $value) {
-		
+
 		$this->oColumns->$oColumnName = $value;
 		return $this;
 
@@ -399,7 +403,7 @@ abstract class DataRecord {
 
 		$aResulObjects = array();
 		$oDatabaseHandler = self::getConnection($sConnectionName);
-		
+
 		$oStatement = $oDatabaseHandler->prepare($sQuery);
 		$oStatement->execute($aBind);
 
@@ -415,6 +419,7 @@ abstract class DataRecord {
 		while ($aRow = $oStatement->fetch()) {
 			$oTmpObject = new $sClassName();
 			foreach ($aRow as $sKey => $sValue) {
+				$sValue = (get_magic_quotes_gpc()) ? stripslashes($sValue) : $sValue;
 				$oTmpObject->setAttr($sKey, $sValue);
 			}
 
@@ -493,4 +498,6 @@ abstract class DataRecord {
 }
 
 
-class RecordException extends Exception {}
+class RecordException extends Exception {
+
+}
