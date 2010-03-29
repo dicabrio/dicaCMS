@@ -75,7 +75,21 @@ class StaticblockModule implements ModuleController {
 			return '';
 		}
 
-		return $this->oTextContent->getContent();
+		$contents = $this->oTextContent->getContent();
+
+		$search = array(
+			'[[www_url]]',
+			'[[images_url]]',
+			'[[media_url]]');
+		
+		$replace = array(
+			Conf::get('general.url.www'),
+			Conf::get('general.url.images'),
+			Conf::get('general.url.www').Conf::get('upload.url.general'));
+
+		$contents = str_replace($search, $replace, $contents);
+
+		return $contents;
 	}
 
 	/* (non-PHPdoc)

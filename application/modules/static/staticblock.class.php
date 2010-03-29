@@ -2,6 +2,13 @@
 
 class StaticBlock extends DataRecord {
 
+	const C_FORMAT_PATH = "%s/static_%s-%s.php";
+
+	private $oldtplname;
+
+	private $location;
+
+
 	/**
 	 *
 	 * @param int $id
@@ -32,10 +39,11 @@ class StaticBlock extends DataRecord {
 	 * @param TextLine $identifier
 	 * @param DomainText $content
 	 */
-	public function update(RequiredTextLine $identifier, DomainText $content) {
+	public function update(RequiredTextLine $identifier, DomainText $content, $location) {
 
 		$this->setAttr('identifier', $identifier);
 		$this->setAttr('content', $content);
+		$this->location = $location;
 		
 	}
 
@@ -69,4 +77,27 @@ class StaticBlock extends DataRecord {
 		return parent::findAll(__CLASS__, parent::ALL);
 	}
 
+	/**
+	 * 
+	 */
+	public function save() {
+
+		parent::save();
+		$format = "%s/static_%s-%s.php";
+		$oldfile = sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id'));
+
+		try {
+			$file = new FileManager($oldfile);
+			$file->delete();
+		} catch (FileNotFoundException $e) {
+			// no problem if the file is not found
+		}
+
+		$source = (get_magic_quotes_gpc()) ? stripslashes($this->getAttr('source')) : $this->getAttr('source');
+		$title = $this->getAttr('title');
+
+		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));
+		file_put_contents($newfile, $source);
+
+	}
 }
