@@ -3,13 +3,16 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generatie Tijd: 03 Feb 2010 om 08:48
+-- Generatie Tijd: 11 Apr 2010 om 19:23
 -- Server versie: 5.1.38
--- PHP Versie: 5.3.0
+-- PHP Versie: 5.3.1
 
 SET FOREIGN_KEY_CHECKS=0;
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+SET AUTOCOMMIT=0;
+START TRANSACTION;
 
 --
 -- Database: `dicabrio`
@@ -136,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `staticblock` (
   `identifier` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -170,5 +174,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
 SET FOREIGN_KEY_CHECKS=1;
+
+COMMIT;
