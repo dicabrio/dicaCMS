@@ -41,7 +41,7 @@ class CmsController extends SecureController {
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
 		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
+//		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
 		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);

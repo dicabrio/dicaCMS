@@ -2,12 +2,16 @@
 
 class StaticBlock extends DataRecord {
 
+	/**
+	 * constant for location of the file
+	 */
 	const C_FORMAT_PATH = "%s/static_%s-%s.php";
 
+	/**
+	 *
+	 * @var string
+	 */
 	private $oldtplname;
-
-	private $location;
-
 
 	/**
 	 *
@@ -29,6 +33,7 @@ class StaticBlock extends DataRecord {
 
 		parent::addColumn('identifier', DataTypes::VARCHAR, 255, false);
 		parent::addColumn('content', DataTypes::TEXT, false, false);
+		parent::addColumn('path', DataTypes::TEXT, false, false);
 		parent::addColumn('created', DataTypes::DATETIME, false, false);
 
 	}
@@ -38,12 +43,16 @@ class StaticBlock extends DataRecord {
 	 * 
 	 * @param TextLine $identifier
 	 * @param DomainText $content
+	 * @param string $path
 	 */
-	public function update(RequiredTextLine $identifier, DomainText $content, $location) {
+	public function update(RequiredTextLine $identifier, DomainText $content, $path) {
+
+		// keep old tplname if
+		$this->oldtplname = $this->getAttr('identifier');
 
 		$this->setAttr('identifier', $identifier);
 		$this->setAttr('content', $content);
-		$this->location = $location;
+		$this->setAttr('path', $path);
 		
 	}
 
@@ -68,6 +77,14 @@ class StaticBlock extends DataRecord {
 		
 	}
 
+	public function getView() {
+
+		$staticblockFile = sprintf(self::C_FORMAT_PATH, '', $this->getAttr('identifier'), $this->getAttr('id'));
+		$view = new View($staticblockFile);
+		return $view;
+
+	}
+
 	/**
 	 * get all staticblocks
 	 * 
@@ -83,21 +100,33 @@ class StaticBlock extends DataRecord {
 	public function save() {
 
 		parent::save();
-		$format = "%s/static_%s-%s.php";
-		$oldfile = sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id'));
+
+		$this->removeFile($this->getAttr('path'), $this->oldtplname, $this->getAttr('id'));
+
+		$source = (get_magic_quotes_gpc()) ? stripslashes($this->getAttr('content')) : $this->getAttr('content');
+
+		$newfile = sprintf(self::C_FORMAT_PATH, $this->getAttr('path'), $this->getAttr('identifier'), $this->getAttr('id'));
+		file_put_contents($newfile, $source);
+
+	}
+	
+	private function removeFile($path, $filename, $id) {
+		
+		$fileToDelete = sprintf(self::C_FORMAT_PATH, $path, $filename, $id);
 
 		try {
-			$file = new FileManager($oldfile);
+			$file = new FileManager($fileToDelete);
 			$file->delete();
 		} catch (FileNotFoundException $e) {
 			// no problem if the file is not found
 		}
+		
+	}
 
-		$source = (get_magic_quotes_gpc()) ? stripslashes($this->getAttr('source')) : $this->getAttr('source');
-		$title = $this->getAttr('title');
+	public function delete() {
 
-		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));
-		file_put_contents($newfile, $source);
+		$this->removeFile($this->getAttr('path'), $this->getAttr('identifier'), $this->getAttr('id'));
+		parent::delete();
 
 	}
 }

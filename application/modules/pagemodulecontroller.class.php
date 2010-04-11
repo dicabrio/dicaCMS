@@ -1,7 +1,7 @@
 <?php
 
 
-interface ModuleController {
+interface PageModuleController {
 
 	/**
 	 * 
@@ -9,15 +9,7 @@ interface ModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod);
-	
-	/**
-	 * This method will return the source of how to edit.
-	 * it will return the html code of an textarea or something like that
-	 *
-	 * @return View
-	 */
-	public function getEditor();
+	public function __construct(PageModule $oMod, Page $page);
 	
 	/**
 	 * get contents for this module as a string or an object that has a __toString method implemented

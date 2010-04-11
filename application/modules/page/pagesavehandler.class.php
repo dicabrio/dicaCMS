@@ -56,7 +56,7 @@ class PageSaveHandler implements FormHandler {
 			$oViewParser = new ViewParser($oTemplateFile);
 			foreach ($oViewParser->getLabels() as $aModule) {
 
-				$sModuleClass = $aModule['module'].'Module';
+				$sModuleClass = $aModule['module'].'CmsModule';
 				$oPageModule = $this->page->getModule($aModule['id']);
 
 				if ($oPageModule === null) {
@@ -69,7 +69,7 @@ class PageSaveHandler implements FormHandler {
 
 				$oModule = new $sModuleClass($oPageModule);
 
-				if ($oModule instanceof ModuleController) {
+				if ($oModule instanceof CmsModuleController) {
 					$oModule->handleData($oReq);
 				}
 			}

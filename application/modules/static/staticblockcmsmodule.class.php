@@ -1,6 +1,6 @@
 <?php
 
-class StaticblockModule implements ModuleController {
+class StaticblockCmsModule implements CmsModuleController {
 
 	/**
 	 * @var PageModule
@@ -10,7 +10,7 @@ class StaticblockModule implements ModuleController {
 	/**
 	 * @var StaticBlock
 	 */
-	private $oTextContent;
+	private $oStaticBlock;
 
 	/**
 	 * @var array
@@ -42,7 +42,7 @@ class StaticblockModule implements ModuleController {
 	 */
 	private function load() {
 
-		$this->oTextContent = Relation::getSingle('pagemodule', 'staticblock', $this->oPageModule);
+		$this->oStaticBlock = Relation::getSingle('pagemodule', 'staticblock', $this->oPageModule);
 
 	}
 
@@ -58,8 +58,8 @@ class StaticblockModule implements ModuleController {
 		$view->assign('blocks', $blocks);
 
 		$blockID = 0;
-		if ($this->oTextContent !== null) {
-			$blockID = $this->oTextContent->getID();
+		if ($this->oStaticBlock !== null) {
+			$blockID = $this->oStaticBlock->getID();
 		}
 
 		$view->assign('block_id', $blockID);
@@ -71,25 +71,17 @@ class StaticblockModule implements ModuleController {
 	 * @return string
 	 */
 	public function getContents() {
-		if ($this->oTextContent === null) {
+		if ($this->oStaticBlock === null) {
 			return '';
 		}
+test($this->oCmsController);
+		$view = $this->oStaticBlock->getView();
 
-		$contents = $this->oTextContent->getContent();
+		$view->assign('www_url', Conf::get('general.url.www'));
+		$view->assign('images_url', Conf::get('general.url.images'));
+		$view->assign('media_url', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
-		$search = array(
-			'[[www_url]]',
-			'[[images_url]]',
-			'[[media_url]]');
-		
-		$replace = array(
-			Conf::get('general.url.www'),
-			Conf::get('general.url.images'),
-			Conf::get('general.url.www').Conf::get('upload.url.general'));
-
-		$contents = str_replace($search, $replace, $contents);
-
-		return $contents;
+		return $view;
 	}
 
 	/* (non-PHPdoc)

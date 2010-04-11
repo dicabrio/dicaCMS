@@ -108,7 +108,7 @@ class PageController extends CmsController {
 
 			$aPageModules = array();
 			foreach ($oViewParser->getLabels() as $aModule) {
-				$sModuleClass = $aModule['module'].'Module';
+				$sModuleClass = $aModule['module'].'CmsModule';
 
 				$oPageModule = $oPage->getModule($aModule['id']);
 				if ($oPageModule === null) {
@@ -121,7 +121,7 @@ class PageController extends CmsController {
 
 				$oModule = new $sModuleClass($oPageModule);
 
-				if ($oModule instanceof ModuleController) {
+				if ($oModule instanceof CmsModuleController) {
 					$oModView = $oModule->getEditor();
 					$oModView->sIdentifier = $oModule->getIdentifier();
 					$aPageModules[] = $oModView;

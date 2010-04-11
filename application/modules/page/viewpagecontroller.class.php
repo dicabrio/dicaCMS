@@ -23,10 +23,14 @@ class ViewPageController {
 		$this->mayShow($oPage);
 
 		$oView = $this->getView($oPage);
-		$oView->assign('WWW_URL', Conf::get('general.url.www'));
-		$oView->assign('IMAGES_URL', Conf::get('general.url.images'));
-		$oView->assign('JS_URL', Conf::get('general.url.js'));
-		$oView->assign('CSS_URL', Conf::get('general.url.css'));
+		
+		$oView->assign('www_url', Conf::get('general.url.www'));
+		$oView->assign('images_url', Conf::get('general.url.images'));
+		$oView->assign('js_url', Conf::get('general.url.js'));
+		$oView->assign('css_url', Conf::get('general.url.css'));
+
+		$oView->assign('pagename', $oPage->getName());
+
 		$oView->assign('title', $oPage->getTitle());
 		$oView->assign('description', $oPage->getDescription());
 		$oView->assign('keywords', $oPage->getKeywords());
@@ -67,8 +71,10 @@ class ViewPageController {
 	}
 
 	private function getView(Page $oPage) {
+
 		$oTemplateFile = $oPage->getTemplate();
 		return new View($oTemplateFile->getFilename());
+		
 	}
 
 	private function populateViewWithModules(Page $oPage, View $oView) {
@@ -82,8 +88,8 @@ class ViewPageController {
 			$oModule = $oPage->getModule($aModule['id']);
 			if ($oModule !== null) {
 
-				$sModuleClass = $oModule->getType().'Module';
-				$oModuleController = new $sModuleClass($oModule);
+				$sModuleClass = $oModule->getType().'PageModule';
+				$oModuleController = new $sModuleClass($oModule, $oPage);
 
 				$sContent = $oModuleController->getContents();
 			}
