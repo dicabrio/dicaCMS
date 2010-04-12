@@ -152,6 +152,8 @@ class Page extends DataRecord {
 			$oModule->save();
 		}
 
+		test($oModule);
+
 		$this->aModules[$oModule->getIdentifier()] = $oModule;
 	}
 

@@ -24,10 +24,10 @@ class ViewPageController {
 
 		$oView = $this->getView($oPage);
 		
-		$oView->assign('www_url', Conf::get('general.url.www'));
-		$oView->assign('images_url', Conf::get('general.url.images'));
-		$oView->assign('js_url', Conf::get('general.url.js'));
-		$oView->assign('css_url', Conf::get('general.url.css'));
+		$oView->assign('wwwurl', Conf::get('general.url.www'));
+		$oView->assign('imagesurl', Conf::get('general.url.images'));
+		$oView->assign('jsurl', Conf::get('general.url.js'));
+		$oView->assign('cssurl', Conf::get('general.url.css'));
 
 		$oView->assign('pagename', $oPage->getName());
 
@@ -86,9 +86,12 @@ class ViewPageController {
 			$sContent = '';
 			$sLabel = ViewParser::constructLabel($aModule['module'], $aModule['id']);
 			$oModule = $oPage->getModule($aModule['id']);
-			if ($oModule !== null) {
+			
+			if ($oModule instanceof PageModule) {
 
 				$sModuleClass = $oModule->getType().'PageModule';
+
+				$oReflection = new ReflectionClass($sModuleClass);
 				$oModuleController = new $sModuleClass($oModule, $oPage);
 
 				$sContent = $oModuleController->getContents();

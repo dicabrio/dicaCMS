@@ -8,7 +8,9 @@ class PageModule extends DataRecord {
 	 * @param int $id
 	 */
 	public function __construct($id=null) {
+
 		parent::__construct(__CLASS__, $id);
+		
 	}
 
 	/**
@@ -30,7 +32,9 @@ class PageModule extends DataRecord {
 	 * @return string
 	 */
 	public function getIdentifier() {
+
 		return $this->getAttr('identifier');
+		
 	}
 
 	/**

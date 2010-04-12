@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generatie Tijd: 11 Apr 2010 om 19:23
+-- Generatie Tijd: 12 Apr 2010 om 10:33
 -- Server versie: 5.1.38
 -- PHP Versie: 5.3.1
 
@@ -99,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pagemodule_id` int(11) unsigned NOT NULL,
   `staticblock_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`staticblock_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

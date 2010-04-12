@@ -67,23 +67,6 @@ class StaticblockCmsModule implements CmsModuleController {
 
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getContents() {
-		if ($this->oStaticBlock === null) {
-			return '';
-		}
-test($this->oCmsController);
-		$view = $this->oStaticBlock->getView();
-
-		$view->assign('www_url', Conf::get('general.url.www'));
-		$view->assign('images_url', Conf::get('general.url.images'));
-		$view->assign('media_url', Conf::get('general.url.www').Conf::get('upload.url.general'));
-
-		return $view;
-	}
-
 	/* (non-PHPdoc)
 	 * @see modules/Module#validate()
 	 */
@@ -103,7 +86,12 @@ test($this->oCmsController);
 		if ($this->validate($blockID)) {
 			if ($blockID > 0) {
 				$block = new StaticBlock($blockID);
-				Relation::add('pagemodule', 'staticblock', $this->oPageModule, $block);
+
+				try {
+					Relation::add('pagemodule', 'staticblock', $this->oPageModule, $block);
+				} catch (PDOException $e) {
+					// trying to add a duplicate
+				}
 			}
 			return true;
 		}

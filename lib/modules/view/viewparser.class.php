@@ -9,12 +9,11 @@
  * @author Robert Cabri
  * @version 0.01
  */
-class ViewParser
-{
+class ViewParser {
 
-	const MOD_PATTERN = '/<\?php\s+echo\s+\$o([a-zA-Z0-9]+)_([a-zA-Z0-9]+);?\s?\?>/';
+	const MOD_PATTERN = '/<\?php\s+echo\s+\$([a-zA-Z0-9]+)_([a-zA-Z0-9]+);?\s?\?>/';
 	
-	const MOD_VAR_BUILDER = 'o%s_%s'; 
+	const MOD_VAR_BUILDER = '%s_%s'; 
 
 	/**
 	 * @var TemplateFile
