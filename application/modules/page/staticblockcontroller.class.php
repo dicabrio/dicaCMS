@@ -3,17 +3,16 @@
 class StaticblockController extends CmsController {
 
 	public function __construct($sMethod) {
-	// we should check for permissions
+// we should check for permissions
 		parent::__construct('staticblock/'.$sMethod, Lang::get('static.title'));
 	}
 
 	/**
 	 * the index method.
-	 * 
+	 *
 	 * @return string
 	 */
-	public function _index() {
-		$aErrors = array();
+	public function _index($aErrors = array()) {
 
 		$actions = new Menu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/editblock', Lang::get('static.button.newblock')));
@@ -37,7 +36,7 @@ class StaticblockController extends CmsController {
 
 	/**
 	 * Handle editing the block
-	 * 
+	 *
 	 * @return string
 	 */
 	public function editblock() {
@@ -64,5 +63,31 @@ class StaticblockController extends CmsController {
 
 	public function _default() {
 		return __CLASS__;
+	}
+
+	public function deleteblock() {
+
+		$data = DataFactory::getInstance();
+		try {
+
+			$data->beginTransaction();
+
+			$req = Request::getInstance();
+			$block = new StaticBlock(Util::getUrlSegment(2));
+
+			$block->delete();
+
+			$data->commit();
+
+			Util::gotoPage(Conf::get('general.url.www').'/staticblock');
+
+		} catch (RecordException $e) {
+			
+			$data->rollBack();
+			return $this->_index(array('static.'.$e->getMessage()));
+
+		}
+
+
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 class PageEditForm extends Form {
-	
+
 	/**
 	 * @var Page
 	 */
@@ -44,7 +44,11 @@ class PageEditForm extends Form {
 		parent::addFormElement($elTitle->getName(), $elTitle);
 
 		$elTemplate = new Select('template_id');
-		$elTemplate->setValue($this->page->getTemplate()->getID());
+		try {
+			$elTemplate->setValue($this->page->getTemplate()->getID());
+		} catch (RecordException $e) {
+			$elTemplate->setValue(0);
+		}
 		$elTemplate->addOption(0, 'Select template..');
 		foreach ($this->templates as $template) {
 			$elTemplate->addOption($template->getID(), $template->getTitle());
@@ -81,6 +85,6 @@ class PageEditForm extends Form {
 		$elActive->setValue($this->page->isActive());
 
 		parent::addFormElement($elActive->getName(), $elActive);
-		
+
 	}
 }
