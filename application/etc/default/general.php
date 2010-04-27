@@ -10,10 +10,10 @@ $config = array(
 	),
 
 	'url' => array(
-		'www' => 'http://'.DOMAIN,
-		'images' => 'http://'.DOMAIN.'/images',
-		'css' => 'http://'.DOMAIN.'/css',
-		'js' => 'http://'.DOMAIN.'/js',
+		'www' => 'http://'.DOMAIN.'/dicabrio/www',
+		'images' => 'http://'.DOMAIN.'/dicabrio/www/images',
+		'css' => 'http://'.DOMAIN.'/dicabrio/www/css',
+		'js' => 'http://'.DOMAIN.'/dicabrio/www/js',
 	),
 
 	'default_lang' => 'NL',

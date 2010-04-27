@@ -68,7 +68,9 @@ class PageSaveHandler implements FormHandler {
 
 					unset($oPageModules[$aModule['id']]);
 				} else {
+					// the type can be updated
 					$oPageModule = $oPageModules[$aModule['id']];
+					$oPageModule->setType($aModule['module']);
 				}
 
 				$oModule = new $sModuleClass($oPageModule);

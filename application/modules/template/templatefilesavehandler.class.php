@@ -43,6 +43,7 @@ class TemplateFileSaveHandler implements FormHandler {
 			$this->formmapper->constructModelsFromForm($oForm);
 			
 			$this->template->setTitle($this->formmapper->getModel('title'));
+			$this->template->setModule($this->formmapper->getModel('module_id'));
 			$this->template->setDescription($this->formmapper->getModel('description'));
 			$this->template->setSource($this->formmapper->getModel('source'));
 			$this->template->setPath(Conf::get('upload.dir.templates'));

@@ -8,6 +8,8 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	private $oldtplname;
 
+	private $module;
+
 	/**
 	 * @param int $id
 	 * @return void
@@ -24,12 +26,15 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	 * @return void
 	 */
 	protected function defineColumns() {
+
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('description', DataTypes::TEXT, 500, true);
 		parent::addColumn('source', DataTypes::TEXT, false, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
+		parent::addColumn('module_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
+
 	}
 
 	/**
@@ -45,8 +50,27 @@ class TemplateFile extends DataRecord implements DomainEntity {
 	public function setTitle($sTitle) {
 
 		$this->oldtplname = $this->getAttr('title');
-
 		$this->setAttr('title', $sTitle);
+
+	}
+
+	/**
+	 * @return Module
+	 */
+	public function getModule() {
+		if ($this->module === null) {
+			$this->module = new Module($this->getAttr('module_id'));
+		}
+
+		return $this->module;
+	}
+
+	public function setModule(Module $mod) {
+
+		if (!$mod->equals($this->module)) {
+			$this->setAttr('module_id', $mod->getID());
+			$this->module = $mod;
+		}
 	}
 
 	/**
@@ -108,8 +132,14 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $folder->getID())));
 	}
 
-	public static function getFiles() {
-		return parent::findAll(__CLASS__, parent::ALL);
+	public static function getFiles(Module $module = null) {
+
+		$crit = null;
+		if ($module != null) {
+			$crit = new Criteria('module_id = :moduleid', array('moduleid' => $module->getID()));
+		}
+
+		return parent::findAll(__CLASS__, parent::ALL, $crit);
 	}
 
 	public function __toString() {

@@ -27,6 +27,14 @@
 	</div>
 
 	<div class="pagemodule">
+		<div class="modulelabel">Corresponding Module:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('module_id'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+
+	<div class="pagemodule">
 		<div class="modulelabel">Description:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('description'); ?>

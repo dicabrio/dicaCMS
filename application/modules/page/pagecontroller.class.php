@@ -67,7 +67,7 @@ class PageController extends CmsController {
 		$pagefolder = new PageFolder($oSession->get(self::C_CURRENT_FOLDER));
 		$oPage = new Page(Util::getUrlSegment(2));
 
-		$aTemplates = TemplateFile::getFiles();
+		$aTemplates = TemplateFile::getFiles(current(Module::getForTemplates('page')));
 
 		$form = new PageEditForm($oReq, $oPage, $aTemplates);
 
@@ -123,8 +123,10 @@ class PageController extends CmsController {
 
 				if ($oModule instanceof CmsModuleController) {
 					$oModView = $oModule->getEditor();
-					$oModView->sIdentifier = $oModule->getIdentifier();
-					$aPageModules[] = $oModView;
+					if ($oModView instanceof View) {
+						$oModView->sIdentifier = $oModule->getIdentifier();
+						$aPageModules[] = $oModView;
+					}
 				}
 			}
 

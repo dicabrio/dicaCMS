@@ -6,6 +6,7 @@ class TemplateFileMapper extends FormMapper {
 
 		//$this->addFormElementToDomainEntityMapping('folder_id', 'TemplateFileFolder');
 		$this->addFormElementToDomainEntityMapping('title', 'TemplateTitle');
+		$this->addFormElementToDomainEntityMapping('module_id', 'Module');
 		$this->addFormElementToDomainEntityMapping('description', 'DomainText');
 		$this->addFormElementToDomainEntityMapping('source', 'DomainText');
 

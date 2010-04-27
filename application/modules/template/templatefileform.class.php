@@ -28,6 +28,15 @@ class TemplateFileForm extends Form {
 		$tplname = new Input('text', 'title', $this->tpl->getTitle());
 		$this->addFormElement($tplname->getName(), $tplname);
 
+		// Modules
+		$modules = Module::getForTemplates();
+		$tplModule = new Select('module_id');
+		$tplModule->setValue($this->tpl->getModule()->getID());
+		foreach ($modules as $module) {
+			$tplModule->addOption($module->getID(), $module->getName());
+		}
+		$this->addFormElement('module_id', $tplModule);
+
 		$tpldescription = new TextArea('description', $this->tpl->getDescription());
 		$this->addFormElement($tpldescription->getName(), $tpldescription);
 
