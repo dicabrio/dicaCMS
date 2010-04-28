@@ -20,6 +20,7 @@ class Module extends DataRecord implements DomainEntity {
 		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('template', DataTypes::INT, false, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
+		parent::addColumn('url', DataTypes::VARCHAR, 255, true);
 	}
 
 	/**
@@ -39,8 +40,25 @@ class Module extends DataRecord implements DomainEntity {
 		$this->setAttr('name', $sTitle);
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
+	public function getUrl() {
+
+		return $this->getAttr('url');
+
+	}
+
 	public static function find() {
 		return parent::findAll(__CLASS__, parent::ALL);
+	}
+
+	public static function getMenu() {
+
+		$crit = new Criteria("url != '' AND active = 1");
+		return parent::findAll(__CLASS__, parent::ALL, $crit);
+
 	}
 
 	/**

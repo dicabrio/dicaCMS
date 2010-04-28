@@ -54,10 +54,7 @@ class TextlinePageModule implements PageModuleController {
 	 * TODO make UT8 compliant
 	 */
 	public function validate($mData) {
-		if (is_string($mData) && strlen($mData) <= self::MAX_LENGTH) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -66,22 +63,7 @@ class TextlinePageModule implements PageModuleController {
 	 * @return boolean
 	 */
 	public function handleData(Request $oReq) {
-
-		$sModIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->validate($oReq->post($sModIdentifier))) {
-
-			if ($this->oTextContent === null) {
-				$this->oTextContent = new PageText();
-			}
-
-			$this->oTextContent->setContent($oReq->post($sModIdentifier));
-			$this->oTextContent->setPageModule($this->oPageModule);
-			$this->oTextContent->save();
-				
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	public function getErrors() {

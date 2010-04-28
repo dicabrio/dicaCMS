@@ -6,6 +6,10 @@ class Tweet extends DataRecord {
 	public function __construct($id=null) {
 		
 		parent::__construct(__CLASS__, $id);
+
+		if (!$id) {
+			$this->setAttr('update', date('Y-m-d H:i:s'));
+		}
 		
 	}
 	
@@ -18,7 +22,23 @@ class Tweet extends DataRecord {
 		parent::addColumn('tweet_id', DataTypes::INT, false, true);
 		parent::addColumn('tweet', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('datum', DataTypes::DATETIME, 1, true);
+		parent::addColumn('update', DataTypes::DATETIME, 1, true);
 		
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUpdate() {
+
+		return $this->getAttr('update');
+		
+	}
+
+	public function setUpdate(Date $date) {
+
+		$this->setAttr('update', $date);
+
 	}
 
 	public function getMessage() {

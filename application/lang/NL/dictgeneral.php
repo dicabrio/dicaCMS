@@ -9,5 +9,7 @@ $lang = array (
 	'logout' => 'Uitloggen',
 	'dashboard' => 'Dashboard',
 	'settings' => 'Settings',
+	'formsubmit' => 'Verstuur',
+	'choose' => 'Kies&hellip;',
 );
 

@@ -46,13 +46,19 @@ class CmsController extends SecureController {
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
-		
+
+		$moduleMenu = Module::getMenu();
+
 		$this->oSubMenu = new Menu('modulesNav');
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/page/', Lang::get('page.menuname'), 'pages', ($sActive == 'page')));
-//		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/user/', 'Users', 'users', ($sActive == 'user')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/template/', Lang::get('template.menuname'), 'templates', ($sActive == 'template')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/', Lang::get('static.menuname'), 'staticblock', ($sActive == 'staticblock')));
-		$this->oSubMenu->addItem(new MenuItem(Conf::get('general.url.www').'/media/', Lang::get('media.menuname'), 'media', ($sActive == 'media')));
+		foreach ($moduleMenu as $module) {
+			$menuItem = new MenuItem(
+					Conf::get('general.url.www').$module->getUrl(),
+					Lang::get('module.menuname.'.$module->getName()),
+					$module->getName(),
+					($sActive == $module->getName()));
+			$this->oSubMenu->addItem($menuItem);
+
+		}
 
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);
@@ -100,4 +106,6 @@ class CmsController extends SecureController {
 	}
 }
 
-class CmsException extends Exception {}
+class CmsException extends Exception {
+
+}

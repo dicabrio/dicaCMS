@@ -127,40 +127,49 @@ class TwitterPageModule implements PageModuleController {
 
 	private function getTweets() {
 
-		$lastTweets = Tweet::getLast();
-		$tweetConnectionString = sprintf('http://twitter.com/users/show/%s.json', $this->twitterAccount);
-		$twitterresource = curl_init();
+		$lastTweet = current(Tweet::getLast());
 
-		curl_setopt($twitterresource, CURLOPT_USERAGENT, 'PHP Twitter/TweetStory');
-		curl_setopt($twitterresource, CURLOPT_URL, $tweetConnectionString);
-		curl_setopt($twitterresource, CURLOPT_RETURNTRANSFER, TRUE);
-		$jsonstring = curl_exec($twitterresource);
-		curl_close($twitterresource);
 
-		$result = json_decode($jsonstring);
-		$data = DataFactory::getInstance();
+		if (strtotime($lastTweet->getUpdate()) < strtotime('now - 30 minutes')) {
+			
+			$tweetConnectionString = sprintf('http://twitter.com/users/show/%s.json', $this->twitterAccount);
+			$twitterresource = curl_init();
 
-		$data->beginTransaction();
-		try {
-			$twitterinfo = new stdClass();
-			$twitterinfo->from_user_id = $result->id;
-			$twitterinfo->from_user = $result->name;
-			$twitterinfo->profile_image_url = $result->profile_image_url;
-			$twitterinfo->id = $result->status->id;
-			$twitterinfo->text = $result->status->text;
-			$twitterinfo->created_at = $result->status->created_at;
+			curl_setopt($twitterresource, CURLOPT_USERAGENT, 'PHP Twitter/TweetStory');
+			curl_setopt($twitterresource, CURLOPT_URL, $tweetConnectionString);
+			curl_setopt($twitterresource, CURLOPT_RETURNTRANSFER, TRUE);
+			$jsonstring = curl_exec($twitterresource);
+			curl_close($twitterresource);
 
-			$tweet = new Tweet();
-			$tweet->update($twitterinfo);
-			$tweet->save();
+			$result = json_decode($jsonstring);
+			$data = DataFactory::getInstance();
 
-			$data->commit();
+			$data->beginTransaction();
+			try {
+				$twitterinfo = new stdClass();
+				$twitterinfo->from_user_id = $result->id;
+				$twitterinfo->from_user = $result->name;
+				$twitterinfo->profile_image_url = $result->profile_image_url;
+				$twitterinfo->id = $result->status->id;
+				$twitterinfo->text = $result->status->text;
+				$twitterinfo->created_at = $result->status->created_at;
 
-		} catch (Exception $e) {
-			// duplicates or incorrect message?
-//			test($e->getMessage());
+				$tweet = new Tweet();
+				$tweet->update($twitterinfo);
+				$tweet->save();
 
-			$data->rollBack();
+				$data->commit();
+
+			} catch (Exception $e) {
+				$data->rollBack();
+
+				$lastTweet->setUpdate(new Date('now'));
+				$lastTweet->save();
+			}
 		}
+//		else {
+//			$lastTweet->setUpdate(new Date('now'));
+//			$lastTweet->save();
+//		}
 	}
 }

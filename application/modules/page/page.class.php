@@ -91,6 +91,10 @@ class Page extends DataRecord {
 		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid ', array('parentid' => $folder->getID())));
 	}
 
+	public static function findActive() {
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
+	}
+
 
 	/**
 	 * get The pagename
