@@ -27,7 +27,7 @@ function selectTab(el) {
 	// activate the right tabpanel
 	$('#tabmenu li a').each(function () {
 		var sClassName = $(this).attr('className');
-		$('#'+sClassName).hide();
+		$('#'+sClassName+"tab").hide();
 	});
-	$('#'+sClassName).show();
+	$('#'+sClassName+"tab").show();
 }

@@ -30,10 +30,14 @@ class BaseView extends View {
 	}
 
 	/**
-	 * @param Link $oLink
+	 * @param Link $sLink
 	 */
-	public function addStyle(Link $oLink) {
-		$this->aStyles[] = $oLink;
+	public function addStyle($sLink) {
+		if (!is_string($sLink)) {
+			throw new CmsException('It is not allowed to add a style url of another type then string. Type is: '.getType($sLink));
+		}
+		
+		$this->aStyles[] = $sLink;
 	}
 
 	/**

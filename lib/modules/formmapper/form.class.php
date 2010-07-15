@@ -80,12 +80,7 @@ class Form {
 		} else {
 			return $this->oRequest->request($formElementName);
 		}
-		
-		//if ($this->sFormMethod == 'post') {
-		//	return $this->oRequest->post($sRequestKey);
-		//}
 
-		//return $this->oRequest->get($sRequestKey);
 	}
 
 	/**

@@ -56,13 +56,11 @@ class MediaSaveHandler implements FormHandler {
 			$this->formmapper->constructModelsFromForm($oForm);
 
 			$upload = $this->formmapper->getModel('media');
-
 			$this->moveFile($upload);
 
 			$this->mediaItem->save();
 
 			$data->commit();
-
 			Util::gotoPage(Conf::get('general.url.www').'/media/');
 
 		} catch (PageRecordException $e) {

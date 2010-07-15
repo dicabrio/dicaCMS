@@ -34,7 +34,7 @@ class TwitterCmsModule implements CmsModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
 
@@ -82,7 +82,7 @@ class TwitterCmsModule implements CmsModuleController {
 	 * @param $oReq
 	 * @return boolean
 	 */
-	public function handleData(Request $oReq) {
+	public function handleData(FormMapper $mapper) {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$blockID = (int)$oReq->post($sModIdentifier);

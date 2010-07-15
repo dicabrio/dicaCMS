@@ -23,16 +23,27 @@ class TextblockCmsModule implements CmsModuleController {
 	private $oCmsController;
 
 	/**
+	 * @var Form
+	 */
+	private $form;
+
+	/**
+	 * @var FormMapper
+	 */
+	private $mapper;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
-
+		$this->form = $form;
+		$this->mapper = $mapper;
 		$this->oCmsController = $oCmsController;
 
 		// load the data
@@ -40,7 +51,11 @@ class TextblockCmsModule implements CmsModuleController {
 	}
 
 	private function load() {
+
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$contentFormElement = new TextArea($this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->form->addFormElement($contentFormElement->getName(), $contentFormElement);
+
 	}
 
 	/**
@@ -62,17 +77,14 @@ class TextblockCmsModule implements CmsModuleController {
 
 		$oView = new View('text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->oTextContent === null) {
-			$oView->sContent = '';
-		} else {
-			$oView->sContent = $this->oTextContent->getContent();
-		}
+		$oView->form = $this->form;
 		return $oView;
+
 	}
 
 	/* (non-PHPdoc)
 	 * @see modules/Module#validate()
-	 */
+	*/
 	public function validate($mData) {
 		return true;
 	}
@@ -82,27 +94,25 @@ class TextblockCmsModule implements CmsModuleController {
 	 * @param $oReq
 	 * @return boolean
 	 */
-	public function handleData(Request $oReq) {
+	public function handleData() {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->validate($oReq->post($sModIdentifier))) {
+		$text = $this->mapper->getModel($sModIdentifier);
 
-			if ($this->oTextContent === null) {
-				$this->oTextContent = new PageText();
-			}
-
-			$this->oTextContent->setContent($oReq->post($sModIdentifier));
-			$this->oTextContent->setPageModule($this->oPageModule);
-			$this->oTextContent->save();
-				
-			return true;
+		if ($this->oTextContent === null) {
+			$this->oTextContent = new PageText();
 		}
 
-		return false;
+		$this->oTextContent->setContent((string)$text);
+		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->save();
+
 	}
 
 	public function getErrors() {
+
 		return $this->aErrors;
+		
 	}
 
 	public function getIdentifier() {

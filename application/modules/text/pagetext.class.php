@@ -60,8 +60,8 @@ class PageText extends DataRecord {
 		if (count($aResultModules) > 0) {
 			return reset($aResultModules);
 		}
-		
-		return null;
+
+		return new PageText();
 	}
 }
 

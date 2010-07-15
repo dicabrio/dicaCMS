@@ -3,11 +3,11 @@
 <?php endif; ?>
 <ul id="tabmenu">
 	<li class="active"><a href="#" class="pageinfo">Page information</a></li>
-	<li><a href="#" class="modulesinfo">Content</a></li>
+	<li><a href="#" class="content">Content</a></li>
 </ul>
 <?php echo $form->begin(); ?>
 
-<fieldset class="tab" id="pageinfo">
+<fieldset class="tab" id="pageinfotab">
 	<?php if (count($aErrors) > 0) : ?>
 	<ul class="error">
 		<?php foreach ($aErrors as $sError) : ?>
@@ -82,7 +82,7 @@
 	</div>
 </fieldset>
 <?php if ($pageid != 0) :?>
-<fieldset class="tab" id="modulesinfo">
+<fieldset class="tab" id="contenttab">
 	<?php if (count($aModules) == 0) : ?>
 	<div class="pagemodule">
 		<div class="modulelabel">No modules for this page</div>

@@ -5,7 +5,7 @@ class PageController extends CmsController {
 	const C_CURRENT_FOLDER = 'currentPageFolder';
 
 	public function __construct($sMethod) {
-	// we should check for permissions
+		// we should check for permissions
 		parent::__construct('page/'.$sMethod, Lang::get('page.title'));
 	}
 
@@ -76,9 +76,6 @@ class PageController extends CmsController {
 		$button = new ActionButton('Save');
 		$button->addAttribute('class', 'save');
 
-		$form->addSubmitButton('save', $button, new PageSaveHandler($formmapper, $oPage, $pagefolder));
-		$form->listen();
-
 		$breadcrumb = new Menu('breadcrumb');
 		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
 		$folderName = $pagefolder->getName();
@@ -102,11 +99,13 @@ class PageController extends CmsController {
 		$oModuleView->assign('breadcrumb', $breadcrumb);
 		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
 
+		$oPageModules = $oPage->getModules();
+		$cmsModules = array();
+		$cmsModuleViews = array();
 		try {
 			$oTemplateFile = $oPage->getTemplate();
 			$oViewParser = new ViewParser($oTemplateFile);
 
-			$aPageModules = array();
 			foreach ($oViewParser->getLabels() as $aModule) {
 				$sModuleClass = $aModule['module'].'CmsModule';
 
@@ -119,23 +118,34 @@ class PageController extends CmsController {
 					$oPage->addModule($oPageModule);
 				}
 
-				$oModule = new $sModuleClass($oPageModule);
+				$oModule = new $sModuleClass($oPageModule, $form, $formmapper, $this);
 
 				if ($oModule instanceof CmsModuleController) {
 					$oModView = $oModule->getEditor();
 					if ($oModView instanceof View) {
 						$oModView->sIdentifier = $oModule->getIdentifier();
-						$aPageModules[] = $oModView;
+						$cmsModuleViews[] = $oModView;
 					}
+					$cmsModules[] = $oModule;
 				}
+
+				unset($oPageModules[$aModule['id']]);
 			}
 
-			$oModuleView->assign('aModules', $aPageModules);
+			foreach ($oPageModules as $key => $pagemodule) {
+				$pagemodule->delete();
+				unset($oPageModules[$key]);
+			}
 
 		} catch (RecordException $e) {
 			$aErrors[] = 'template.removedtemplate';
 			$oModuleView->assign('iTemplateID', $oReq->post('template_id', 0));
 		}
+
+		$oModuleView->assign('aModules', $cmsModuleViews);
+
+		$form->addSubmitButton('save', $button, new PageSaveHandler($formmapper, $oPage, $cmsModules, $pagefolder));
+		$form->listen();
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->addScript('tabbing.js');
@@ -196,7 +206,7 @@ class PageController extends CmsController {
 			$page->delete();
 
 			$data->commit();
-			
+
 			$session = Session::getInstance();
 			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
 		} catch (RecordException $e) {
@@ -206,7 +216,7 @@ class PageController extends CmsController {
 
 		$data->rollBack();
 		return $this->_index($aErrors);
-		
+
 	}
 
 	public function deletefolder() {
@@ -221,7 +231,7 @@ class PageController extends CmsController {
 			$pageFolder->delete();
 
 			$data->commit();
-			
+
 			$session = Session::getInstance();
 			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
 

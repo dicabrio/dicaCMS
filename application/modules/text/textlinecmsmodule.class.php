@@ -26,7 +26,7 @@ class TextlineCmsModule implements CmsModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod) {
+	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
 
