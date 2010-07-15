@@ -34,7 +34,7 @@ class StaticblockCmsModule implements CmsModuleController {
 		$this->oPageModule = $oMod;
 		$this->oCmsController = $oCmsController;
 		$this->load();
-		
+
 	}
 
 	/**
@@ -69,7 +69,7 @@ class StaticblockCmsModule implements CmsModuleController {
 
 	/* (non-PHPdoc)
 	 * @see modules/Module#validate()
-	 */
+	*/
 	public function validate($mData) {
 		return true;
 	}
@@ -85,10 +85,12 @@ class StaticblockCmsModule implements CmsModuleController {
 		$blockID = (int)$oReq->post($sModIdentifier);
 		if ($this->validate($blockID)) {
 			if ($blockID > 0) {
-				$block = new StaticBlock($blockID);
 
 				try {
+					$block = new StaticBlock($blockID);
+					Relation::remove('pagemodule', 'staticblock', $this->oPageModule);
 					Relation::add('pagemodule', 'staticblock', $this->oPageModule, $block);
+					
 				} catch (PDOException $e) {
 					// trying to add a duplicate
 				}

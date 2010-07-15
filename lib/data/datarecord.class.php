@@ -38,19 +38,19 @@
  * 	// its optional to create getters/setters
  * 	// it will come in handy when using an IDE like eclipse of netbeans
  * 	public function getName() {
- * 		return $this->name;
+ *		return $this->getAttr('name');
  * 	}
  *
  * 	public function setName($sName) {
- * 		$this->name = $sName;
+ * 		$this->setAttr('name', $sName);
  * 	}
  *
  * 	public function getOther() {
- * 		$this->other;
+ *		return $this->getAttr('other');
  * 	}
  *
  * 	public function setOther($sOther) {
- * 		$this->other = $sOther;
+ *		$this->setAttr('other', $sOther);
  * 	}
  *
  * 	public static function findAll() {
@@ -304,12 +304,12 @@ abstract class DataRecord {
 	 * @return void
 	 */
 	public function delete() {
+
 		if ($this->getAttr('id') == 0) {
 			throw new RecordException($this->table." object has no ID, can't delete it");
 		}
 
 		$oQueryBuilder = new QueryBuilder('DELETE', $this);
-
 
 		$oDatabaseHandler = self::getConnection();
 
@@ -321,12 +321,11 @@ abstract class DataRecord {
 			throw new RecordException($errorInfo[2]);
 		}
 
-		return;
 	}
 
 	/**
 	 * Define a column for the object. Specify the right datatype, size and if it is required (null/ not null)
-	 * TODO add validators
+	 * @TODO nothing is done with foreignkeys right now. This could be handled in someway.
 	 *
 	 * @param string $columnName
 	 * @param const $dataType data type
@@ -334,6 +333,7 @@ abstract class DataRecord {
 	 * @param bool $null false = not null / true = null
 	 */
 	protected function addColumn($columnName, $dataType, $size=null, $null=false) {
+
 		$attr = new Column($columnName);
 		$attr->setFormattedName(str_replace('_', ' ', $columnName));
 		$attr->setType($dataType);
@@ -380,6 +380,12 @@ abstract class DataRecord {
 
 	}
 
+	/**
+	 * private method for getting the connection
+	 *
+	 * @param string $sConnection
+	 * @return PDO
+	 */
 	private static function getConnection($sConnection=null) {
 
 		if ($sConnection === null) {
@@ -401,7 +407,7 @@ abstract class DataRecord {
 	 */
 	protected static function findBySql($sClassName, $sQuery, $aBind=array(), $sConnectionName = null) {
 
-		$aResulObjects = array();
+		$aResultObjects = array();
 		$oDatabaseHandler = self::getConnection($sConnectionName);
 
 		$oStatement = $oDatabaseHandler->prepare($sQuery);
@@ -423,10 +429,10 @@ abstract class DataRecord {
 				$oTmpObject->setAttr($sKey, $sValue);
 			}
 
-			$aResulObjects[] = $oTmpObject;
+			$aResultObjects[] = $oTmpObject;
 		}
 
-		return $aResulObjects;
+		return $aResultObjects;
 
 	}
 
@@ -442,7 +448,7 @@ abstract class DataRecord {
 	 * @param Criteria $conditions conditions to apply in query
 	 * @param string $orderings order to return results with
 	 * @param string $limit any limit to apply to query
-	 * @return object first object that matches "conditions" and "orderings"
+	 * @return array first object that matches "conditions" and "orderings"
 	 */
 	protected static function findAll($sTableName, $columns, Criteria $conditions=null, $orderings=null, $limit=null, $sDbConnectionName = null) {
 		// construct the sql
@@ -474,10 +480,19 @@ abstract class DataRecord {
 		return self::findBySql($sTableName, $sql, $aBindings, $sDbConnectionName);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function  __toString() {
-
+		return '';
 	}
 
+	/**
+	 * You can compare object with eachother
+	 *
+	 * @param mixed $object
+	 * @return boolean
+	 */
 	public function equals($object) {
 
 		if ($object === null) {

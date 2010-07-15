@@ -12,4 +12,6 @@ $lang = array(
 		'editblock' => 'Wijzig',
 		'deleteblock' => 'Verwijder',
 	),
+
+	'editpagetitle' => 'Statisch blok',
 );

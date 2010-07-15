@@ -66,7 +66,7 @@ class TextArea implements FormElement {
 				$sAttributes .= sprintf(' %s="%s"', $name, $value);
 			}
 
-			return sprintf('<textarea id="%s" name="%s" %s %s>%s</textarea>', $this->sName, $this->sName, $this->sStyle, $sAttributes, $this->sValue);
+			return sprintf('<textarea id="%s" name="%s" %s %s>%s</textarea>', $this->sName, $this->sName, $this->sStyle, $sAttributes, htmlentities($this->sValue, ENT_COMPAT, 'UTF-8'));
 		} catch (Exception $e) {
 			return (string)$e->getMessage();
 		}

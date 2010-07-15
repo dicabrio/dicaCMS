@@ -13,6 +13,12 @@ class Page extends DataRecord {
 	private $aModules;
 
 	/**
+	 *
+	 * @var array
+	 */
+	private $aRemoveModules = array();
+
+	/**
 	 * constructor
 	 *
 	 * @param int $id
@@ -156,6 +162,14 @@ class Page extends DataRecord {
 			$oModule->save();
 		}
 
+		if (isset($this->aModules[$oModule->getIdentifier()])) {
+			$oldModule = $this->aModules[$oModule->getIdentifier()];
+			if ($oldModule !== $oModule->getType()) {
+				// the current module is from another type. Flag the old module to be deleted
+				$this->aRemoveModules[] = $oldModule;
+			}
+		}
+
 		$this->aModules[$oModule->getIdentifier()] = $oModule;
 	}
 
@@ -274,6 +288,10 @@ class Page extends DataRecord {
 			foreach ($this->aModules as $oModule) {
 				$oModule->save();
 			}
+		}
+
+		foreach ($this->aRemoveModules as $module) {
+			$module->delete();
 		}
 		
 	}

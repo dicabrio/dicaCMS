@@ -1,5 +1,6 @@
 <div class="modulelabel">
-	<?php echo $identifier; ?>:
+	<h2><?php echo Lang::get('static.editpagetitle'); ?></h2>
+	<p>id: <?php echo $identifier; ?><p>
 </div>
 <div class="modulecontent">
 	<select name="<?php echo $identifier; ?>">

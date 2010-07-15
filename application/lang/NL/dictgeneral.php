@@ -11,5 +11,8 @@ $lang = array (
 	'settings' => 'Settings',
 	'formsubmit' => 'Verstuur',
 	'choose' => 'Kies&hellip;',
+	'title' => array(
+		'textblock' => 'Tekstblok'
+	),
 );
 

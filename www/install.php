@@ -7,6 +7,8 @@
  *	@TODO: database configuration
  *	@TODO: add initial pages (index and 404?)
  */
+
+exit;
  
 include('main.inc.php');
 

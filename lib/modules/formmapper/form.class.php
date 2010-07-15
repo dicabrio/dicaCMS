@@ -157,6 +157,15 @@ class Form {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getFormAction() {
+
+		return $this->sFormAction;
+		
+	}
+
+	/**
 	 * @param string $sButtonIdentifier
 	 * @param FormElement $oElement
 	 * @param FormHandler $oHandler

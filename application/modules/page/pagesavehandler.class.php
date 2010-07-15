@@ -55,6 +55,7 @@ class PageSaveHandler implements FormHandler {
 			$view = new View();
 			$oViewParser = new ViewParser($oTemplateFile);
 			$oPageModules = $this->page->getModules();
+
 			foreach ($oViewParser->getLabels() as $aModule) {
 
 				$sModuleClass = $aModule['module'].'CmsModule';
@@ -66,7 +67,6 @@ class PageSaveHandler implements FormHandler {
 
 					$this->page->addModule($oPageModule);
 
-					unset($oPageModules[$aModule['id']]);
 				} else {
 					// the type can be updated
 					$oPageModule = $oPageModules[$aModule['id']];
@@ -79,6 +79,12 @@ class PageSaveHandler implements FormHandler {
 					$oModule->handleData($oReq);
 				}
 
+				unset($oPageModules[$aModule['id']]);
+			}
+
+			foreach ($oPageModules as $key => $pagemodule) {
+				$pagemodule->delete();
+				unset($oPageModules[$key]);
 			}
 
 			$this->page->save();

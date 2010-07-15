@@ -50,11 +50,15 @@ class Tweet extends DataRecord {
 	private function parseTweet($tweet) {
 
 		$patterns = array(
+			'/(http:\/\/[a-zA-Z0-9\/\.-_]{3,})/',
 			'/@([a-zA-Z-_\.]+)/',
-			'/#([a-zA-Z-_\.]+)/');
+			'/#([a-zA-Z-_\.]+)/',
+			);
 		$replacements = array(
+			'<a href="$1" class="external">$1</a>',
 			'@<a href="http://www.twitter.com/$1">$1</a>',
-			'<a href="http://twitter.com/#search?q=%23$1">#$1</a>');
+			'<a href="http://twitter.com/#search?q=%23$1">#$1</a>',
+			);
 
 		return preg_replace($patterns, $replacements, $tweet);
 		

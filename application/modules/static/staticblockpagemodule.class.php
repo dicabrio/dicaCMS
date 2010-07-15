@@ -58,6 +58,8 @@ class StaticblockPageModule implements PageModuleController {
 
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
+		$view->assign('cssurl', Conf::get('general.url.css'));
+		$view->assign('jsurl', Conf::get('general.url.js'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
 		$view->assign('pagename', $this->page->getName());
