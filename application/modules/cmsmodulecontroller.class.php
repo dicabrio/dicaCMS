@@ -5,10 +5,10 @@ interface CmsModuleController {
 
 	/**
 	 * 
-	 * @param string $sIdentifier
 	 * @param Page $oPage
 	 * @param Form $form
 	 * @param FormMapper $mapper
+	 * @param CmsController $controller
 	 * 
 	 * @return void
 	 */
@@ -30,21 +30,6 @@ interface CmsModuleController {
 	 */
 	public function handleData();
 	
-	/**
-	 * return the errors occurred when validating the given data
-	 * @return array
-	 */
-	public function getErrors();
-
-	/**
-	 * validate the data that is posted. If there are any errors
-	 * the return array will hold the errormessages. If no error is present it returns an empty array
-	 *
-	 * @param $aData
-	 * @return array
-	 */
-	public function validate($aData);
-
 	/**
 	 * @return string
 	 */

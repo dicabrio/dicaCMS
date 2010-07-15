@@ -28,8 +28,14 @@ class ContactformPageModule implements PageModuleController {
 	 */
 	private $request;
 
+	/**
+	 * @var RequiredEmail
+	 */
 	private $email;
 
+	/**
+	 * @var Page
+	 */
 	private $thnxpage;
 
 	/**
@@ -68,8 +74,7 @@ class ContactformPageModule implements PageModuleController {
 
 			// Check if the values are correct. If no email is set or not a valid page id
 			// show them no contact form
-
-			$this->email = new Email($formshizzle[0]);
+			$this->email = new RequiredEmail($formshizzle[0]);
 			if ($formshizzle[1] == 0) {
 				throw new InvalidArgumentException('not valid', 1);
 			}

@@ -1,6 +1,6 @@
 <?php
 
-class Page extends DataRecord {
+class Page extends DataRecord implements DomainEntity {
 
 	/**
 	 * @var TemplateFile

@@ -1,6 +1,6 @@
 <?php
 
-class StaticBlock extends DataRecord {
+class StaticBlock extends DataRecord implements DomainEntity {
 
 	/**
 	 * constant for location of the file

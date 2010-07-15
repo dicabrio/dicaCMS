@@ -23,17 +23,31 @@ class StaticblockCmsModule implements CmsModuleController {
 	private $oCmsController;
 
 	/**
+	 * @var Form
+	 */
+	private $form;
+
+	/**
+	 * @var FormMapper
+	 */
+	private $mapper;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
+		$this->form = $form;
+		$this->mapper = $mapper;
 		$this->oCmsController = $oCmsController;
+
 		$this->load();
+		$this->defineForm();
 
 	}
 
@@ -44,6 +58,26 @@ class StaticblockCmsModule implements CmsModuleController {
 
 		$this->oStaticBlock = Relation::getSingle('pagemodule', 'staticblock', $this->oPageModule);
 
+		if ($this->oStaticBlock === null) {
+			$this->oStaticBlock = new StaticBlock();
+		}
+
+	}
+
+	private function defineForm() {
+
+		$blocks = StaticBlock::find();
+
+		$selectStaticBlock = new Select($this->oPageModule->getIdentifier());
+		$selectStaticBlock->setValue($this->oStaticBlock->getID());
+
+		foreach ($blocks as $block) {
+			$selectStaticBlock->addOption($block->getID(), $block->getIdentifier());
+		}
+
+		$this->form->addFormElement($selectStaticBlock->getName(), $selectStaticBlock);
+		$this->mapper->addFormElementToDomainEntityMapping($selectStaticBlock->getName(), "Staticblock");
+
 	}
 
 	/**
@@ -52,26 +86,12 @@ class StaticblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$blocks = StaticBlock::find();
 		$view = new View('staticblock/staticblockchooser.php');
+		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
-		$view->assign('blocks', $blocks);
 
-		$blockID = 0;
-		if ($this->oStaticBlock !== null) {
-			$blockID = $this->oStaticBlock->getID();
-		}
-
-		$view->assign('block_id', $blockID);
 		return $view;
 
-	}
-
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	*/
-	public function validate($mData) {
-		return true;
 	}
 
 	/**
@@ -79,35 +99,21 @@ class StaticblockCmsModule implements CmsModuleController {
 	 * @param $oReq
 	 * @return boolean
 	 */
-	public function handleData(FormMapper $mapper) {
+	public function handleData() {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
-		$blockID = (int)$oReq->post($sModIdentifier);
-		if ($this->validate($blockID)) {
-			if ($blockID > 0) {
+		$staticBlock = $this->mapper->getModel($sModIdentifier);
 
-				try {
-					$block = new StaticBlock($blockID);
-					Relation::remove('pagemodule', 'staticblock', $this->oPageModule);
-					Relation::add('pagemodule', 'staticblock', $this->oPageModule, $block);
-					
-				} catch (PDOException $e) {
-					// trying to add a duplicate
-				}
-			}
-			return true;
+		try {
+			Relation::remove('pagemodule', 'staticblock', $this->oPageModule);
+			Relation::add('pagemodule', 'staticblock', $this->oPageModule, $staticBlock);
+
+		} catch (PDOException $e) {
+			// trying to add a duplicate
 		}
 
 		return false;
 
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-		return $this->aErrors;
 	}
 
 	/**

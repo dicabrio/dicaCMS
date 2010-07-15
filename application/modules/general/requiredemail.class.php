@@ -9,7 +9,7 @@
  *
  * @author robertcabri
  */
-class Email extends DomainText {
+class RequiredEmail extends Email {
 
 	/**
 	 * minimum length should be 3 and max lenght should be 30
@@ -17,10 +17,8 @@ class Email extends DomainText {
 	 */
 	public function __construct($value=null) {
 
-		if (!empty($value)) {
-			if (!preg_match('/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})(?::\d++)?$/iD', (string) $value)) {
-				throw new InvalidArgumentException('not-well-formed', 100);
-			}
+		if (empty($value)) {
+			throw new InvalidArgumentException('not-filled', 100);
 		}
 
 		parent::__construct($value);

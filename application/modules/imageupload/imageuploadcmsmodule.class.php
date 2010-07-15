@@ -13,16 +13,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 	private $oPageModule;
 
 	/**
-	 * @var PageText
-	 */
-	private $oTextContent;
-
-	/**
-	 * @var array
-	 */
-	private $aErrors;
-
-	/**
 	 * @var Form
 	 */
 	private $form;
@@ -38,10 +28,11 @@ class ImageuploadCmsModule implements CmsModuleController {
 	private $mediaItem;
 
 	/**
-	 * construct the text line module
+	 * construct the imageupload module
 	 *
 	 * @param PageModule $oMod
 	 * @param Form $form
+	 * @param FormMapper $mapper
 	 * @param CmsController $oCmsController
 	 *
 	 * @return void
@@ -51,6 +42,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$this->oPageModule = $oMod;
 		$this->form = $form;
 		$this->mapper = $mapper;
+		$this->cmsController = $oCmsController;
 
 		$this->load();
 		$this->defineForm();
@@ -59,7 +51,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 	private function load() {
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		$mediaItem = Relation::getSingle('pagemodule', 'media', $this->oPageModule);
 		if ($mediaItem === null) {
 			$mediaItem = new Media();
@@ -77,7 +68,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 
 		// define description (alt text) field
-		$descriptionInput = new Input("text", $this->oPageModule->getIdentifier()."description", $this->oTextContent->getContent());
+		$descriptionInput = new Input("text", $this->oPageModule->getIdentifier()."description", $this->mediaItem->getTitle());
 		$descriptionInputName = $descriptionInput->getName();
 		$this->form->addFormElement($descriptionInputName, $descriptionInput);
 		$this->mapper->addFormElementToDomainEntityMapping($descriptionInputName, "TextLine");
@@ -100,14 +91,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 		return $oView;
 	}
 
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	 * TODO make UT8 compliant
-	*/
-	public function validate($mData) {
-		return true;
-	}
-
 	/**
 	 * Handle the data. Saving/deleting/updating
 	 * @return void
@@ -124,13 +107,11 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$upload->moveTo(Conf::get('upload.dir.general'));
 		$file = $upload->getFile();
 
-
-//		if ($this->mediaItem->getID() == 0 && $file === null) {
-//			throw new FileNotFoundException('no-file-uploaded');
-//		}
 		$new = false;
 		if ($this->mediaItem->getID() == 0) {
 			$new = true;
+		} else {
+			$this->mediaItem->getFile()->delete();
 		}
 		$this->mediaItem->update($description, "", $file);
 		$this->mediaItem->save();
@@ -138,19 +119,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 		if ($new) {
 			Relation::add('pagemodule', 'media', $this->oPageModule, $this->mediaItem);
 		}
-
-		$this->oTextContent->setContent((string)$description->getValue()); // cast object to string
-		$this->oTextContent->setPageModule($this->oPageModule);
-		$this->oTextContent->save();
-
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-		return $this->aErrors;
 	}
 
 	/**

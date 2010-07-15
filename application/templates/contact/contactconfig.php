@@ -5,11 +5,11 @@
 	<table>
 		<tr>
 			<td>Ontvangst email:&nbsp;&nbsp; </td>
-			<td><input type="text" name="<?php echo $sIdentifier; ?>" value="<?php echo $sContent; ?>" maxlength="<?php echo $sMaxLength; ?>" /></td>
+			<td><?php echo $form->getFormElementByName($sIdentifier); ?></td>
 		</tr>
 		<tr>
 			<td>Bedanktpagina:&nbsp;&nbsp;</td>
-			<td><?php echo $select; ?></td>
+			<td><?php echo $form->getFormElementByName("bedanktpagina"); ?></td>
 		</tr>
 	</table>
 </div>

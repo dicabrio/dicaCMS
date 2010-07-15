@@ -39,7 +39,7 @@ class ContactformHandler implements FormHandler {
 	private function defineMapping() {
 
 		$this->formmapper->addFormElementToDomainEntityMapping('naam', 'RequiredTextLine');
-		$this->formmapper->addFormElementToDomainEntityMapping('email', 'Email');
+		$this->formmapper->addFormElementToDomainEntityMapping('email', 'RequiredEmail');
 		$this->formmapper->addFormElementToDomainEntityMapping('telefoon', 'TextLine');
 		$this->formmapper->addFormElementToDomainEntityMapping('bericht', 'RequiredText');
 

@@ -5,7 +5,6 @@ $config = array(
 	'dir' => array(
 		'www' => SYS_DIR.'/www',
 		'templates' => APP_DIR.'/templates',
-		'upload' => APP_DIR.'/upload',
 		'lang' => APP_DIR.'/lang',
 	),
 

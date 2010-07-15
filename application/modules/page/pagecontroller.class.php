@@ -142,13 +142,16 @@ class PageController extends CmsController {
 			$oModuleView->assign('iTemplateID', $oReq->post('template_id', 0));
 		}
 
-		$oModuleView->assign('aModules', $cmsModuleViews);
 
 		$form->addSubmitButton('save', $button, new PageSaveHandler($formmapper, $oPage, $cmsModules, $pagefolder));
 		$form->listen();
 
+		$oModuleView->assign('aModules', $cmsModuleViews);
+		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
+
 		$oBaseView = parent::getBaseView();
 		$oBaseView->addScript('tabbing.js');
+
 		$oBaseView->assign('oModule', $oModuleView);
 
 		return $oBaseView->getContents();

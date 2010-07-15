@@ -17,39 +17,56 @@ class ContactformCmsModule implements CmsModuleController {
 	/**
 	 * @var array
 	 */
-	private $aErrors;
-
-	/**
-	 *
-	 * @var array
-	 */
 	private $pages;
 
+	/**
+	 * @var string
+	 */
 	private $email;
 
+	/**
+	 * @var int
+	 */
 	private $page;
 
 	/**
-	 * construct the text line module
+	 * @var Form
+	 */
+	private $form;
+
+	/**
+	 * @var FormMapper
+	 */
+	private $mapper;
+
+	/**
 	 *
-	 * @param string $sIdentifier
 	 * @param Page $oPage
+	 * @param Form $form
+	 * @param FormMapper $mapper
+	 * @param CmsController $controller
+	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $controller = null) {
 
 		$this->oPageModule = $oMod;
+		$this->form = $form;
+		$this->mapper = $mapper;
+		$this->oCmsController = $controller;
 
 		// load the data
 		$this->load();
+		$this->defineForm();
+
 	}
 
 	private function load() {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
-		
+
 		$values = explode(',', $this->oTextContent->getContent());
-		
+
 		if (!isset($values[1])) {
 			$this->email = $values[0];
 			$this->page = 0;
@@ -62,78 +79,57 @@ class ContactformCmsModule implements CmsModuleController {
 
 	}
 
-	/**
-	 * (non-PHPdoc)
-	 * @see modules/Module#getEditor()
-	 */
-	public function getEditor() {
-		$oView = new View('contact/contactconfig.php');
+	private function defineForm() {
 
+		// Thnx page field
 		$select = new Select('bedanktpagina');
-
 		$select->addOption(0, Lang::get('general.choose'));
 		foreach ($this->pages as $page) {
 			$select->addOption($page->getID(), $page->getName());
 		}
 		$select->setValue($this->page);
+		$this->form->addFormElement($select->getName(), $select);
 
-		$oView->select = $select;
-		$oView->sMaxLength = self::MAX_LENGTH;
-		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->oTextContent === null) {
-			$oView->sContent = '';
-		} else {
-			$oView->sContent = $this->email;
-		}
-		return $oView;
-	}
+		// define the mapping
+		$this->mapper->addFormElementToDomainEntityMapping('bedanktpagina', "Page");
 
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	 * TODO make UT8 compliant
-	*/
-	public function validate($mData) {
-		if (is_string($mData) && strlen($mData) <= self::MAX_LENGTH) {
-			return true;
-		}
-		return false;
+		// Email field
+		$emailField = new Input('text', $this->oPageModule->getIdentifier(), $this->email);
+		$emailField->addAttribute('maxlength', self::MAX_LENGTH);
+		$this->form->addFormElement($emailField->getName(), $emailField);
+
+		// define the mapping
+		$this->mapper->addFormElementToDomainEntityMapping($emailField->getName(), "Email");
+
 	}
 
 	/**
-	 *
-	 * @param $oReq
+	 * (non-PHPdoc)
+	 * @see modules/Module#getEditor()
+	 */
+	public function getEditor() {
+
+		$oView = new View('contact/contactconfig.php');
+		$oView->form = $this->form;
+		$oView->sIdentifier = $this->oPageModule->getIdentifier();
+		return $oView;
+
+	}
+
+	/**
 	 * @return boolean
 	 */
-	public function handleData(FormMapper $mapper) {
+	public function handleData() {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->validate($oReq->post($sModIdentifier))) {
+		$email = $this->mapper->getModel($sModIdentifier);
+		$thnxpage = $this->mapper->getModel("bedanktpagina");
 
-			if ($this->oTextContent === null) {
-				$this->oTextContent = new PageText();
-			}
+		$this->oTextContent->setContent($email.','.$thnxpage->getID());
+		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->save();
 
-			$val = $oReq->post('bedanktpagina');
-
-			$this->oTextContent->setContent($oReq->post($sModIdentifier).','.$val);
-			$this->oTextContent->setPageModule($this->oPageModule);
-			$this->oTextContent->save();
-
-
-
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-		return $this->aErrors;
+		return true;
 	}
 
 	/**

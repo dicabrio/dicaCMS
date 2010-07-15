@@ -8,19 +8,19 @@ class TwitterCmsModule implements CmsModuleController {
 	private $oPageModule;
 
 	/**
-	 * @var PageText
-	 */
-	private $oTextContent;
-
-	/**
 	 * @var TemplateFile
 	 */
 	private $templateFile;
 
 	/**
-	 * @var array
+	 * @var Form
 	 */
-	private $aErrors;
+	private $form;
+
+	/**
+	 * @var FormMapper
+	 */
+	private $mapper;
 
 	/**
 	 * @var CmsController
@@ -28,25 +28,57 @@ class TwitterCmsModule implements CmsModuleController {
 	private $oCmsController;
 
 	/**
-	 * construct the text line module
 	 *
-	 * @param string $sIdentifier
+	 * @var array
+	 */
+	private $options;
+
+	/**
+	 *
 	 * @param Page $oPage
+	 * @param Form $form
+	 * @param FormMapper $mapper
+	 * @param CmsController $controller
+	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $controller = null) {
 
 		$this->oPageModule = $oMod;
-
-		$this->oCmsController = $oCmsController;
+		$this->form = $form;
+		$this->mapper = $mapper;
+		$this->oCmsController = $controller;
 
 		// load the data
 		$this->load();
+		$this->defineForm();
+
 	}
 
 	private function load() {
+
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
-		//$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		if ($this->templateFile == null) {
+			$this->templateFile = new TemplateFile();
+		}
+
+		$module = current(Module::getForTemplates('twitter'));
+		$this->options = TemplateFile::getFiles($module);
+
+	}
+
+	private function defineForm() {
+
+		$selectTemplate = new Select($this->oPageModule->getIdentifier());
+		$selectTemplate->setValue($this->templateFile->getID());
+		$selectTemplate->addOption(0, Lang::get('general.choose'));
+
+		foreach ($this->options as $templateOption) {
+			$selectTemplate->addOption($templateOption->getID(), $templateOption->getTitle());
+		}
+		$this->form->addFormElement($selectTemplate->getName(), $selectTemplate);
+		$this->mapper->addFormElementToDomainEntityMapping($selectTemplate->getName(), "TemplateFile");
+
 	}
 
 	/**
@@ -55,58 +87,46 @@ class TwitterCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$module = current(Module::getForTemplates('twitter'));
-		$blocks = TemplateFile::getFiles($module);
 		$view = new View('twitter/twitterchooser.php');
+		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
-		$view->assign('blocks', $blocks);
-
-		$blockID = 0;
-		if ($this->templateFile !== null) {
-			$blockID = $this->templateFile->getID();
-		}
-
-		$view->assign('block_id', $blockID);
 		return $view;
+
 	}
 
-	/* (non-PHPdoc)
-	 * @see modules/CmsModuleController#validate()
+	/**
+	 * @return boolean
 	 */
-	public function validate($mData) {
-		return true;
+	public function handleData() {
+
+		$sModIdentifier = $this->oPageModule->getIdentifier();
+		$templateFile = $this->mapper->getModel($sModIdentifier);
+
+		try {
+			Relation::add('pagemodule', 'templatefile', $this->oPageModule, $templateFile);
+		} catch (PDOException $e) {
+			// trying to add a duplicate
+		}
+
+//		exit;
+//		$blockID = (int)$oReq->post($sModIdentifier);
+//		if ($this->validate($blockID)) {
+//			if ($blockID > 0) {
+//				$block = new TemplateFile($blockID);
+//
+//				
+//			}
+//			return true;
+//		}
+
+//		return false;
+
 	}
 
 	/**
 	 *
-	 * @param $oReq
-	 * @return boolean
+	 * @return string
 	 */
-	public function handleData(FormMapper $mapper) {
-
-		$sModIdentifier = $this->oPageModule->getIdentifier();
-		$blockID = (int)$oReq->post($sModIdentifier);
-		if ($this->validate($blockID)) {
-			if ($blockID > 0) {
-				$block = new TemplateFile($blockID);
-
-				try {
-					Relation::add('pagemodule', 'templatefile', $this->oPageModule, $block);
-				} catch (PDOException $e) {
-					// trying to add a duplicate
-				}
-			}
-			return true;
-		}
-
-		return false;
-
-	}
-
-	public function getErrors() {
-		return $this->aErrors;
-	}
-
 	public function getIdentifier() {
 		return $this->oPageModule->getIdentifier();
 	}

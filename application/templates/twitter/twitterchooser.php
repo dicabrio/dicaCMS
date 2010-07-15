@@ -4,10 +4,5 @@
 </div>
 <div class="modulecontent">
 	<?php echo Lang::get('module.menuname.template'); ?>:&nbsp;
-	<select name="<?php echo $identifier; ?>">
-		<option value="0">Choose..</option>
-		<?php foreach ($blocks as $block) : ?>
-		<option value="<?php echo $block->getID(); ?>" <?php if ($block_id == $block->getID()) : ?> selected="selected"<?php endif; ?>><?php echo $block->getTitle(); ?></option>
-		<?php endforeach; ?>
-	</select>
+	<?php echo $form->getFormElementByName($identifier); ?>
 </div>
