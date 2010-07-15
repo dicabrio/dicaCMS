@@ -111,14 +111,14 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$description = $this->mapper->getModel($sModIdentifier."description");
 		$upload = $this->mapper->getModel($sModIdentifier);
-		
+
 		try {
 
 			$upload->validateFileType(Conf::get('imageupload.allowedfiles'));
-			
+
 		} catch (Exception $e) {
 
-			$this->mapper->addMappingError('imageupload', $e->getMessage());
+			$this->mapper->addMappingError($sModIdentifier, $e->getMessage());
 			$this->form->getFormElementByName($sModIdentifier)->notMapped();
 			throw new FormMapperException($e->getMessage(), 100, $e);
 		}
@@ -129,9 +129,8 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$new = false;
 		if ($this->mediaItem->getID() == 0) {
 			$new = true;
-		} else {
-			$this->mediaItem->getFile()->delete();
 		}
+		
 		$this->mediaItem->update($description, "", $file);
 		$this->mediaItem->save();
 

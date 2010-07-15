@@ -87,6 +87,14 @@ class Media extends DataRecord implements DomainEntity {
 	 */
 	public function update(TextLine $title, $description, FileManager $file=null) {
 
+		try {
+			if ($file instanceof FileManager) {
+				$this->getFile()->delete();
+			}
+		} catch (FileNotFoundException $e) {
+
+		}
+
 		if ($file !== null) {
 			$this->file = $file;
 

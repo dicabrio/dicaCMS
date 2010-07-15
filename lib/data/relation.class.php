@@ -92,12 +92,17 @@ class Relation extends DataRecord {
 			$oReferenceObj = $oOther;
 		}
 
+//		$query = "	SELECT t2.*
+//					FROM `".$sRelationTable."` AS t1
+//					LEFT JOIN `".$sSearchRelations."` AS t2
+//					ON t1.".$sSearchRelations."_id = t2.id
+//					WHERE t1.".$sReferenceRelation."_id = :referencid";
 		$query = "	SELECT t2.*
-					FROM `".$sRelationTable."` AS t1
-					LEFT JOIN `".$sSearchRelations."` AS t2
-					ON t1.".$sSearchRelations."_id = t2.id
-					WHERE t1.".$sReferenceRelation."_id = :referencid";
+					FROM `".$sRelationTable."` AS t1, `".$sSearchRelations."` AS t2
+					WHERE t1.".$sSearchRelations."_id = t2.id AND t1.".$sReferenceRelation."_id = :referencid";
 
+//		test($query);
+//		test($oReferenceObj->getID());
 		$aBind = array('referencid' => $oReferenceObj->getID());
 		return parent::findBySql($sSearchRelations, $query, $aBind);
 	}

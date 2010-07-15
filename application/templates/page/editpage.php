@@ -2,8 +2,8 @@
 	<?php echo $breadcrumb->getContents(); ?>
 <?php endif; ?>
 <ul id="tabmenu">
-	<li class="active"><a href="#" class="pageinfo">Page information</a></li>
-	<li><a href="#" class="content">Content</a></li>
+	<li class="active"><a href="#pageinfo" class="pageinfo">Page information</a></li>
+	<li><a href="#content" class="content">Content</a></li>
 </ul>
 <?php echo $form->begin(); ?>
 

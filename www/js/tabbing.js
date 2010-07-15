@@ -3,12 +3,10 @@
  */
 $(function () {
 	$('#tabmenu li a').click(function (e) {
-		e.preventDefault();
 		selectTab(this);
 	});
 	
 	$('#tabmenu li.active a').click();
-	
 	var urlHash = window.location.hash;
 	selectTab($('#tabmenu li a.'+urlHash.substr(1)));
 });
