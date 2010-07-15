@@ -7,15 +7,15 @@
 </ul>
 <?php echo $form->begin(); ?>
 
-<fieldset class="tab" id="pageinfotab">
-	<?php if (count($aErrors) > 0) : ?>
-	<ul class="error">
+<?php if (count($aErrors) > 0) : ?>
+<ul class="error">
 		<?php foreach ($aErrors as $sError) : ?>
-		<li><?php echo Lang::get('page.'.$sError); ?></li>
+	<li><?php echo Lang::get('page.'.$sError); ?></li>
 		<?php endforeach; ?>
-	</ul>
-	<?php endif; ?>
+</ul>
+<?php endif; ?>
 
+<fieldset class="tab" id="pageinfotab">
 	<div class="pagemodule">
 		<div class="modulelabel">Pagename:</div>
 		<div class="modulecontent">
@@ -83,19 +83,19 @@
 </fieldset>
 <?php if ($pageid != 0) :?>
 <fieldset class="tab" id="contenttab">
-	<?php if (count($aModules) == 0) : ?>
+		<?php if (count($aModules) == 0) : ?>
 	<div class="pagemodule">
 		<div class="modulelabel">No modules for this page</div>
 		<div class="modulecontent"></div>
 	</div>
-	<?php else: ?>
-	<?php foreach ($aModules as $oModule) :?>
-		<div class="pagemodule <?php echo $oModule->sIdentifier; ?>">
-			<?php echo $oModule->getContents(); ?>
-			<div class="clear">&nbsp;</div>
-		</div>
-	<?php endforeach; ?>
-	<?php endif;?>
+		<?php else: ?>
+			<?php foreach ($aModules as $oModule) :?>
+	<div class="pagemodule <?php echo $oModule->sIdentifier; ?>">
+					<?php echo $oModule->getContents(); ?>
+		<div class="clear">&nbsp;</div>
+	</div>
+			<?php endforeach; ?>
+		<?php endif;?>
 </fieldset>
 <?php endif; ?>
 
@@ -110,4 +110,4 @@
 </fieldset>
 
 <?php echo $form->end(); ?>
-			
+

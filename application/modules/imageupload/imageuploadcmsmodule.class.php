@@ -83,10 +83,20 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$oView = new View('imageupload/imageuploadform.php');
 		$oView->form = $this->form;
 
+		$filename = false;
+		$alttext = false;
+
 		if ($this->mediaItem !== null) {
-			$oView->filename = $this->mediaItem->getFile()->getFilename();
-			$oView->alttext = $this->mediaItem->getTitle();
+			try {
+				$alttext = $this->mediaItem->getTitle();
+				$filename = $this->mediaItem->getFile()->getFilename();
+			} catch (FileNotFoundException $e) {
+
+			}
 		}
+
+		$oView->filename = $filename;
+		$oView->alttext = $alttext;
 
 		return $oView;
 	}
@@ -100,9 +110,18 @@ class ImageuploadCmsModule implements CmsModuleController {
 		// when overhere... there shouldn't be any errors from the form
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$description = $this->mapper->getModel($sModIdentifier."description");
-
 		$upload = $this->mapper->getModel($sModIdentifier);
-		$upload->validateFileType(Conf::get('imageupload.allowedfiles'));
+		
+		try {
+
+			$upload->validateFileType(Conf::get('imageupload.allowedfiles'));
+			
+		} catch (Exception $e) {
+
+			$this->mapper->addMappingError('imageupload', $e->getMessage());
+			$this->form->getFormElementByName($sModIdentifier)->notMapped();
+			throw new FormMapperException($e->getMessage(), 100, $e);
+		}
 
 		$upload->moveTo(Conf::get('upload.dir.general'));
 		$file = $upload->getFile();
