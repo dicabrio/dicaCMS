@@ -33,6 +33,11 @@ class ImageuploadCmsModule implements CmsModuleController {
 	private $mapper;
 
 	/**
+	 * @var Media
+	 */
+	private $mediaItem;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param PageModule $oMod
@@ -47,8 +52,19 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$this->form = $form;
 		$this->mapper = $mapper;
 
+		$this->load();
 		$this->defineForm();
 
+	}
+
+	private function load() {
+
+		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$mediaItem = Relation::getSingle('pagemodule', 'media', $this->oPageModule);
+		if ($mediaItem === null) {
+			$mediaItem = new Media();
+		}
+		$this->mediaItem = $mediaItem;
 	}
 
 	private function defineForm() {
@@ -59,7 +75,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$this->form->addFormElement($fileInputName, $fileInput);
 		$this->mapper->addFormElementToDomainEntityMapping($fileInputName, "Upload");
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 
 		// define description (alt text) field
 		$descriptionInput = new Input("text", $this->oPageModule->getIdentifier()."description", $this->oTextContent->getContent());
@@ -76,6 +91,12 @@ class ImageuploadCmsModule implements CmsModuleController {
 	public function getEditor() {
 		$oView = new View('imageupload/imageuploadform.php');
 		$oView->form = $this->form;
+
+		if ($this->mediaItem !== null) {
+			$oView->filename = $this->mediaItem->getFile()->getFilename();
+			$oView->alttext = $this->mediaItem->getTitle();
+		}
+
 		return $oView;
 	}
 
@@ -96,14 +117,31 @@ class ImageuploadCmsModule implements CmsModuleController {
 		// when overhere... there shouldn't be any errors from the form
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$description = $this->mapper->getModel($sModIdentifier."description");
-		
+
 		$upload = $this->mapper->getModel($sModIdentifier);
 		$upload->validateFileType(Conf::get('imageupload.allowedfiles'));
+
+		$upload->moveTo(Conf::get('upload.dir.general'));
+		$file = $upload->getFile();
+
+
+//		if ($this->mediaItem->getID() == 0 && $file === null) {
+//			throw new FileNotFoundException('no-file-uploaded');
+//		}
+		$new = false;
+		if ($this->mediaItem->getID() == 0) {
+			$new = true;
+		}
+		$this->mediaItem->update($description, "", $file);
+		$this->mediaItem->save();
+
+		if ($new) {
+			Relation::add('pagemodule', 'media', $this->oPageModule, $this->mediaItem);
+		}
 
 		$this->oTextContent->setContent((string)$description->getValue()); // cast object to string
 		$this->oTextContent->setPageModule($this->oPageModule);
 		$this->oTextContent->save();
-
 
 	}
 
