@@ -22,12 +22,32 @@ $lang = array(
 		'deletefolder' => 'Verwijder',
 	),
 
+	'label' => array(
+		'pagename' => 'Pagina-url',
+		'template' => 'Template',
+		'publishtime' => 'Publiseer datum',
+		'expiretime' => 'Verval datum',
+		'title' => 'Paginatitel',
+		'keywords' => 'Pagina termen',
+		'description' => 'Pagina omschrijving',
+		'redirect' => 'Pagina doorverwijzing',
+		'active' => 'Actief',
+		'actions' => 'Acties',
+	),
+
+	'tab' => array(
+		'content' => 'Inhoud',
+		'pageinfo' => 'Pagina informatie',
+	),
+
 	'breadcrumb' => array(
 		'editpagefolder' => '"%s" bewerken',
 		'newpagefolder' => 'Folder aanmaken',
 
 		'editpage' => '"%s" bewerken',
 		'newpage' => 'Pagina aanmaken',
-	)
+	),
+
+	'pagenameexample' => '(contact.html zonder .html)',
 
 );

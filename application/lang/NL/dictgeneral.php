@@ -3,7 +3,9 @@
 $lang = array (
 	'button' => array (
 		'edit' => 'wijzig',
-		'delete' => 'verwijder'
+		'delete' => 'verwijder',
+		'save' => 'opslaan',
+		'cancel' => 'annuleer'
 	),
 
 	'logout' => 'Uitloggen',

@@ -2,79 +2,79 @@
 	<?php echo $breadcrumb->getContents(); ?>
 <?php endif; ?>
 <ul id="tabmenu">
-	<li class="active"><a href="#pageinfo" class="pageinfo">Page information</a></li>
-	<li><a href="#content" class="content">Content</a></li>
+	<li class="active"><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
+	<li><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
 </ul>
 <?php echo $form->begin(); ?>
 
 <?php if (count($aErrors) > 0) : ?>
 <ul class="error">
-		<?php foreach ($aErrors as $sError) : ?>
-	<li><?php echo Lang::get('page.'.$sError); ?></li>
+		<?php foreach ($aErrors as $key => $sError) : ?>
+	<li><?php echo Lang::get('page.'.$sError); ?> (<?php echo $key; ?>)</li>
 		<?php endforeach; ?>
 </ul>
 <?php endif; ?>
 
 <fieldset class="tab" id="pageinfotab">
 	<div class="pagemodule">
-		<div class="modulelabel">Pagename:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.pagename'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('page_id'); ?>
-			<?php echo $form->getFormElement('pagename'); ?> (voorbeeld.html zonder .html)
+			<?php echo $form->getFormElement('pagename'); ?> <?php echo Lang::get('page.pagenameexample'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Template:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.template'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('template_id'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Publishtime:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.publishtime'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('publishtime'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Expiretime:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.expiretime'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('expiretime'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Title:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.title'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('title'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Keywords:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.keywords'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('keywords'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Description:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.description'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('description'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Redirect:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.redirect'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('redirect'); ?>
 		</div>
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Active:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.active'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('active'); ?>
 		</div>
@@ -85,7 +85,7 @@
 <fieldset class="tab" id="contenttab">
 		<?php if (count($aModules) == 0) : ?>
 	<div class="pagemodule">
-		<div class="modulelabel">No modules for this page</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.nomodules'); ?></div>
 		<div class="modulecontent"></div>
 	</div>
 		<?php else: ?>
@@ -101,10 +101,10 @@
 
 <fieldset class="actions">
 	<div class="pagemodule">
-		<div class="modulelabel">Actions:</div>
+		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
-			<a href="<?php echo Conf::get('general.url.www').'/page/folder/'.$folderid; ?>" class="button">Cancel</a>
+			<a href="<?php echo Conf::get('general.url.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
 		</div>
 	</div>
 </fieldset>

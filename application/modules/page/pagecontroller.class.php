@@ -73,7 +73,7 @@ class PageController extends CmsController {
 
 		$formmapper = new PageMapper($form);
 
-		$button = new ActionButton('Save');
+		$button = new ActionButton(Lang::get('general.button.save'));
 		$button->addAttribute('class', 'save');
 
 		$breadcrumb = new Menu('breadcrumb');
