@@ -88,34 +88,6 @@ class ContactformPageModule implements PageModuleController {
 
 	}
 
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	*/
-	public function validate($mData) {
-
-		return true;
-
-	}
-
-	/**
-	 *
-	 * @param $oReq
-	 * @return boolean
-	 */
-	public function handleData(Request $oReq) {
-
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-
-		return $this->aErrors;
-
-	}
-
 	/**
 	 *
 	 * @return string

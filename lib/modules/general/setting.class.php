@@ -1,15 +1,9 @@
 <?php
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of configclass
  *
  * @author robertcabri
  */
-class Config extends DataRecord {
+class Setting extends DataRecord {
 
 	public function __construct($id = null) {
 		parent::__construct(__CLASS__, $id);
@@ -25,9 +19,9 @@ class Config extends DataRecord {
 	}
 
 	/**
-	 *
+	 * Get the setting property. If no setting is found it will return an empty setting
 	 * @param string $columns
-	 * @return Config
+	 * @return Setting
 	 */
 	public static function getByName($name) {
 
@@ -38,7 +32,7 @@ class Config extends DataRecord {
 			return current($result);
 		}
 
-		return null;
+		return new Setting();
 	}
 
 	/**

@@ -13,11 +13,6 @@ class TwitterPageModule implements PageModuleController {
 	private $templateFile;
 
 	/**
-	 * @var array
-	 */
-	private $aErrors;
-
-	/**
 	 * @var Page
 	 */
 	private $page;
@@ -34,7 +29,7 @@ class TwitterPageModule implements PageModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Page $page) {
+	public function __construct(PageModule $oMod, Page $page, Request $request) {
 
 		$this->oPageModule = $oMod;
 		$this->page = $page;
@@ -49,8 +44,8 @@ class TwitterPageModule implements PageModuleController {
 
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
 
-		$configValue = Config::getByName('twitteraccount');
-		$this->twitterAccount = $configValue->getValue();
+		$settingValue = Setting::getByName('twitteraccount');
+		$this->twitterAccount = $settingValue->getValue();
 
 		$this->getTweets();
 
@@ -64,53 +59,17 @@ class TwitterPageModule implements PageModuleController {
 		if ($this->templateFile === null) {
 			return '';
 		}
-//		$view = $this->templateFile->getView();
+		$tweet = current(Tweet::getLast(1));
 
 		$view = new View($this->templateFile->getFilename());
-
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
-
-		$tweet = current(Tweet::getLast(1));
-
-//		test($tweet->getMessagee());
 		$view->assign('twittermessage', $tweet->getMessage());
 		$view->assign('twitteraccount', $this->twitterAccount);
-
 		$view->assign('pagename', $this->page->getName());
 
 		return $view;
-
-//		return '';
-
-	}
-
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	*/
-	public function validate($mData) {
-
-		return true;
-
-	}
-
-	/**
-	 *
-	 * @param $oReq
-	 * @return boolean
-	 */
-	public function handleData(Request $oReq) {
-
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-
-		return $this->aErrors;
 
 	}
 
@@ -124,17 +83,16 @@ class TwitterPageModule implements PageModuleController {
 
 	}
 
-
+	/**
+	 * load the tweets from twitter
+	 */
 	private function getTweets() {
 
 		$lastTweet = current(Tweet::getLast());
-
-
 		if (strtotime($lastTweet->getUpdate()) < strtotime('now - 30 minutes')) {
 			
 			$tweetConnectionString = sprintf('http://twitter.com/users/show/%s.json', $this->twitterAccount);
 			$twitterresource = curl_init();
-
 			curl_setopt($twitterresource, CURLOPT_USERAGENT, 'PHP Twitter/TweetStory');
 			curl_setopt($twitterresource, CURLOPT_URL, $tweetConnectionString);
 			curl_setopt($twitterresource, CURLOPT_RETURNTRANSFER, TRUE);
@@ -161,15 +119,13 @@ class TwitterPageModule implements PageModuleController {
 				$data->commit();
 
 			} catch (Exception $e) {
+				
 				$data->rollBack();
 
 				$lastTweet->setUpdate(new Date('now'));
 				$lastTweet->save();
 			}
 		}
-//		else {
-//			$lastTweet->setUpdate(new Date('now'));
-//			$lastTweet->save();
-//		}
+		
 	}
 }

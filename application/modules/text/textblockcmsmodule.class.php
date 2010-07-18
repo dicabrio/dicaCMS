@@ -53,8 +53,10 @@ class TextblockCmsModule implements CmsModuleController {
 	private function load() {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		
 		$contentFormElement = new TextArea($this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
 		$this->form->addFormElement($contentFormElement->getName(), $contentFormElement);
+		$this->mapper->addFormElementToDomainEntityMapping($contentFormElement->getName(), 'DomainText');
 
 	}
 
@@ -107,12 +109,6 @@ class TextblockCmsModule implements CmsModuleController {
 		$this->oTextContent->setPageModule($this->oPageModule);
 		$this->oTextContent->save();
 
-	}
-
-	public function getErrors() {
-
-		return $this->aErrors;
-		
 	}
 
 	public function getIdentifier() {

@@ -1,7 +1,7 @@
 <?php
 
 class TextlineCmsModule implements CmsModuleController {
-	
+
 	const MAX_LENGTH = 255;
 
 	/**
@@ -15,20 +15,30 @@ class TextlineCmsModule implements CmsModuleController {
 	private $oTextContent;
 
 	/**
-	 * @var array
+	 * @var Form
 	 */
-	private $aErrors;
+	private $form;
 
 	/**
-	 * construct the text line module
+	 * @var FormMapper
+	 */
+	private $mapper;
+
+	/**
+	 * construct the imageupload module
 	 *
-	 * @param string $sIdentifier
-	 * @param Page $oPage
+	 * @param PageModule $oMod
+	 * @param Form $form
+	 * @param FormMapper $mapper
+	 * @param CmsController $oCmsController
+	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
 
 		$this->oPageModule = $oMod;
+		$this->form = $form;
+		$this->mapper = $mapper;
 
 		// load the data
 		$this->load();
@@ -38,33 +48,25 @@ class TextlineCmsModule implements CmsModuleController {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
+		$contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->form->addFormElement($contentFormElement->getName(), $contentFormElement);
+		$this->mapper->addFormElementToDomainEntityMapping($contentFormElement->getName(), 'TextLine');
+
 	}
-	
+
+
 	/**
 	 * (non-PHPdoc)
 	 * @see modules/Module#getEditor()
 	 */
 	public function getEditor() {
+
 		$oView = new View('text/textline.php');
 		$oView->sMaxLength = self::MAX_LENGTH;
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->oTextContent === null) {
-			$oView->sContent = '';
-		} else {
-			$oView->sContent = $this->oTextContent->getContent();
-		}
+		$oView->form = $this->form;
+		
 		return $oView;
-	}
-
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	 * TODO make UT8 compliant
-	 */
-	public function validate($mData) {
-		if (is_string($mData) && strlen($mData) <= self::MAX_LENGTH) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -72,31 +74,16 @@ class TextlineCmsModule implements CmsModuleController {
 	 * @param $oReq
 	 * @return boolean
 	 */
-	public function handleData(Request $oReq) {
+	public function handleData() {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
-		if ($this->validate($oReq->post($sModIdentifier))) {
+		$text = $this->mapper->getModel($sModIdentifier);
 
-			if ($this->oTextContent === null) {
-				$this->oTextContent = new PageText();
-			}
+		$this->oTextContent->setContent($text);
+		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->save();
 
-			$this->oTextContent->setContent($oReq->post($sModIdentifier));
-			$this->oTextContent->setPageModule($this->oPageModule);
-			$this->oTextContent->save();
-				
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-		return $this->aErrors;
+		return true;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 <?php
 
+class UploadException extends Exception {}
 
 class Upload implements DomainEntity {
 
@@ -95,16 +96,35 @@ class Upload implements DomainEntity {
 
 	}
 
-	public function validateFileType($allowedTypes=null) {
-		if ($this->error != UPLOAD_ERR_NO_FILE) {
-			if ($allowedTypes === null) {
-				return true;
-			} else if (isset($allowedTypes[$this->type])) {
-				return true;
-			} else {
-				throw new InvalidArgumentException('file-type-not-allowed');
-			}
+	protected function isUploaded() {
+		return ($this->error != UPLOAD_ERR_NO_FILE);
+	}
+
+	protected function validateFileType($allowedTypes=null) {
+
+		if (!$this->isUploaded()) {
+			return ;
 		}
+
+		if ($allowedTypes === null) {
+			return true;
+		} else if (isset($allowedTypes[$this->type])) {
+			return true;
+		} else {
+			throw new InvalidArgumentException('file-type-not-allowed');
+		}
+
+	}
+
+	protected function validateFileSize($filesize) {
+
+		if (!$this->isUploaded()) {
+			return ;
+		}
+		if ($this->size > $filesize) {
+			throw new FileException('uploaded-file-too-big', 100);
+		}
+
 	}
 
 	private function validateError() {

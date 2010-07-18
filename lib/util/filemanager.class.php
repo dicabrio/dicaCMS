@@ -92,7 +92,11 @@ class FileManager {
 
 	}
 
-	public function exists() {
+	/**
+	 *
+	 * @return boolean
+	 */
+	private function exists() {
 
 		return (file_exists($this->getFullPath()));
 		
@@ -184,7 +188,7 @@ class FileManager {
 	 */
 	private function validateFile() {
 
-		if (!file_exists($this->getFullPath())) {
+		if (!$this->exists()) {
 			throw new FileNotFoundException('File '.$this->getFullPath().' cannot be found');
 		}
 

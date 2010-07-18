@@ -7,11 +7,18 @@
  */
 class ViewPageController {
 
+	/**
+	 * @var Request
+	 */
+	private $request;
+
 	public function __construct() {
 		// we should check for permissions
 		// change the template directory. This differs from the standard
 
 		View::setTemplateDirectory(Conf::get('upload.dir.templates'));
+		$this->request = Request::getInstance();
+
 	}
 
 	public function show($sPagename) {
@@ -92,7 +99,7 @@ class ViewPageController {
 				$sModuleClass = $oModule->getType().'PageModule';
 
 				$oReflection = new ReflectionClass($sModuleClass);
-				$oModuleController = new $sModuleClass($oModule, $oPage);
+				$oModuleController = new $sModuleClass($oModule, $oPage, $this->request);
 
 				$sContent = $oModuleController->getContents();
 			}

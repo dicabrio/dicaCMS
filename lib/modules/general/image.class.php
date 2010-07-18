@@ -1,89 +1,47 @@
 <?php
+/**
+ * Image class
+ *
+ * Handle some dimension shizzle
+ */
+class Image  {
+	
+	private $file;
 
-class Image extends DataRecord
-{
-	public function __construct($id=null)
-	{
-		parent::__construct(__CLASS__, $id);
-	}
+	private $width;
 
-	protected function defineColumns()
-	{
-		parent::addColumn('id', DataTypes::INT, false, true);
-		parent::addColumn('filename', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('path', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('active', DataTypes::INT, false, true);
-	}
+	private $height;
 
-	public static function findAll()
-	{
-		return parent::findAll(__CLASS__, parent::ALL);
+	/**
+	 * 
+	 * @param FileManager $file
+	 */
+	public function __construct(FileManager $file) {
+
+		$this->file = $file;
+		list($this->width, $this->height) = getimagesize($this->file->getFullPath());
+		
 	}
 
 	/**
-	 * get The filename of the image
 	 *
-	 * @return string
+	 * @return int
 	 */
-	public function getFilename() {
-		return $this->filename;
+	public function getWidth() {
+
+		return (int)$this->width;
+
 	}
 
 	/**
-	 * get the Path where this image is stored
 	 *
-	 * @return string
+	 * @return int
 	 */
-	public function getPath() {
-		return $this->path;
-	}
+	public function getHeight() {
 
-	/**
-	 * Checks wether this Image is active
-	 *
-	 * @return bool
-	 */
-	public function isActive() {
-		if ($this->active == 1) {
-			return true;
-		}
+		return (int)$this->height;
 
-		return false;
-	}
-
-	/**
-	 * Set the image active or not
-	 *
-	 * @param bool $bActive
-	 */
-	public function setActive($bActive) {
-
-		if ($bActive == true) {
-			$this->active =  1;
-		} else if ($bActive == false) {
-			$this->active = 0;
-		}
-	}
-
-	/**
-	 * set the path to the image where it is stored
-	 *
-	 * @param string $sPath
-	 */
-	public function setPath($sPath) {
-		$this->path = $sPath;
-	}
-
-	/**
-	 * set the filename of the image
-	 *
-	 * @param string $sFilename
-	 */
-	public function setFilename($sFilename) {
-		$this->filename = $sFilename;
 	}
 
 }
 
-
-?>

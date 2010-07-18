@@ -13,11 +13,6 @@ class StaticblockPageModule implements PageModuleController {
 	private $oStaticBlock;
 
 	/**
-	 * @var array
-	 */
-	private $aErrors;
-
-	/**
 	 * @var Page
 	 */
 	private $page;
@@ -29,7 +24,7 @@ class StaticblockPageModule implements PageModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Page $page) {
+	public function __construct(PageModule $oMod, Page $page, Request $request) {
 
 		$this->oPageModule = $oMod;
 		$this->page = $page;
@@ -66,34 +61,6 @@ class StaticblockPageModule implements PageModuleController {
 
 		return $view;
 
-	}
-
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	 */
-	public function validate($mData) {
-
-		return true;
-		
-	}
-
-	/**
-	 *
-	 * @param $oReq
-	 * @return boolean
-	 */
-	public function handleData(Request $oReq) {
-
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function getErrors() {
-
-		return $this->aErrors;
-		
 	}
 
 	/**
