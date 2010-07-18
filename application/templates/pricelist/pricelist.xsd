@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="description">
+    <xs:complexType mixed="true" />
+  </xs:element>
+
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title" />
+        <xs:element ref="description" />
+        <xs:element ref="price" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="item" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="price">
+    <xs:complexType mixed="true" />
+  </xs:element>
+
+  <xs:element name="title">
+    <xs:complexType mixed="true" />
+  </xs:element>
+
+</xs:schema>

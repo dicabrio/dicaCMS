@@ -49,7 +49,7 @@ class PageText extends DataRecord {
 	}
 
 	/**
-	 * Get the pagetext content for a given module. It returns an PageText object when found. If not found it returns null
+	 * Get the pagetext content for a given module. It returns an PageText object when found. If not found it returns PageText
 	 * 
 	 * @param PageModule $oPage
 	 * @return PageText
