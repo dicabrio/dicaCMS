@@ -17,8 +17,10 @@
 		<?php echo $form->getFormElement($sIdentifier); ?><br /><br />
 		<label style="width: 100px; float: left;" for="<?php echo $sIdentifier."title"; ?>"><?php echo Lang::get('imageupload.alttext'); ?></label>
 		<?php echo $form->getFormElement($sIdentifier."title")->addAttribute('style', 'width: 230px; margin: 0 0 5px 0;'); ?>
+		<?php if (isset($extended) && $extended == true) : ?>
 		<label style="width: 100px; float: left;" for="<?php echo $sIdentifier."description"; ?>"><?php echo Lang::get('imageupload.description'); ?></label>
 		<?php echo $form->getFormElement($sIdentifier."description")->addAttribute('style', 'width: 230px;'); ?>
+		<?php endif; ?>
 	</div>
 
 

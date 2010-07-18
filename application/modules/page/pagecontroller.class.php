@@ -116,6 +116,8 @@ class PageController extends CmsController {
 					$oPageModule->setIdentifier($aModule['id']);
 
 					$oPage->addModule($oPageModule);
+				} else {
+					$oPageModule->setType($aModule['module']);
 				}
 
 				$oModule = new $sModuleClass($oPageModule, $form, $formmapper, $this);

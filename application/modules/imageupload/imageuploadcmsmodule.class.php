@@ -3,11 +3,6 @@
 class ImageuploadCmsModule implements CmsModuleController {
 
 	/**
-	 * max input
-	 */
-	const MAX_LENGTH = 255;
-
-	/**
 	 * @var PageModule
 	 */
 	private $oPageModule;
@@ -73,7 +68,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$this->form->addFormElement($fileInputName, $fileInput);
 		$this->mapper->addFormElementToDomainEntityMapping($fileInputName, "ImageUpload");
 
-
 		// define description (alt text) field
 		$descriptionInput = new Input("text", $this->oPageModule->getIdentifier()."title", $this->mediaItem->getTitle());
 		$descriptionInputName = $descriptionInput->getName();
@@ -92,6 +86,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 * @see modules/Module#getEditor()
 	 */
 	public function getEditor() {
+		
 		$oView = new View('imageupload/imageuploadform.php');
 		$oView->form = $this->form;
 
@@ -109,7 +104,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 		$oView->filename = $filename;
 		$oView->alttext = $alttext;
-		$oView->defaultimage = $this->defaultImage;
+		$oView->defaultimage = $this->getDefaultImage();
 		
 
 		return $oView;
@@ -151,5 +146,15 @@ class ImageuploadCmsModule implements CmsModuleController {
 	public function getIdentifier() {
 
 		return $this->oPageModule->getIdentifier();
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	protected function getDefaultImage() {
+
+		return $this->defaultImage;
+		
 	}
 }

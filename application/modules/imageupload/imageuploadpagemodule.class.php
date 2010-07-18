@@ -58,18 +58,8 @@ class ImageuploadPageModule implements PageModuleController {
 	public function getContents() {
 
 		try {
-			$file = $this->mediaItem->getFile();
-			$image = new Image($file);
 
-			$path = Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$file->getFilename();
-
-			$view = new View('imageuploadcontent.php');
-			$view->imageurl = $path;
-			$view->title = $this->mediaItem->getTitle();
-			$view->description = $this->mediaItem->getDescription();
-			$view->imageheight = $image->getHeight();
-
-			return $view;
+			return $this->getView('imageuploadcontent.php');
 
 		} catch (Exception $e) {
 			test($e);
@@ -77,6 +67,22 @@ class ImageuploadPageModule implements PageModuleController {
 
 		return "";
 
+	}
+
+	protected function getView($viewfile) {
+		
+		$file = $this->mediaItem->getFile();
+		$image = new Image($file);
+
+		$path = Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$file->getFilename();
+
+		$view = new View($viewfile);
+		$view->imageurl = $path;
+		$view->title = $this->mediaItem->getTitle();
+		$view->description = $this->mediaItem->getDescription();
+		$view->imageheight = $image->getHeight();
+
+		return $view;
 	}
 
 	/**
