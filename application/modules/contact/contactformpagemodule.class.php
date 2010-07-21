@@ -45,7 +45,7 @@ class ContactformPageModule implements PageModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Page $page) {
+	public function __construct(PageModule $oMod, Page $page, Request $request) {
 
 		$this->request = Request::getInstance();
 		$this->oPageModule = $oMod;

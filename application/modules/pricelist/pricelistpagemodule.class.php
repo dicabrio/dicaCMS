@@ -57,10 +57,14 @@ class PricelistPageModule implements PageModuleController {
 			return "";
 		}
 
-		$priceList = new PriceListXML($this->xmlFeed->getSource());
-		$priceList->addTemplate(new View('pricelist.xls'));
+		try {
+			$priceList = new PriceListXML($this->xmlFeed->getSource());
+			$priceList->addTemplate(new View('pricelist.xls'));
 
-		return $priceList->getContents();
+			return $priceList->getContents();
+		} catch (Exception $e) {
+			return "<!-- ".$e->getMessage()." -->";
+		}
 
 	}
 

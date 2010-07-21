@@ -34,13 +34,14 @@ class XMLGetter implements DomainEntity {
 
 		$this->xmlsource = $feedurl;
 		$this->domdoc = new DOMDocument();
+
 		$this->domdoc->load($feedurl);
 		if ($schemeValidationFile != null) {
 			if (!$this->domdoc->schemaValidate($schemeValidationFile)) {
 				throw new XMLFeedException('xml-notvalid', 300);
 			}
 		}
-
+		
 	}
 
 	public function setSource(XMLFeed $xml) {
