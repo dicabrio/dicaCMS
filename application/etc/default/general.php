@@ -3,9 +3,9 @@
 $config = array(
 
 	'dir' => array(
-		'www' => SYS_DIR.'/www',
-		'templates' => APP_DIR.'/templates',
-		'lang' => APP_DIR.'/lang',
+		'www' => realpath(SYS_DIR.'/www'),
+		'templates' => realpath(APP_DIR.'/templates'),
+		'lang' => realpath(APP_DIR.'/lang'),
 	),
 
 	'url' => array(
