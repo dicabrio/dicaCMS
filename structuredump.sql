@@ -3,11 +3,14 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generatie Tijd: 21 Jul 2010 om 16:06
+-- Generatie Tijd: 21 Jul 2010 om 16:13
 -- Server versie: 5.1.38
 -- PHP Versie: 5.3.1
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET FOREIGN_KEY_CHECKS=0;
+
+SET AUTOCOMMIT=0;
+START TRANSACTION;
 
 --
 -- Database: `dicabrio_com`
@@ -27,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `folder` (
   `folder_id` int(11) unsigned NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+);
 
 -- --------------------------------------------------------
 
@@ -46,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `folder_id` int(11) NOT NULL,
   `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+);
 
 -- --------------------------------------------------------
 
@@ -61,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `active` int(1) NOT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+);
 
 -- --------------------------------------------------------
 
@@ -83,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `description` text COLLATE utf8_unicode_ci,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+);
 
 -- --------------------------------------------------------
 
@@ -97,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule` (
   `identifier` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=102 ;
+);
 
 -- --------------------------------------------------------
 
@@ -111,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_media` (
   `media_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`media_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+);
 
 -- --------------------------------------------------------
 
@@ -125,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
   `staticblock_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`staticblock_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=564 ;
+);
 
 -- --------------------------------------------------------
 
@@ -139,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_templatefile` (
   `templatefile_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`templatefile_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=121 ;
+);
 
 -- --------------------------------------------------------
 
@@ -152,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `pagetext` (
   `pagemodule_id` int(11) unsigned NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=39 ;
+);
 
 -- --------------------------------------------------------
 
@@ -165,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `name` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+);
 
 -- --------------------------------------------------------
 
@@ -180,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `staticblock` (
   `created` datetime NOT NULL,
   `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+);
 
 -- --------------------------------------------------------
 
@@ -197,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `templatefile` (
   `source` text COLLATE utf8_unicode_ci,
   `module_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+);
 
 -- --------------------------------------------------------
 
@@ -217,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `tweet` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `tweet_id` (`tweet_id`),
   UNIQUE KEY `tweet_id_2` (`tweet_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=107 ;
+);
 
 -- --------------------------------------------------------
 
@@ -232,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `active` int(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+);
 
 -- --------------------------------------------------------
 
@@ -246,4 +249,8 @@ CREATE TABLE IF NOT EXISTS `xmlfeed` (
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `xml` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+);
+
+SET FOREIGN_KEY_CHECKS=1;
+
+COMMIT;

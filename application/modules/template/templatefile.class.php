@@ -162,7 +162,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 		parent::save();
 		$format = "%s/%s-%s.php";
-		$oldfile = sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id'));
+		$oldfile = realpath(sprintf($format, $this->path, $this->oldtplname, $this->getAttr('id')));
 
 		try {
 			$file = new FileManager($oldfile);
@@ -174,15 +174,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		$source = (get_magic_quotes_gpc()) ? stripslashes($this->getAttr('source')) : $this->getAttr('source');
 		$title = $this->getAttr('title');
 
-		$newfile = sprintf($format, $this->path, $title, $this->getAttr('id'));
-		file_put_contents($newfile, $source);
+		$newfile = new FileManager(sprintf($format, $this->path, $title, $this->getAttr('id')), true);
+		$newfile->setContents($source);
+//		$newfile = realpath();
+//		file_put_contents($newfile, $source);
 
 	}
 
 	public function delete() {
 
 		$format = "%s/%s-%s.php";
-		$filepath = sprintf($format, $this->path, $this->getAttr('title'), $this->getAttr('id'));
+		$filepath = (sprintf($format, $this->path, $this->getAttr('title'), $this->getAttr('id')));
 
 		try {
 			$file = new FileManager($filepath);

@@ -32,18 +32,23 @@ class FileManager {
 	 * Constructor checks if the given file exists
 	 *
 	 * @param string $pFile
+	 * @param boolean $create
 	 * @throws FileNotFoundException
 	 */
-	public function __construct($pFile) {
+	public function __construct($pFile, $create=false) {
 
 		$this->breakFileName($pFile);
-		$this->validateFile();
+		if ($create === false) {
+			$this->validateFile();
+		} else if ($create === true) {
+			$this->createFile($pFile);
+		}
 
 	}
 
 	public function getPath() {
 
-		return $this->path;
+		return realpath($this->path);
 
 	}
 
@@ -61,10 +66,10 @@ class FileManager {
 	public function getFullPath() {
 
 		if (empty($this->path)) {
-			return $this->filename;
+			return realpath($this->filename);
 		}
 
-		return $this->path . self::SEP . $this->filename;
+		return realpath($this->path . self::SEP . $this->filename);
 
 	}
 
@@ -94,12 +99,32 @@ class FileManager {
 
 	/**
 	 *
+	 * @param mixed $contents
+	 * @return boolean
+	 */
+	public function setContents($contents) {
+
+		return file_put_contents($this->getFullPath(), $contents);
+		
+	}
+
+	/**
+	 *
 	 * @return boolean
 	 */
 	private function exists() {
 
-		return (file_exists($this->getFullPath()));
-		
+		return (file_exists($this->getFullPath()) && is_file($this->getFullPath()));
+
+	}
+
+	/**
+	 * create a file
+	 * 
+	 * @param string $pFilename
+	 */
+	private function createFile($pFilename) {
+		touch($pFilename);
 	}
 
 	/**
@@ -158,7 +183,7 @@ class FileManager {
 		}
 
 		return true;
-		
+
 	}
 
 	/**
@@ -199,7 +224,7 @@ class FileManager {
 	 *	@throws DirException
 	 */
 	private function validateDestination($destination) {
-		
+
 		if (!is_dir($destination)) {
 			throw new DirException('Given destination "'.$destination.'" is not a directory');
 		}
@@ -211,5 +236,9 @@ class FileManager {
 	}
 }
 
-class DirException extends Exception {}
-class FileException extends Exception {}
+class DirException extends Exception {
+
+}
+class FileException extends Exception {
+
+}
