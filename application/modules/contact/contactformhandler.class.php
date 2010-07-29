@@ -73,7 +73,7 @@ class ContactformHandler implements FormHandler {
 			$oRecipients = new Swift_RecipientList();
 			$oRecipients->addTo($this->email); //We can give a name along with the address
 
-			$oMessage = new Swift_Message(Lang::get('contact.emailsubject'));
+			$oMessage = new Swift_Message(Lang::get('contact.emailsubject', $_SERVER['HTTP_HOST']));
 			$oMessage->attach(new Swift_Message_Part($message, 'text/plain', null, 'UTF-8'));
 
 			$number_sent = $oSwift->send($oMessage, $oRecipients, $email->getValue());
