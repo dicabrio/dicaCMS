@@ -33,6 +33,7 @@ $lang = array(
 		'redirect' => 'Pagina doorverwijzing',
 		'active' => 'Actief',
 		'actions' => 'Acties',
+		'nomodules' => 'Geen modules aangegeven in de template'
 	),
 
 	'tab' => array(

@@ -35,6 +35,7 @@ class ViewPageController {
 		$oView->assign('imagesurl', Conf::get('general.url.images'));
 		$oView->assign('jsurl', Conf::get('general.url.js'));
 		$oView->assign('cssurl', Conf::get('general.url.css'));
+		$oView->assign('uploadurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
 		$oView->assign('pagename', $oPage->getName());
 
