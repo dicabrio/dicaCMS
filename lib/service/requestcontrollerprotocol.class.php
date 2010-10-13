@@ -70,6 +70,7 @@ class RequestControllerProtocol implements ServiceProtocol {
 		if (!($reflection->implementsInterface('Controller'))) {
 			throw new Exception('Not a valid Controller');
 		}
+		
 		$controller = $reflection->newInstance($oReflMethod->getName());
 		$controller->setArguments($this->arguments);
 		$this->result = $oReflMethod->invokeArgs($controller, array());

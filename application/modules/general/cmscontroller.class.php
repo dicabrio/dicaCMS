@@ -53,7 +53,7 @@ class CmsController extends SecureController {
 		foreach ($moduleMenu as $module) {
 			$menuItem = new MenuItem(
 					Conf::get('general.url.www').$module->getUrl(),
-					Lang::get('module.menuname.'.$module->getName()),
+					Lang::get($module->getName().'.menuname'),
 					$module->getName(),
 					($sActive == $module->getName()));
 			$this->oSubMenu->addItem($menuItem);

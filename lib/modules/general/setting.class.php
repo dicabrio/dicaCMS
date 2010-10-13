@@ -45,4 +45,10 @@ class Setting extends DataRecord {
 		
 	}
 
+	public function setValue($value) {
+
+		$this->setAttr('value', $value);
+		
+	}
+
 }

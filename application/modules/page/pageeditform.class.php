@@ -16,11 +16,11 @@ class PageEditForm extends Form {
 	 * @param Request $oReq
 	 * @param array $aElements
 	 */
-	public function __construct(Request $oReq, Page $page, $templates) {
+	public function __construct(Page $page, $templates) {
 		$this->page = $page;
 		$this->templates = $templates;
 
-		parent::__construct($oReq, Conf::get('general.url.www').'/page/editpage/'.$page->getID(), Request::POST, 'pageform');
+		parent::__construct(Conf::get('general.url.www').'/page/savepage/'.$page->getID(), Request::POST, 'pageform');
 	}
 
 	/**
@@ -85,6 +85,11 @@ class PageEditForm extends Form {
 		$elActive->setValue($this->page->isActive());
 
 		parent::addFormElement($elActive->getName(), $elActive);
+
+		$button = new ActionButton(Lang::get('general.button.save'));
+		$button->addAttribute('class', 'save button');
+
+		parent::addFormElement('save', $button);
 
 	}
 }

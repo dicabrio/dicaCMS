@@ -24,6 +24,8 @@ class TextlineCmsModule implements CmsModuleController {
 	 */
 	private $mapper;
 
+	private $contentFormElement;
+
 	/**
 	 * construct the imageupload module
 	 *
@@ -34,11 +36,10 @@ class TextlineCmsModule implements CmsModuleController {
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
 
 		// load the data
 		$this->load();
@@ -48,9 +49,16 @@ class TextlineCmsModule implements CmsModuleController {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
-		$contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
-		$this->form->addFormElement($contentFormElement->getName(), $contentFormElement);
-		$this->mapper->addFormElementToDomainEntityMapping($contentFormElement->getName(), 'TextLine');
+		$this->contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->form->addFormElement($this->contentFormElement->getName(), $this->contentFormElement);
+		
+
+	}
+
+	public function addFormMapping(FormMapper $mapper) {
+
+		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->contentFormElement->getName(), 'TextLine');
 
 	}
 

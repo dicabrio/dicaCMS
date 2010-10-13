@@ -8,6 +8,8 @@ class Authentication {
 
 	const KEY_IP = 'user_ip';
 
+	const C_AUTH_SESSIONNAME = 'USER_AUTH';
+
 	private static $oSession;
 
 	private static $instance;

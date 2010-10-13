@@ -24,6 +24,12 @@ class PageSaveHandler implements FormHandler {
 	private $cmsModules;
 
 	/**
+	 *
+	 * @var DataFactory
+	 */
+	private $data;
+
+	/**
 	 * @param FormMapper $formmapper
 	 * @param Page $page
 	 * @param PageFolder $folder
@@ -33,6 +39,23 @@ class PageSaveHandler implements FormHandler {
 		$this->page = $page;
 		$this->cmsModules = $cmsModules;
 		$this->folder = $folder;
+		
+		$this->data =  DataFactory::getInstance();
+	}
+
+	private function updatePage() {
+
+		$this->page->update($this->formmapper->getModel('pagename'),
+				$this->formmapper->getModel('template_id'),
+				$this->formmapper->getModel('publishtime'),
+				$this->formmapper->getModel('expiretime'),
+				$this->formmapper->getModel('title'),
+				$this->formmapper->getModel('keywords'),
+				$this->formmapper->getModel('description'));
+
+		$this->page->setActive($this->formmapper->getModel('active'));
+		$this->folder->addChild($this->page);
+
 	}
 
 	/**
@@ -41,21 +64,11 @@ class PageSaveHandler implements FormHandler {
 	public function handleForm(Form $oForm) {
 		try {
 
-			$data =  DataFactory::getInstance();
-			$data->beginTransaction();
-
 			$this->formmapper->constructModelsFromForm($oForm);
-			$this->page->update($this->formmapper->getModel('pagename'),
-					$this->formmapper->getModel('template_id'),
-					$this->formmapper->getModel('publishtime'),
-					$this->formmapper->getModel('expiretime'),
-					$this->formmapper->getModel('title'),
-					$this->formmapper->getModel('keywords'),
-					$this->formmapper->getModel('description'));
-
-			$this->page->setActive($this->formmapper->getModel('active'));
-			$this->folder->addChild($this->page);
-
+			
+			$this->data->beginTransaction();
+			$this->updatePage();
+			
 			foreach ($this->cmsModules as $oModule) {
 				if ($oModule instanceof CmsModuleController) {
 					$oModule->handleData();
@@ -63,14 +76,18 @@ class PageSaveHandler implements FormHandler {
 			}
 
 			$this->page->save();
-			$data->commit();
+			$this->data->commit();
+
+			// need to check fi there is a special redirect to another controller
 			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.$this->folder->getID());
+
 		} catch (PageRecordException $e) {
 			$oForm->getFormElement('template_id')->notMapped();
 			$this->formmapper->addMappingError('page', $e->getMessage());
 
 		} catch (FormMapperException $e) {
-			$data->rollBack();
+			$this->data->rollBack();
+//			$this->getSession()->set('error', $this->formmapper->getMappingErrors());
 		}
 	}
 

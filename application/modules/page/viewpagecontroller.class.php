@@ -61,6 +61,7 @@ class ViewPageController {
 	}
 
 	private function mayShow(Page $oPage) {
+
 		$sToday = strtotime('now');
 		$sPublish = strtotime($oPage->getPublishTime());
 		$sExpire = $oPage->getExpireTime();

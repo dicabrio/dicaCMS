@@ -1,24 +1,29 @@
 <?php
 
-Util::import(LIB_DIR.'/modules/auth');
-
 class SecureController implements Controller {
-
-	const C_AUTH_SESSIONNAME = 'CMS';
 
 	protected $arguments;
 
+	/**
+	 *
+	 * @var Session
+	 */
+	private $session;
+
+	/**
+	 *
+	 * @param string $sMethod
+	 */
 	public function __construct($sMethod) {
 		// we should check for permissions
-		// we should check for permissions
-		$oAuth = Authentication::getInstance(self::C_AUTH_SESSIONNAME);
+		$this->session = Session::getInstance();
+		$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
 
-		if (!$oAuth->isLoggedIn()) {
+		if (!$oAuth->isLoggedIn() && !($this instanceof LoginController)) {
 
 			$sMethod = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $sMethod);
 			// set a redirect
-			$oSession = Session::getInstance();
-			$oSession->set('redirect', $sMethod);
+			$this->session->set('redirect', $sMethod);
 
 			$this->_redirect('login');
 		}
@@ -26,6 +31,16 @@ class SecureController implements Controller {
 
 	public function setArguments($arguments) {
 		$this->arguments = $arguments;
+	}
+
+	/**
+	 *
+	 * @return Session
+	 */
+	public function getSession() {
+
+		return $this->session;
+
 	}
 
 

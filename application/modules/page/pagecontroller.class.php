@@ -4,6 +4,21 @@ class PageController extends CmsController {
 
 	const C_CURRENT_FOLDER = 'currentPageFolder';
 
+	/**
+	 * @var Page
+	 */
+	private $page;
+
+	/**
+	 * @var Form
+	 */
+	private $form;
+
+	/**
+	 * @var FormMapper
+	 */
+	private $formMapper;
+
 	public function __construct($sMethod) {
 		// we should check for permissions
 		parent::__construct('page/'.$sMethod, Lang::get('page.title'));
@@ -19,14 +34,12 @@ class PageController extends CmsController {
 
 	public function _index($aErrors = array(), $iParentID=0, $sSuccess = false) {
 
-		$session = Session::getInstance();
+		$session = $this->getSession();
 		$session->set(self::C_CURRENT_FOLDER, $iParentID);
+		$session->set('pagesavedredirect', null);
 
 		$folder = new PageFolder($iParentID);
 		$stuff = $folder->getChildren();
-
-		$breadcrumbFac = new BreadcrumbFactory($folder, Conf::get('general.url.www').'/page');
-		$breadcrumb = $breadcrumbFac->build();
 
 		$actions = new Menu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', Lang::get('page.button.newpage')));
@@ -41,7 +54,7 @@ class PageController extends CmsController {
 		$oPageOverview->assign('aErrors', $aErrors);
 		$oPageOverview->assign('actions', $actions);
 		$oPageOverview->assign('oOverview', $oTable);
-		$oPageOverview->assign('oBreadCrumb', $breadcrumb);
+		$oPageOverview->assign('oBreadCrumb', $this->buildBreadcrumb($folder));
 		$oPageOverview->assign('sSearchFormAction', Conf::get('general.url.www').Conf::get('page.url.searchpage'));
 		$oPageOverview->assign('sPageFormAction', Conf::get('general.url.www').Conf::get('page.url.showpage'));
 		$oPageOverview->assign('sSucces', $sSuccess);
@@ -54,7 +67,40 @@ class PageController extends CmsController {
 	}
 
 	/**
-	 * @TODO create a pageview object that will populate the view with variables and such
+	 * @param Page $oPage
+	 * @param Folder $pagefolder
+	 * @return Menu
+	 */
+	private function buildBreadcrumb(Folder $pagefolder, Page $oPage=null) {
+
+		$breadcrumbFac = new BreadcrumbFactory($pagefolder, Conf::get('general.url.www').'/page');
+		$breadcrumb = $breadcrumbFac->build();
+
+		if ($oPage !== null) {
+
+			$breadcrumbname = Lang::get('page.breadcrumb.editpage', $oPage->getName());
+			if ($oPage->getID() == 0) {
+				$breadcrumbname = Lang::get('page.breadcrumb.newpage');
+			}
+
+			$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
+		}
+
+		return $breadcrumb;
+	}
+
+	private function getEditPageForm($page, $templates) {
+		if ($this->form === null) {
+			$this->form = new PageEditForm($page, $templates);
+		}
+
+		if ($this->formMapper === null) {
+			$this->formMapper = new PageMapper();
+		}
+
+	}
+
+	/**
 	 *
 	 * edit an existing page
 	 * @return string
@@ -62,102 +108,109 @@ class PageController extends CmsController {
 	public function editpage() {
 
 		$oReq = Request::getInstance();
-		$oSession = Session::getInstance();
+		$session = $this->getSession();
 
-		$pagefolder = new PageFolder($oSession->get(self::C_CURRENT_FOLDER));
-		$oPage = new Page(Util::getUrlSegment(2));
-
-		$aTemplates = TemplateFile::getFiles(current(Module::getForTemplates('page')));
-
-		$form = new PageEditForm($oReq, $oPage, $aTemplates);
-
-		$formmapper = new PageMapper($form);
-
-		$button = new ActionButton(Lang::get('general.button.save'));
-		$button->addAttribute('class', 'save');
-
-		$breadcrumb = new Menu('breadcrumb');
-		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
-		$folderName = $pagefolder->getName();
-		if ($folderName == '') {
-			$folderName = Lang::get('breadcrumb.root');
-		}
-		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$pagefolder->getID(), $folderName));
-
-		$breadcrumbname = Lang::get('page.breadcrumb.editpage', $oPage->getName());
-		if ($oPage->getID() == 0) {
-			$breadcrumbname = Lang::get('page.breadcrumb.newpage');
-		}
-
-		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
-
-		$oModuleView = new View('page/editpage.php');
-		$oModuleView->assign('form', $form);
-		$oModuleView->assign('folderid', $pagefolder->getID());
-		$oModuleView->assign('pageid', $oPage->getID());
-		$oModuleView->assign('aModules', array());
-		$oModuleView->assign('breadcrumb', $breadcrumb);
-		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
-
-		$oPageModules = $oPage->getModules();
-		$cmsModules = array();
-		$cmsModuleViews = array();
-		try {
-			$oTemplateFile = $oPage->getTemplate();
-			$oViewParser = new ViewParser($oTemplateFile);
-
-			foreach ($oViewParser->getLabels() as $aModule) {
-				$sModuleClass = $aModule['module'].'CmsModule';
-
-				$oPageModule = $oPage->getModule($aModule['id']);
-				if ($oPageModule === null) {
-					$oPageModule = new PageModule();
-					$oPageModule->setType($aModule['module']);
-					$oPageModule->setIdentifier($aModule['id']);
-
-					$oPage->addModule($oPageModule);
-				} else {
-					$oPageModule->setType($aModule['module']);
-				}
-
-				$oModule = new $sModuleClass($oPageModule, $form, $formmapper, $this);
-
-				if ($oModule instanceof CmsModuleController) {
-					$oModView = $oModule->getEditor();
-					if ($oModView instanceof View) {
-						$oModView->sIdentifier = $oModule->getIdentifier();
-						$cmsModuleViews[] = $oModView;
-					}
-					$cmsModules[] = $oModule;
-				}
-
-				unset($oPageModules[$aModule['id']]);
+		// it could be there is a page set in the session by another controller
+		// and redirected to here to edit.
+		$page = $session->get('page');
+		if ($page == null) {
+			$page = new Page(Util::getUrlSegment(2));
+			if ($page->getParent()->getID() == 0) {
+				$pagefolder = new PageFolder($session->get(self::C_CURRENT_FOLDER));
+				$page->setParent($pagefolder);
 			}
-
-			foreach ($oPageModules as $key => $pagemodule) {
-				$pagemodule->delete();
-				unset($oPageModules[$key]);
-			}
-
-		} catch (RecordException $e) {
-			$aErrors[] = 'template.removedtemplate';
-			$oModuleView->assign('iTemplateID', $oReq->post('template_id', 0));
 		}
 
+		$session->set('page', null);
+		$session->set(self::C_CURRENT_FOLDER, $page->getParent()->getID());
 
-		$form->addSubmitButton('save', $button, new PageSaveHandler($formmapper, $oPage, $cmsModules, $pagefolder));
-		$form->listen();
+		$pageBuilder = new PageBuilder($page);
+		$page = $pageBuilder->buildPageFromTemplate();
 
-		$oModuleView->assign('aModules', $cmsModuleViews);
-		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
+		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
+
+		// view stuff
+		$this->getEditPageForm($page, $templates);
+
+		$pageEditView = new PageEditViewBuilder($page);
+		$pageEditView->buildFormForModules($this->form);
+		$view = $pageEditView->getView();
+		$view->assign('aErrors', $this->formMapper->getMappingErrors());
+		$view->assign('pagesavedredirect', $session->get('pagesavedredirect'));
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->addScript('tabbing.js');
-
-		$oBaseView->assign('oModule', $oModuleView);
-
+		$oBaseView->assign('oModule', $view);
 		return $oBaseView->getContents();
 	}
+
+	public function savepage() {
+
+		// page inladen
+		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
+		$page = new Page(Util::getUrlSegment(2));
+		$pageBuilder = new PageBuilder($page);
+		$folder = new PageFolder($this->getSession()->get(self::C_CURRENT_FOLDER));
+		$this->formMapper = new PageMapper();
+
+		$page->setParent($folder);
+		$page = $pageBuilder->buildPageFromTemplate();
+		$this->getEditPageForm($page, $templates);
+
+		$pageEditView = new PageEditViewBuilder($page);
+		$pageEditView->buildFormForModules($this->form);
+		$pageEditView->addFormMapping($this->formMapper);
+
+
+		$this->form->listen(Request::getInstance());
+		$data = DataFactory::getInstance();
+
+		try {
+
+			$this->formMapper->constructModelsFromForm($this->form);
+
+			$data->beginTransaction();
+			$page->update($this->formMapper->getModel('pagename'),
+					$this->formMapper->getModel('template_id'),
+					$this->formMapper->getModel('publishtime'),
+					$this->formMapper->getModel('expiretime'),
+					$this->formMapper->getModel('title'),
+					$this->formMapper->getModel('keywords'),
+					$this->formMapper->getModel('description'));
+
+			foreach ($pageEditView->getPageModuleControllers() as $oModuleController) {
+				$oModuleController->handleData();
+			}
+
+			$page->setActive($this->formMapper->getModel('active'));
+			$page->save();
+
+			$data->commit();
+
+			$redirect = $this->getSession()->get('pagesavedredirect');
+			if ($redirect !== null) {
+				$this->getSession()->set('pagesavedredirect', null);
+				$this->_redirect($redirect);
+			}
+
+			$this->_redirect('page/folder/'.$folder->getID());
+
+		} catch (PageRecordException $e) {
+
+			$data->rollBack();
+			$this->form->getFormElement('template_id')->notMapped();
+			$this->formmapper->addMappingError('page', $e->getMessage());
+
+		} catch (FormMapperException $e) {
+
+//			$this->getSession()->set('error', $this->formmapper->getMappingErrors());
+
+		}
+
+		return $this->editpage();
+
+	}
+
 
 	public function editfolder() {
 		$req = Request::getInstance();

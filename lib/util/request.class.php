@@ -152,9 +152,10 @@ class Request
 	 *
 	 * @return string
 	 */
-	public static function method()
-	{
+	public function method() {
+
 		return strtolower($_SERVER['REQUEST_METHOD']);
+		
 	}
 
 	/**

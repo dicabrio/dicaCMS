@@ -81,12 +81,13 @@
 		<div class="clear">&nbsp;</div>
 	</div>
 </fieldset>
-<?php if ($pageid != 0) :?>
+
 <fieldset class="tab" id="contenttab">
-		<?php if (count($aModules) == 0) : ?>
+	<?php if (count($aModules) == 0) : ?>
+		
 	<div class="pagemodule">
-		<div class="modulelabel"><?php echo Lang::get('page.label.nomodules'); ?></div>
-		<div class="modulecontent"></div>
+		<div class="modulelabel">&nbsp;</div>
+		<div class="modulecontent"><?php echo Lang::get('page.label.nomodules'); ?></div>
 	</div>
 		<?php else: ?>
 			<?php foreach ($aModules as $oModule) :?>
@@ -95,16 +96,20 @@
 		<div class="clear">&nbsp;</div>
 	</div>
 			<?php endforeach; ?>
-		<?php endif;?>
+	<?php endif;?>
 </fieldset>
-<?php endif; ?>
 
 <fieldset class="actions">
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
+			<?php echo $form->getFormElement('save'); ?>
+
+			<?php if ($pagesavedredirect !== null) : ?>
+			<a href="<?php echo Conf::get('general.url.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<?php else : ?>
 			<a href="<?php echo Conf::get('general.url.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<?php endif; ?>
 		</div>
 	</div>
 </fieldset>

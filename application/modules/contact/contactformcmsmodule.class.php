@@ -48,12 +48,10 @@ class ContactformCmsModule implements CmsModuleController {
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $controller = null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
-		$this->oCmsController = $controller;
 
 		// load the data
 		$this->load();
@@ -91,15 +89,20 @@ class ContactformCmsModule implements CmsModuleController {
 		$this->form->addFormElement($select->getName(), $select);
 
 		// define the mapping
-		$this->mapper->addFormElementToDomainEntityMapping('bedanktpagina', "Page");
 
 		// Email field
-		$emailField = new Input('text', $this->oPageModule->getIdentifier(), $this->email);
-		$emailField->addAttribute('maxlength', self::MAX_LENGTH);
-		$this->form->addFormElement($emailField->getName(), $emailField);
+		$this->emailField = new Input('text', $this->oPageModule->getIdentifier(), $this->email);
+		$this->emailField->addAttribute('maxlength', self::MAX_LENGTH);
+		$this->form->addFormElement($this->emailField->getName(), $this->emailField);
 
 		// define the mapping
-		$this->mapper->addFormElementToDomainEntityMapping($emailField->getName(), "Email");
+
+	}
+
+	public function addFormMapping(FormMapper $mapper) {
+		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping('bedanktpagina', "Page");
+		$this->mapper->addFormElementToDomainEntityMapping($this->emailField->getName(), "Email");
 
 	}
 

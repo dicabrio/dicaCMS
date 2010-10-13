@@ -16,4 +16,5 @@ $config = array(
 	),
 
 	'default_lang' => 'NL',
+	
 );

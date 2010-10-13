@@ -29,6 +29,7 @@ class Folder extends DataRecord implements IFolder {
 
 		if ($id == 0) {
 			$this->setAttr('created', date("Y-m-d H:i:s"));
+			$this->setAttr('visible', 1);
 		}
 
 	}
@@ -45,6 +46,7 @@ class Folder extends DataRecord implements IFolder {
 		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, 255, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
+		parent::addColumn('visible', DataTypes::INT, false, true);
 
 	}
 
@@ -195,7 +197,7 @@ class Folder extends DataRecord implements IFolder {
 
 			$ref = new ReflectionClass($parentfolder);
 			$refMethod = $ref->getMethod('findInFolder');
-			$this->folders = $refMethod->invokeArgs($o, array($this));
+			$this->folders = $refMethod->invokeArgs($o, array($this, true));
 		}
 		return $this->folders;
 
@@ -217,6 +219,29 @@ class Folder extends DataRecord implements IFolder {
 		}
 		return $this->children;
 
+	}
+
+	public function hide() {
+
+		$this->setAttr('visible', 0);
+	}
+
+	public function show() {
+
+		$this->setAttr('visible', 1);
+	}
+
+	/**
+	 * check visibility 
+	 * @return boolean
+	 */
+	public function isVisible() {
+
+		if ($this->getAttr('visible') == 1) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -282,13 +307,22 @@ class Folder extends DataRecord implements IFolder {
 	 * @param Folder $folder
 	 * @return array
 	 */
-	public static function findInFolder(Folder $folder) {
+	public static function findInFolder(Folder $folder, $showOnlyVisible = false) {
 
 		parent::setRetrieveRawData(true);
 
+		$query = " folder_id = :parentid AND associationtype = :type";
+		$bind = array(
+						'parentid' => $folder->getID(),
+						'type' => $folder->getAssociationType());
+
+		if ($showOnlyVisible === true) {
+			$query .= " AND visible = :visible ";
+			$bind['visible'] = 1;
+		}
+
 		$className = get_class($folder);
-		$result = parent::findAll('Folder', parent::ALL, new Criteria(' folder_id = :parentid AND associationtype = :type',
-			array('parentid' => $folder->getID(), 'type' => $folder->getAssociationType())));
+		$result = parent::findAll('Folder', parent::ALL, new Criteria($query, $bind));
 
 		$folders = array();
 		foreach ($result as $folderrecord) {
@@ -305,6 +339,33 @@ class Folder extends DataRecord implements IFolder {
 
 		return $folders;
 
+	}
+
+	/**
+	 *
+	 * @param Folder $folderName
+	 */
+	public static function findByName($className, $folderName) {
+
+		parent::setRetrieveRawData(true);
+
+		$result = parent::findAll('Folder', parent::ALL, new Criteria(' name = :name ', array('name' => $folderName)));
+
+		parent::setRetrieveRawData(false);
+
+		if (count($result) > 0) {
+
+			$folder = new $className();
+
+			$folderrecord = current($result);
+			foreach ($folderrecord as $key => $value) {
+				$folder->setAttr($key, $value);
+			}
+
+			return $folder;
+		}
+
+		return null;
 	}
 }
 

@@ -128,18 +128,35 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		$this->setAttr('folder_id', $template->getID());
 	}
 
+	/**
+	 * find all template files
+	 * @return array
+	 */
+	public static function findAll() {
+		return parent::findAll(__CLASS__, parent::ALL);
+	}
+
+	/**
+	 * find template files within a given folder
+	 * 
+	 * @param TemplateFileFolder $folder
+	 * @return array
+	 */
 	public static function findInFolder(TemplateFileFolder $folder) {
 		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid', array('parentid' => $folder->getID())));
 	}
 
-	public static function getFiles(Module $module = null) {
+	/**
+	 * Get all template files for corresponding modules.
+	 *
+	 * @param Module $module
+	 * @return array
+	 */
+	public static function findByModule(Module $module) {
 
-		$crit = null;
-		if ($module != null) {
-			$crit = new Criteria('module_id = :moduleid', array('moduleid' => $module->getID()));
-		}
-
+		$crit = new Criteria('module_id = :moduleid', array('moduleid' => $module->getID()));
 		return parent::findAll(__CLASS__, parent::ALL, $crit);
+
 	}
 
 	public function __toString() {
@@ -176,8 +193,6 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 		$newfile = new FileManager(sprintf($format, $this->path, $title, $this->getAttr('id')), true);
 		$newfile->setContents($source);
-//		$newfile = realpath();
-//		file_put_contents($newfile, $source);
 
 	}
 

@@ -15,7 +15,7 @@ class StaticblockController extends CmsController {
 	public function _index($aErrors = array()) {
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/editblock', Lang::get('static.button.newblock')));
+		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/editblock', Lang::get('staticblock.button.newblock')));
 
 		$blocks = StaticBlock::find();
 
@@ -49,7 +49,7 @@ class StaticblockController extends CmsController {
 
 		$formmapper = new StaticBlockMapper($form);
 		$form->addSubmitButton('save', $button, new StaticBlockHandler($block, $formmapper));
-		$form->listen();
+		$form->listen($req);
 
 		$editview = new View('staticblock/editblock.php');
 		$editview->assign('form', $form);

@@ -5,7 +5,7 @@
 			<?php if (isset($actions)) : ?>
 			<?php echo $actions->getContents(); ?>
 			<?php endif; ?>
-			
+
 			<?php if ($sSucces !== false) : ?>
 			<div><?php echo $sSucces; ?></div>
 			<?php endif; ?>
@@ -15,7 +15,7 @@
 					<li><?php echo Lang::get($sError); ?></li>
 				<?php endforeach; ?>
 			<?php endif; ?>
-			
+
 			<?php if (isset($oOverview)) : ?>
 			<?php echo $oOverview->getContents(); ?>
 			<?php endif; ?>

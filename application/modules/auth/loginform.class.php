@@ -7,21 +7,10 @@
 class LoginForm extends Form {
 
 	/**
-	 * @var Request
-	 */
-	private $req;
-
-	/**
-	 * @var FormMapper
-	 */
-	private $formmapper;
-
-	/**
 	 * @param Request $req
 	 */
-	public function __construct(Request $req) {
-		$this->req = $req;
-		parent::__construct($req, Conf::get('general.url.www').'/login/', Request::POST, 'loginform');
+	public function __construct() {
+		parent::__construct(Conf::get('general.url.www').'/login/accept', Request::POST, 'loginform');
 
 	}
 
@@ -36,17 +25,8 @@ class LoginForm extends Form {
 		$oPassword = new Input('password', 'password');
 		$this->addFormElement($oPassword->getName(), $oPassword);
 
-		$this->formmapper = new LoginMapper($this);
-
 		$action = new ActionButton(Lang::get('login.button'));
-		$this->addSubmitButton('login', $action, new LoginHandler($this->formmapper, $this->req));
+		$this->addFormElement('login', $action);
 		
-	}
-
-	/**
-	 * @return FormMapper
-	 */
-	public function getMapper() {
-		return $this->formmapper;
 	}
 }

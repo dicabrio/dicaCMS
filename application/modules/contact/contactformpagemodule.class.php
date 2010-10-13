@@ -111,12 +111,12 @@ class ContactformPageModule implements PageModuleController {
 				$bericht = new TextArea('bericht'),
 		);
 
-		$form = new Form($request, Conf::get('general.url.www').'/'.$this->page->getName().'.html');
+		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName().'.html');
 		foreach ($elements as $element) {
 			$form->addFormElement($element->getName(), $element);
 		}
 		$form->addSubmitButton($button->getName(), $button, $formHandler);
-		$form->listen();
+		$form->listen($this->request);
 
 		$this->aErrors = $mapper->getMappingErrors();
 

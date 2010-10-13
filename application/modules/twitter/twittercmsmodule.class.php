@@ -18,20 +18,21 @@ class TwitterCmsModule implements CmsModuleController {
 	private $form;
 
 	/**
-	 * @var FormMapper
-	 */
-	private $mapper;
-
-	/**
-	 * @var CmsController
-	 */
-	private $oCmsController;
-
-	/**
 	 *
 	 * @var array
 	 */
 	private $options;
+
+	/**
+	 * @var Select
+	 */
+	private $selectElement;
+
+	/**
+	 *
+	 * @var FormMapper
+	 */
+	private $mapper;
 
 	/**
 	 *
@@ -42,12 +43,10 @@ class TwitterCmsModule implements CmsModuleController {
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $controller = null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
-		$this->oCmsController = $controller;
 
 		// load the data
 		$this->load();
@@ -63,21 +62,27 @@ class TwitterCmsModule implements CmsModuleController {
 		}
 
 		$module = current(Module::getForTemplates('twitter'));
-		$this->options = TemplateFile::getFiles($module);
+		$this->options = TemplateFile::findByModule($module);
 
 	}
 
 	private function defineForm() {
 
-		$selectTemplate = new Select($this->oPageModule->getIdentifier());
-		$selectTemplate->setValue($this->templateFile->getID());
-		$selectTemplate->addOption(0, Lang::get('general.choose'));
+		$this->selectElement = new Select($this->oPageModule->getIdentifier());
+		$this->selectElement->setValue($this->templateFile->getID());
+		$this->selectElement->addOption(0, Lang::get('general.choose'));
 
 		foreach ($this->options as $templateOption) {
-			$selectTemplate->addOption($templateOption->getID(), $templateOption->getTitle());
+			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
-		$this->form->addFormElement($selectTemplate->getName(), $selectTemplate);
-		$this->mapper->addFormElementToDomainEntityMapping($selectTemplate->getName(), "TemplateFile");
+		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+
+	}
+
+	public function addFormMapping(FormMapper $mapper) {
+
+		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "TemplateFile");
 
 	}
 
@@ -107,20 +112,6 @@ class TwitterCmsModule implements CmsModuleController {
 		} catch (PDOException $e) {
 			// trying to add a duplicate
 		}
-
-//		exit;
-//		$blockID = (int)$oReq->post($sModIdentifier);
-//		if ($this->validate($blockID)) {
-//			if ($blockID > 0) {
-//				$block = new TemplateFile($blockID);
-//
-//				
-//			}
-//			return true;
-//		}
-
-//		return false;
-
 	}
 
 	/**
