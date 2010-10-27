@@ -7,24 +7,60 @@
 /**
  * Class template
  * @author Robert Cabri
- * @version 0.01
+ * @version 1.01
+ *
+ * @todo remove the static method to set the template directory
+ *
  */
-class View
-{
+class View {
+
+	/**
+	 * @todo remove this directory. This is global state we don't want that :(
+	 * 
+	 * @var string
+	 */
 	private static $m_sTemplateDirectory = false;
 
+	/**
+	 *
+	 * @var string
+	 */
 	private $m_sTemplateFile = false;
 
+	/**
+	 *
+	 * @var array
+	 */
 	private $m_aTemplateData = array();
 
+	/**
+	 *
+	 * @var string
+	 */
 	private $source = "";
 
+	/**
+	 *
+	 * @var array
+	 */
 	private $m_aGlobalData = array();
 
 	/**
 	 * @var View
 	 */
 	private $m_oParentView = null;
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $scripts = array();
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $style = array();
 
 	/**
 	 * construct the view if given a template filename it will check if it exists
@@ -69,6 +105,23 @@ class View
 		$this->source = $source;
 	}
 
+	public function addScript($script) {
+
+		if ($this->hasParent()) {
+			$this->m_oParentView->addScript($script);
+		} else {
+			$this->scripts[] = $script;
+		}
+	}
+
+	public function addStyle($style) {
+		if ($this->hasParent()) {
+			$this->m_oParentView->addStyle($style);
+		} else {
+			$this->style[] = $style;
+		}
+	}
+
 	/**
 	 * @param string $psPattern Pattern that should be replaced
 	 * @param string $psVal The content the pattern should replaced with
@@ -77,6 +130,7 @@ class View
 		
 		if ($pmValue instanceof View) {
 			$pmValue->setParent($this);
+			$pmValue = "".$pmValue;
 		}
 		$this->m_aTemplateData[$psVariable] = $pmValue;
 	}
@@ -90,8 +144,24 @@ class View
 		return $this->m_aGlobalData;
 	}
 
+	/**
+	 * set the parent for this view
+	 * 
+	 * @param View $oView
+	 */
 	public function setParent(View $oView) {
 		$this->m_oParentView = $oView;
+	}
+
+	/**
+	 * check if this view has a parent view
+	 * @return Boolean
+	 */
+	public function hasParent() {
+		if ($this->m_oParentView !== null) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

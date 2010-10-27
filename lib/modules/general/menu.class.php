@@ -1,14 +1,11 @@
 <?php
 
-
-
 class Menu {
 
 	/**
 	 * @var array
 	 */
 	private $menuitems = array();
-
 	/**
 	 * @var View
 	 */
@@ -39,6 +36,14 @@ class Menu {
 
 		$this->oView->assign('menuItems', $this->menuitems);
 		return $this->oView->getContents();
+	}
+
+	public function __toString() {
+		try {
+			return $this->getContents();
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
 	}
 
 }

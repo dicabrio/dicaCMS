@@ -139,7 +139,6 @@ class PageController extends CmsController {
 		$view->assign('pagesavedredirect', $session->get('pagesavedredirect'));
 
 		$oBaseView = parent::getBaseView();
-		$oBaseView->addScript('tabbing.js');
 		$oBaseView->assign('oModule', $view);
 		return $oBaseView->getContents();
 	}
