@@ -19,11 +19,11 @@
 <ul id="tabmenu">
 	<?php if (count($aModules) == 0) : ?>
 	<li class="active"><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
-	<li><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
 	<?php else : ?>
-	<li><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
 	<li class="active"><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
+	<li><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
 	<?php endif; ?>
+	<li><a href="#access" class="access"><?php echo Lang::get('page.tab.access'); ?></a></li>
 </ul>
 <?php echo $form->begin(); ?>
 
@@ -117,6 +117,23 @@
 	</div>
 			<?php endforeach; ?>
 	<?php endif;?>
+</fieldset>
+
+<fieldset class="tab" id="accesstab">
+	<div class="pagemodule">
+		<div class="modulelabel">&nbsp;</div>
+		<div class="modulecontent">
+			<?php if (count($userGroups) == 0) : ?>
+			<?php echo Lang::get('page.label.nousergroups'); ?>
+			<?php else : ?>
+			<ul>
+				<?php foreach ($userGroups as $userGroup) : ?>
+				<li><?php echo $form->getFormElement('usergroup_'.$userGroup->getID()); ?> <?php echo $userGroup->getTitle(); ?></li>
+				<?php endforeach; ?>
+			</ul>
+			<?php endif; ?>
+		</div>
+	</div>
 </fieldset>
 
 <fieldset class="actions">

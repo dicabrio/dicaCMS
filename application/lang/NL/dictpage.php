@@ -34,11 +34,13 @@ $lang = array(
 		'active' => 'Actief',
 		'actions' => 'Acties',
 		'nomodules' => 'Er zijn geen modules beschikbaar voor deze pagina',
+		'nousergroups' => 'Er zijn geen gebruikersgroepen beschikbaar',
 	),
 
 	'tab' => array(
 		'content' => 'Inhoud',
 		'pageinfo' => 'Pagina informatie',
+		'access' => 'Toegang',
 	),
 
 	'breadcrumb' => array(

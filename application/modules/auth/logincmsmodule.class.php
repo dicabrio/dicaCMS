@@ -95,6 +95,7 @@ class LoginCmsModule implements CmsModuleController {
 		$view = new View('login/logincmsmodule.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
+		
 		return $view;
 
 	}

@@ -89,9 +89,11 @@ class PageController extends CmsController {
 		return $breadcrumb;
 	}
 
-	private function getEditPageForm($page, $templates) {
+	private function getEditPageForm($page, $templates, $userGroups) {
 		if ($this->form === null) {
-			$this->form = new PageEditForm($page, $templates);
+			$this->form = new PageEditForm($page);
+			$this->form->addTemplates($templates);
+			$this->form->addUserGroups($userGroups);
 		}
 
 		if ($this->formMapper === null) {
@@ -128,15 +130,17 @@ class PageController extends CmsController {
 		$page = $pageBuilder->buildPageFromTemplate();
 
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
+		$userGroups = UserGroup::findAll();
 
 		// view stuff
-		$this->getEditPageForm($page, $templates);
+		$this->getEditPageForm($page, $templates, $userGroups);
 
 		$pageEditView = new PageEditViewBuilder($page);
 		$pageEditView->buildFormForModules($this->form);
 		$view = $pageEditView->getView();
 		$view->assign('aErrors', $this->formMapper->getMappingErrors());
 		$view->assign('pagesavedredirect', $session->get('pagesavedredirect'));
+		$view->assign('userGroups', $userGroups);
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $view);
@@ -146,6 +150,7 @@ class PageController extends CmsController {
 	public function savepage() {
 
 		// page inladen
+		$userGroups = UserGroup::findAll();
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
 		$page = new Page(Util::getUrlSegment(2));
 		$pageBuilder = new PageBuilder($page);
@@ -154,12 +159,11 @@ class PageController extends CmsController {
 
 		$page->setParent($folder);
 		$page = $pageBuilder->buildPageFromTemplate();
-		$this->getEditPageForm($page, $templates);
+		$this->getEditPageForm($page, $templates, $userGroups);
 
 		$pageEditView = new PageEditViewBuilder($page);
 		$pageEditView->buildFormForModules($this->form);
 		$pageEditView->addFormMapping($this->formMapper);
-
 
 		$this->form->listen(Request::getInstance());
 		$data = DataFactory::getInstance();
