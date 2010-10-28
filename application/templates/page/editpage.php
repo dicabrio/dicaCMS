@@ -1,6 +1,7 @@
 <?php 
 
 	$this->addStyle('http://yui.yahooapis.com/2.8.1/build/assets/skins/sam/skin.css');
+	$this->addStyle(Conf::get('general.url.css').'/editors.css');
 	
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');

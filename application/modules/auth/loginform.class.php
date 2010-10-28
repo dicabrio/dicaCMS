@@ -9,8 +9,9 @@ class LoginForm extends Form {
 	/**
 	 * @param Request $req
 	 */
-	public function __construct() {
-		parent::__construct(Conf::get('general.url.www').'/login/accept', Request::POST, 'loginform');
+	public function __construct($action) {
+		
+		parent::__construct($action, Request::POST, 'loginform');
 
 	}
 

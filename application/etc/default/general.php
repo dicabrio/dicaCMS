@@ -9,10 +9,10 @@ $config = array(
 	),
 
 	'url' => array(
-		'www' => 'http://'.DOMAIN.'/dicabrio/www',
-		'images' => 'http://'.DOMAIN.'/dicabrio/www/images',
-		'css' => 'http://'.DOMAIN.'/dicabrio/www/css',
-		'js' => 'http://'.DOMAIN.'/dicabrio/www/js',
+		'www' => 'http://'.DOMAIN.'/lckv/www',
+		'images' => 'http://'.DOMAIN.'/lckv/www/images',
+		'css' => 'http://'.DOMAIN.'/lckv/www/css',
+		'js' => 'http://'.DOMAIN.'/lckv/www/js',
 	),
 
 	'default_lang' => 'NL',

@@ -20,7 +20,8 @@ class TemplateDataSet extends AbstractTableDataSet {
 
 		$this->addColumn(0, Html::getCheckbox('selectall', 'all'));
 		$this->addColumn(1, 'title');
-		$this->addColumn(2, 'actions');
+		$this->addColumn(2, 'type');
+		$this->addColumn(3, 'actions');
 
 	}
 
@@ -35,7 +36,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 		$folderid = $folder->getID();
 		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.url.www').'/template/folder/'.$folder->getID()));
 
-		$this->constructLine($folderid, $sTitle, array('editfolder', 'deletefolder'));
+		$this->constructLine($folderid, $sTitle, '', array('editfolder', 'deletefolder'));
 
 	}
 
@@ -44,7 +45,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 		$pageid = $template->getID();
 		$sTitle = $this->constuctTitle('icon-file.png', $template->getTitle());
 
-		$this->constructLine($pageid, $sTitle, array('edittemplate', 'deletetemplate'));
+		$this->constructLine($pageid, $sTitle, $template->getModule()->getName(), array('edittemplate', 'deletetemplate'));
 
 	}
 
@@ -54,7 +55,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 	 * @param string $title
 	 * @param array $actions
 	 */
-	private function constructLine($pid, $title, $actions) {
+	private function constructLine($pid, $title, $type, $actions) {
 
 		$this->setValueAt(Html::getCheckbox('select[]', $pid), $this->iRecordCount, 0);
 		$this->setValueAt($title, $this->iRecordCount, 1);
@@ -72,7 +73,8 @@ class TemplateDataSet extends AbstractTableDataSet {
 												$attributes).'&nbsp;';
 		}
 
-		$this->setValueAt($actionstring, $this->iRecordCount, 2);
+		$this->setValueAt($type, $this->iRecordCount, 2);
+		$this->setValueAt($actionstring, $this->iRecordCount, 3);
 		
 	}
 

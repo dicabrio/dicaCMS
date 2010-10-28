@@ -20,7 +20,7 @@ $(function () {
 				height: '200px',
 				width: '500px',
 				dompath: false, //Turns on the bar at the bottom
-				animate: false, //Animates the opening, closing and moving of Editor windows
+				animate: true, //Animates the opening, closing and moving of Editor windows
 				toolbar: {
 					titlebar: 'editor',
 					buttonType: 'advanced',
@@ -47,7 +47,7 @@ $(function () {
 					]
 				}
 			});
-
+			
 			myEditor.render();
 			editors.push(myEditor);
 		});

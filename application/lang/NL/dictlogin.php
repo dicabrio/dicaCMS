@@ -8,7 +8,9 @@ $lang = array(
 	'button' => 'Login',
 	'password-value-too-short' => 'Je wachtwoord is te kort',
 	'username-value-too-short' => 'Je gebruikersnaam is te kort',
-	'errorusernameorpass' => 'De combinatie gebruikersnaam en wachtwoord is niet correct.'
+	'errorusernameorpass' => 'De combinatie gebruikersnaam en wachtwoord is niet correct.',
+
+	'notabletologin' => 'Op dit moment is het niet mogelijk om in te loggen.'
 
 );
 

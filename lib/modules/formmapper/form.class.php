@@ -160,6 +160,13 @@ class Form {
 
 	}
 
+	public function addListener($buttonIdentifier, FormHandler $handler) {
+
+		$formElement = $this->getFormElement($buttonIdentifier);
+		$this->addSubmitButton($buttonIdentifier, $formElement, $handler);
+
+	}
+
 	/**
 	 * @param string $sButtonIdentifier
 	 * @param FormElement $oElement
