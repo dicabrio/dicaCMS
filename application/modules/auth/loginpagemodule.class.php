@@ -71,6 +71,8 @@ class LoginPageModule implements PageModuleController {
 	 */
 	public function getContents() {
 
+		$session = Session::getInstance();
+
 		if ($this->templateFile === null) {
 			return Lang::get('login.notabletologin');
 		}
@@ -81,6 +83,7 @@ class LoginPageModule implements PageModuleController {
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
+		$view->assign('flash', $session->get('flash'));
 		$view->assign('errors', $this->loginMapper->getMappingErrors());
 
 		$view->assign('formbegin', $this->loginForm->begin());
@@ -88,6 +91,8 @@ class LoginPageModule implements PageModuleController {
 		$view->assign('password', $this->loginForm->getFormElement('password'));
 		$view->assign('button', $this->loginForm->getFormElement('login'));
 		$view->assign('formend', $this->loginForm->end());
+
+		$session->set('flash', null);
 
 		return $view;
 

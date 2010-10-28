@@ -33,17 +33,18 @@ class LoginHandler implements FormHandler {
 		try {
 			$this->mapper->constructModelsFromForm($form);
 
-			$oAuth = Authentication::getInstance(self::C_AUTH_SESSIONNAME);
+			$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
 			if ($oAuth->login($this->mapper->getModel('username'), $this->mapper->getModel('password'))) {
 				$oSession = Session::getInstance();
 				// your are logged in go to next page
-				$sRedirect = $oSession->get('redirect');
+				$redirect = $oSession->get('front-end-redirect');
+				$oSession->set('front-end-redirect', null);
 
-				if (empty($sRedirect)) {
-					$sRedirect = 'dropbox.html';
+				if (empty($redirect)) {
+					$redirect = 'dropbox.html';
 				}
 
-				$this->req->redirect(Conf::get('general.url.www').'/'.$sRedirect);
+				$this->req->redirect(Conf::get('general.url.www').'/'.$redirect);
 			}
 
 			$this->mapper->addMappingError('login', 'errorusernameorpass');

@@ -48,4 +48,34 @@ class UserGroup extends DataRecord {
 		return parent::findAll(__CLASS__, parent::ALL);
 
 	}
+
+	/**
+	 *
+	 * @param User $user
+	 * @return array
+	 */
+	public static function findByUser(User $user) {
+
+		$userGroups = Relation::getOther('user', 'usergroup', $user);
+		$newOrderedGroups = array();
+		foreach ($userGroups as $group) {
+			$newOrderedGroups[$group->getID()] = $group;
+		}
+
+		return $newOrderedGroups;
+
+	}
+
+	public static function findByArea(Area $area) {
+
+		$userGroups = Relation::getOther('area', 'usergroup', $area);
+		$newOrderedGroups = array();
+		foreach ($userGroups as $group) {
+			$newOrderedGroups[$group->getID()] = $group;
+		}
+
+		return $newOrderedGroups;
+
+	}
+
 }
