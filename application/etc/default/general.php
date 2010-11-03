@@ -9,10 +9,10 @@ $config = array(
 	),
 
 	'url' => array(
-		'www' => 'http://'.DOMAIN.'/lckv/www',
-		'images' => 'http://'.DOMAIN.'/lckv/www/images',
-		'css' => 'http://'.DOMAIN.'/lckv/www/css',
-		'js' => 'http://'.DOMAIN.'/lckv/www/js',
+		'www' => 'http://'.DOMAIN.'/lckvsite/www',
+		'images' => 'http://'.DOMAIN.'/lckvsite/www/images',
+		'css' => 'http://'.DOMAIN.'/lckvsite/www/css',
+		'js' => 'http://'.DOMAIN.'/lckvsite/www/js',
 	),
 
 	'default_lang' => 'NL',
