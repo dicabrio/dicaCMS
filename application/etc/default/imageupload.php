@@ -10,8 +10,8 @@ $config = array(
 
 		'allowedsize' => array(
 				'filesize' => (1024 * 50), // size in bytes (1kb = 1024b)
-				'width' => 150,
-				'height' => 150
+				'width' => 185,
+				'height' => 70
 		),
 
 );

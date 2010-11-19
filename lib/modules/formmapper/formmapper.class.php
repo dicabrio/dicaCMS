@@ -105,7 +105,8 @@ class FormMapper {
 		}
 
 		$oReflectionClass = new ReflectionClass($sClass);
-		return $oReflectionClass->newInstanceArgs($aArguments);
+		$domainEntity = $oReflectionClass->newInstanceArgs($aArguments);
+		return $domainEntity;
 	}
 
 	/**

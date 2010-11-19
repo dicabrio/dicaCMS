@@ -52,5 +52,7 @@ $lang = array(
 	),
 
 	'pagenameexample' => '(contact.html zonder .html)',
+	'inhoud_2-file-dimensions-too-big' => 'Het te uploaden bestand is te groot',
+	'inhoud_2-uploaded-file-too-big' => 'Het te uploaden bestand is te groot',
 
 );

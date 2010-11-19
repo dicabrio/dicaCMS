@@ -5,7 +5,7 @@
 	</div>
 	<div class="modulecontent">
 		<?php if ($filename) : ?>
-		<div style="float: left; width: 150px; border: 1px solid #eee; margin: 0 10px 0 0; text-align: center; padding: 5px;">
+		<div style="float: left; border: 1px solid #eee; margin: 0 10px 0 0; text-align: center; padding: 5px;">
 			<img style="border: 1px solid #ccc;" src="<?php echo Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$filename; ?>" alt="<?php echo $alttext; ?>" />
 		</div>
 		<?php else: ?>
@@ -15,6 +15,12 @@
 		</div>
 		<?php endif; ?>
 		<div style="float: left;width: 400px;">
+			<p>
+				Het bestand mag niet groter zijn dan <?php echo Conf::get('imageupload.allowedsize.width'); ?>px breed en <?php echo Conf::get('imageupload.allowedsize.height'); ?>px hoog.
+				<br />
+				<br />
+				<br />
+			</p>
 			<?php echo $form->getFormElement($sIdentifier); ?><br /><br />
 			<label style="width: 100px; float: left;" for="<?php echo $sIdentifier."title"; ?>"><?php echo Lang::get('imageupload.alttext'); ?></label>
 			<?php echo $form->getFormElement($sIdentifier."title")->addAttribute('style', 'width: 230px; margin: 0 0 5px 0;'); ?>
@@ -23,7 +29,6 @@
 			<?php echo $form->getFormElement($sIdentifier."description")->addAttribute('style', 'width: 230px;'); ?>
 			<?php endif; ?>
 		</div>
-
 
 		<div class="clear">&nbsp;</div>
 	</div>

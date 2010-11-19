@@ -35,7 +35,7 @@ class CmsController extends SecureController {
 	public function __construct($sMethod, $sTitle='') {
 		parent::__construct($sMethod);
 
-		$this->oBaseView = new BaseView('baseview.php', $sTitle);
+		$this->oBaseView = new BaseView(Conf::get('general.dir.templates').'/baseview.php', $sTitle);
 
 		$this->oMainMenu = new Menu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now

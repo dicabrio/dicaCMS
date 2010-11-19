@@ -6,13 +6,11 @@ class SpecialpagemenuCmsModule implements CmsModuleController {
 	 * @var PageModule
 	 */
 	private $pageModule;
-
 	/**
 	 *
 	 * @var TextblockCmsModule
 	 */
 	private $cmsModuleTextBlock;
-
 	/**
 	 *
 	 * @var ImageuploadCmsModule
@@ -32,7 +30,6 @@ class SpecialpagemenuCmsModule implements CmsModuleController {
 
 		$this->cmsModuleTextBlock = new TextblockCmsModule(new SpecialPageModule($module, 1), $form);
 		$this->cmsModuleImageUpload = new ImageuploadCmsModule(new SpecialPageModule($module, 2), $form);
-		
 	}
 
 	/**
@@ -43,14 +40,14 @@ class SpecialpagemenuCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-//		$views = array($this->cmsModuleTextBlock->getEditor());
-		$views = array($this->cmsModuleImageUpload->getEditor(), $this->cmsModuleTextBlock->getEditor());
+		$views = array(
+			$this->cmsModuleImageUpload->getEditor(),
+			$this->cmsModuleTextBlock->getEditor());
 
-		$multiView = new View('general/multiview.php');
+		$multiView = new View(Conf::get('general.dir.templates').'/general/multiview.php');
 		$multiView->assign('multiviews', $views);
 
 		return $multiView;
-
 	}
 
 	/**
@@ -63,7 +60,6 @@ class SpecialpagemenuCmsModule implements CmsModuleController {
 
 		$this->cmsModuleTextBlock->handleData();
 		$this->cmsModuleImageUpload->handleData();
-
 	}
 
 	/**
@@ -82,7 +78,6 @@ class SpecialpagemenuCmsModule implements CmsModuleController {
 
 		$this->cmsModuleTextBlock->addFormMapping($mapper);
 		$this->cmsModuleImageUpload->addFormMapping($mapper);
-		
 	}
 
 }

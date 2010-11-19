@@ -14,7 +14,7 @@ function __exceptionHandler(Exception $oException) {
 		test($oException->getTraceAsString());
 		exit;
 	} else {
-		$oView = new View('error.php');
+		$oView = new View(Conf::get('general.dir.templates').'/error.php');
 		echo $oView->getContents();
 		exit;
 	}

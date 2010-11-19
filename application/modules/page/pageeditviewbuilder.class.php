@@ -55,7 +55,7 @@ class PageEditViewBuilder {
 		$this->page = $page;
 		$this->folder = $page->getParent();
 
-		$this->view = new View('page/editpage.php');
+		$this->view = new View(Conf::get('general.dir.templates').'/page/editpage.php');
 
 		$this->view->assign('folderid', $this->folder->getID());
 		$this->view->assign('pageid', $this->page->getID());

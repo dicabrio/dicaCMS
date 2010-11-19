@@ -67,7 +67,7 @@ class TextblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View('text/textblock.php');
+		$oView = new View(Conf::get('general.dir.templates').'/text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;
 		return $oView;

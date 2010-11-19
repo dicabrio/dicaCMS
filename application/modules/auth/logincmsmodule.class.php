@@ -92,7 +92,7 @@ class LoginCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$view = new View('login/logincmsmodule.php');
+		$view = new View(Conf::get('general.dir.templates').'/login/logincmsmodule.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
 		

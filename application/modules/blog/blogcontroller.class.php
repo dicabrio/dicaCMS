@@ -29,7 +29,7 @@ class BlogController extends CmsController {
 
 		$oTable = new Table($oPageDataSet);
 
-		$blogOverview = new View('page/pageoverview.php');
+		$blogOverview = new View(Conf::get('general.dir.templates').'/page/pageoverview.php');
 		$blogOverview->assign('aErrors', array());
 		$blogOverview->assign('sSucces', false);
 		$blogOverview->assign('actions', $actions);

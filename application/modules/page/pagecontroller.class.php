@@ -43,14 +43,14 @@ class PageController extends CmsController {
 
 		$actions = new Menu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', Lang::get('page.button.newpage')));
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
+//		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($stuff);
 
 		$oTable = new Table($oPageDataSet);
 
-		$oPageOverview = new View('page/pageoverview.php');
+		$oPageOverview = new View(Conf::get('general.dir.templates').'/page/pageoverview.php');
 		$oPageOverview->assign('aErrors', $aErrors);
 		$oPageOverview->assign('actions', $actions);
 		$oPageOverview->assign('oOverview', $oTable);
@@ -244,7 +244,7 @@ class PageController extends CmsController {
 
 		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
 
-		$oModuleView = new View('page/editpagefolder.php');
+		$oModuleView = new View(Conf::get('general.dir.templates').'/page/editpagefolder.php');
 		$oModuleView->assign('form', $form);
 		$oModuleView->assign('folderid', $parentPageFolder->getID());
 		$oModuleView->assign('pageid', $currentPageFolder->getID());
