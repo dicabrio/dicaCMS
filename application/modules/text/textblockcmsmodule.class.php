@@ -67,29 +67,11 @@ class TextblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-//		if ($this->oCmsController !== null) {
-//
-//			$this->oCmsController->getBaseView()->addStyle(Conf::get('general.url.js').'/yui/assets/skins/sam/skin.css');
-//			$this->oCmsController->getBaseView()->addScript('yui/yahoo-dom-event/yahoo-dom-event.js');
-//			$this->oCmsController->getBaseView()->addScript('yui/element/element-min.js');
-//			$this->oCmsController->getBaseView()->addScript('yui/container/container_core-min.js');
-//			$this->oCmsController->getBaseView()->addScript('yui/editor/simpleeditor-min.js');
-//			$this->oCmsController->getBaseView()->addScript('wysiwyg-startup.js');
-//		}
-
-
 		$oView = new View('text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;
 		return $oView;
 
-	}
-
-	/* (non-PHPdoc)
-	 * @see modules/Module#validate()
-	*/
-	public function validate($mData) {
-		return true;
 	}
 
 	/**

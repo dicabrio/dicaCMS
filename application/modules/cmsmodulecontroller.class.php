@@ -7,8 +7,6 @@ interface CmsModuleController {
 	 * 
 	 * @param Page $oPage
 	 * @param Form $form
-	 * @param FormMapper $mapper
-	 * @param CmsController $controller
 	 * 
 	 * @return void
 	 */
