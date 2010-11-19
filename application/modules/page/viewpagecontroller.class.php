@@ -116,7 +116,6 @@ class ViewPageController {
 			if ($oModule instanceof PageModule) {
 
 				$sModuleClass = $oModule->getType().'PageModule';
-
 				$oReflection = new ReflectionClass($sModuleClass);
 				$oModuleController = new $sModuleClass($oModule, $oPage, $this->request);
 

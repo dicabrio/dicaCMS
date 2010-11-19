@@ -61,7 +61,7 @@ class TwitterPageModule implements PageModuleController {
 		}
 		$tweet = current(Tweet::getLast(1));
 
-		$view = new View($this->templateFile->getFilename());
+		$view = new View(Conf::get('upload.dir.templates').'/'.$this->templateFile->getFilename());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));

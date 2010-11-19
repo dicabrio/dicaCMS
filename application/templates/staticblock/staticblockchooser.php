@@ -1,4 +1,4 @@
-<div class="pagemodule <?php echo $sIdentifier; ?>">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
 		<h2><?php echo ucfirst($identifier); ?></h2>
 		<p>Type: <?php echo Lang::get('staticblock.title'); ?><p>

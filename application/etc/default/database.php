@@ -4,7 +4,7 @@ $config = array(
 
 	'dbtype' => 'mysql',
 	'dbhost' => '127.0.0.1',
-	'dbname' => 'szwspecial',
-	'dbuser' => 'szwspecial',
-	'dbpass' => 'USd62Tyz',
+	'dbname' => 'dicabrio_com',
+	'dbuser' => 'root',
+	'dbpass' => 'DCrob1981',
 );
