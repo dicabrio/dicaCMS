@@ -205,9 +205,11 @@ class PageController extends CmsController {
 				$this->_redirect($redirect);
 			}
 
-			if (!$keepediting) {
-				$this->_redirect('page/folder/'.$folder->getID());
+			if ($keepediting) {
+				$this->_redirect('page/editpage/'.$page->getID());
 			}
+			
+			$this->_redirect('page/folder/'.$folder->getID());
 
 		} catch (PageRecordException $e) {
 
