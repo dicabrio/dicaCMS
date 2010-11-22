@@ -147,7 +147,16 @@ class PageController extends CmsController {
 		return $oBaseView->getContents();
 	}
 
-	public function savepage() {
+	public function saveeditpage() {
+		return $this->savepage(true);
+	}
+
+	/**
+	 *
+	 * @param bool $keepediting
+	 * @return string
+	 */
+	public function savepage($keepediting = false) {
 
 		// page inladen
 		$userGroups = UserGroup::findAll();
@@ -170,9 +179,9 @@ class PageController extends CmsController {
 
 		try {
 
-			$this->formMapper->constructModelsFromForm($this->form);
-
 			$data->beginTransaction();
+
+			$this->formMapper->constructModelsFromForm($this->form);
 			$page->update($this->formMapper->getModel('pagename'),
 					$this->formMapper->getModel('template_id'),
 					$this->formMapper->getModel('publishtime'),
@@ -196,7 +205,9 @@ class PageController extends CmsController {
 				$this->_redirect($redirect);
 			}
 
-			$this->_redirect('page/folder/'.$folder->getID());
+			if (!$keepediting) {
+				$this->_redirect('page/folder/'.$folder->getID());
+			}
 
 		} catch (PageRecordException $e) {
 
