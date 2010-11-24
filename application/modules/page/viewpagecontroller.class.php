@@ -21,7 +21,6 @@ class ViewPageController {
 		// we should check for permissions
 		// change the template directory. This differs from the standard
 
-		View::setTemplateDirectory(Conf::get('upload.dir.templates'));
 		$this->request = Request::getInstance();
 		$this->session = Session::getInstance();
 
@@ -100,7 +99,7 @@ class ViewPageController {
 	private function getView(Page $oPage) {
 
 		$oTemplateFile = $oPage->getTemplate();
-		return new View($oTemplateFile->getFilename());
+		return new View(Conf::get('upload.dir.templates').'/'.$oTemplateFile->getFilename());
 		
 	}
 
@@ -117,7 +116,6 @@ class ViewPageController {
 			if ($oModule instanceof PageModule) {
 
 				$sModuleClass = $oModule->getType().'PageModule';
-
 				$oReflection = new ReflectionClass($sModuleClass);
 				$oModuleController = new $sModuleClass($oModule, $oPage, $this->request);
 

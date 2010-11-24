@@ -71,7 +71,7 @@ class PricelistCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View('pricelist/pricelistfeed.php');
+		$oView = new View(Conf::get('general.dir.templates').'/pricelist/pricelistfeed.php');
 		$oView->sMaxLength = self::MAX_LENGTH;
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;

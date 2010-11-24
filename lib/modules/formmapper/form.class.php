@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Form
  *
@@ -10,37 +11,30 @@ class Form {
 	 * @var Request
 	 */
 	private $request;
-
 	/**
 	 * @var string
 	 */
 	private $sFormMethod;
-
 	/**
 	 * @var string
 	 */
 	private $sFormAction;
-
 	/**
 	 * @var string
 	 */
 	private $sFormIdentifier;
-
 	/**
 	 * @var string
 	 */
 	private $sFormEnctype;
-
 	/**
 	 * @var array
 	 */
 	private $aFormElementsByIdentifier = array();
-
 	/**
 	 * @var array
 	 */
 	private $aSubmitButtonsAndHandlers = array();
-
 	/**
 	 * @var array
 	 */
@@ -80,7 +74,6 @@ class Form {
 		} else {
 			return $this->request->request($formElementName);
 		}
-
 	}
 
 	/**
@@ -99,7 +92,6 @@ class Form {
 
 		$this->aFormElementsByIdentifier[$sIdentifier] = $oFormElement;
 		$this->aFormElementsByName[$sFormElementName][] = $oFormElement;
-
 	}
 
 	/**
@@ -109,7 +101,7 @@ class Form {
 	public function getFormElement($sFormElementIdentifier) {
 
 		if (!isset($this->aFormElementsByIdentifier[$sFormElementIdentifier])) {
-			throw new FormException('requested form element is not defined in this form: '.$sFormElementIdentifier);
+			throw new FormException('requested form element is not defined in this form: ' . $sFormElementIdentifier);
 		}
 
 		return $this->aFormElementsByIdentifier[$sFormElementIdentifier];
@@ -121,7 +113,6 @@ class Form {
 	public function getFormElements() {
 
 		return $this->aFormElementsByIdentifier;
-
 	}
 
 	/**
@@ -132,12 +123,12 @@ class Form {
 	public function getFormElementByName($sFormElementName) {
 
 		if (!isset($this->aFormElementsByName[$sFormElementName])) {
-			throw new FormException('No such elementname defined: '.$sFormElementName);
+			throw new FormException('No such elementname defined: ' . $sFormElementName);
 		}
 
 		$aElements = $this->aFormElementsByName[$sFormElementName];
 		if (!is_array($aElements) || count($aElements) == 0) {
-			throw new FormException('No such elements for this elementname defined: '.$sFormElementName);
+			throw new FormException('No such elements for this elementname defined: ' . $sFormElementName);
 		}
 
 		if (count($aElements) == 1) {
@@ -157,14 +148,12 @@ class Form {
 	public function getFormAction() {
 
 		return $this->sFormAction;
-
 	}
 
 	public function addListener($buttonIdentifier, FormHandler $handler) {
 
 		$formElement = $this->getFormElement($buttonIdentifier);
 		$this->addSubmitButton($buttonIdentifier, $formElement, $handler);
-
 	}
 
 	/**
@@ -175,7 +164,6 @@ class Form {
 	public function addSubmitButton($sButtonIdentifier, FormElement $oElement, FormHandler $oHandler) {
 
 		$this->aSubmitButtonsAndHandlers[$sButtonIdentifier] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
-
 	}
 
 	/**
@@ -200,8 +188,8 @@ class Form {
 		if ($request->method() == Request::POST) {
 			$this->populateFormElementsWithRequestData();
 		}
-		
-		
+
+
 		foreach ($this->aSubmitButtonsAndHandlers as $aSingleSubmitButtonAndHandler) {
 			$oButton = $aSingleSubmitButtonAndHandler['FormElement'];
 			$oHandler = $aSingleSubmitButtonAndHandler['FormHandler'];
@@ -220,9 +208,7 @@ class Form {
 
 		foreach ($this->aFormElementsByIdentifier as $oFormElement) {
 			if ($oFormElement->getType() !== 'submit') {
-				if ($this->getValueFromRequest($oFormElement)) {
-					$oFormElement->setValue($this->getValueFromRequest($oFormElement));
-				}
+				$oFormElement->setValue($this->getValueFromRequest($oFormElement));
 			}
 		}
 	}
@@ -232,7 +218,7 @@ class Form {
 	 */
 	public function begin() {
 
-		return '<form id="'.$this->sFormIdentifier.'" method="'.$this->sFormMethod.'" action="'.$this->sFormAction.'"'.$this->sFormEnctype.'>';
+		return '<form id="' . $this->sFormIdentifier . '" method="' . $this->sFormMethod . '" action="' . $this->sFormAction . '"' . $this->sFormEnctype . '>';
 	}
 
 	/**
@@ -250,8 +236,8 @@ class Form {
 
 		return $this->sFormIdentifier;
 	}
-}
 
+}
 
 class FormException extends Exception {
 

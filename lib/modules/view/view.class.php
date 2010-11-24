@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File template.class.php
  *
@@ -20,42 +21,35 @@ class View {
 	 * @var string
 	 */
 	private static $m_sTemplateDirectory = false;
-
 	/**
 	 *
 	 * @var string
 	 */
 	private $m_sTemplateFile = false;
-
 	/**
 	 *
 	 * @var array
 	 */
 	private $m_aTemplateData = array();
-
 	/**
 	 *
 	 * @var string
 	 */
 	private $source = "";
-
 	/**
 	 *
 	 * @var array
 	 */
 	private $m_aGlobalData = array();
-
 	/**
 	 * @var View
 	 */
 	private $m_oParentView = null;
-
 	/**
 	 *
 	 * @var array
 	 */
 	private $scripts = array();
-
 	/**
 	 *
 	 * @var array
@@ -71,21 +65,6 @@ class View {
 		if ($psFileName !== null) {
 			$this->setTemplateFile($psFileName);
 		}
-		
-		$this->assign('sTemplateDir', self::$m_sTemplateDirectory);
-	}
-
-	/**
-	 * This sets the template directory for every view file. It checks if the dir exists. Should be called only once
-	 *
-	 * @param string $psTemplateDirectory
-	 */
-	public static function setTemplateDirectory($psTemplateDirectory) {
-		if (is_string($psTemplateDirectory) && is_dir($psTemplateDirectory)) {
-			self::$m_sTemplateDirectory = $psTemplateDirectory;
-		} else {
-			throw new Exception('Template directory:'.$psTemplateDirectory.' does not exist', 0);
-		}
 	}
 
 	/**
@@ -94,11 +73,9 @@ class View {
 	 * @throws FileNotFoundException if the file is not available
 	 */
 	public function setTemplateFile($psTemplateFilename) {
-		
-		$this->m_sTemplateFile = $psTemplateFilename;
-		$sTemplateFilename = self::$m_sTemplateDirectory.'/'.$this->m_sTemplateFile;
 
-		$oFile = new FileManager($sTemplateFilename);
+		$this->m_sTemplateFile = $psTemplateFilename;
+		$oFile = new FileManager($this->m_sTemplateFile);
 	}
 
 	public function defineSource($source) {
@@ -127,16 +104,16 @@ class View {
 	 * @param string $psVal The content the pattern should replaced with
 	 */
 	public function assign($psVariable, $pmValue) {
-		
+
 		if ($pmValue instanceof View) {
 			$pmValue->setParent($this);
-			$pmValue = "".$pmValue;
+			$pmValue = "" . $pmValue;
 		}
 		$this->m_aTemplateData[$psVariable] = $pmValue;
 	}
 
 	public function assignGlobal($psVariable, $psValue) {
-		
+
 		$this->m_aGlobalData[$psVariable] = $psValue;
 	}
 
@@ -176,7 +153,7 @@ class View {
 		extract($this->m_aGlobalData, EXTR_SKIP);
 		extract($this->m_aTemplateData, EXTR_SKIP);
 
-		$sTemplateFilename = self::$m_sTemplateDirectory.'/'.$this->m_sTemplateFile;
+		$sTemplateFilename = self::$m_sTemplateDirectory . '/' . $this->m_sTemplateFile;
 		include $sTemplateFilename;
 
 		return ob_get_clean();
@@ -185,7 +162,7 @@ class View {
 	public function __set($sVarname, $sValue) {
 		$this->assign($sVarname, $sValue);
 	}
-	
+
 	public function __get($psVariable) {
 		if (isset($this->m_aTemplateData[$psVariable])) {
 			return $this->m_aTemplateData[$psVariable];
@@ -194,6 +171,13 @@ class View {
 	}
 
 	public function __toString() {
-		return $this->getContents();
+		try {
+			return $this->getContents();
+		} catch (Exception $e) {
+			if (DEBUG == true) {
+				return $e->getTraceAsString();
+			}
+		}
 	}
+
 }

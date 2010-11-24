@@ -25,7 +25,7 @@ class Table {
 
 	public function __construct(ITableDataSet $oData=null) {
 
-		$this->oView = new View('table.php');
+		$this->oView = new View(Conf::get('general.dir.templates').'/table.php');
 
 		if ($oData !== null) {
 			$this->setTableData($oData);

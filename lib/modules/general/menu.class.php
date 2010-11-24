@@ -18,7 +18,7 @@ class Menu {
 	 * @param string $sTemplateFilename
 	 */
 	public function __construct($sIdentifier, $sTemplateFilename='') {
-		$this->oView = new View('menu/menu.php');
+		$this->oView = new View(Conf::get('general.dir.templates').'/menu/menu.php');
 		$this->oView->assign('sIdentifier', $sIdentifier);
 	}
 

@@ -46,7 +46,7 @@ class TemplateController extends CmsController {
 
 		$oTable = new Table($oTemplateDataSet);
 
-		$oTemplateOverview = new View('template/templateoverview.php');
+		$oTemplateOverview = new View(Conf::get('general.dir.templates').'/template/templateoverview.php');
 		$oTemplateOverview->assign('sSearchFormAction', Conf::get('general.url.www').Conf::get('template.url.searchtemplate'));
 		$oTemplateOverview->assign('sShowFormAction', Conf::get('general.url.www').Conf::get('template.url.showtemplate'));
 		$oTemplateOverview->assign('aErrors', $aErrors);
@@ -83,7 +83,7 @@ class TemplateController extends CmsController {
 		$form->addSubmitButton('save', $button, new TemplateFileSaveHandler($formmapper, $template, $folder));
 		$form->listen($req);
 
-		$oModuleView = new View('template/uploadtemplate.php');
+		$oModuleView = new View(Conf::get('general.dir.templates').'/template/uploadtemplate.php');
 		$oModuleView->assign('form', $form);
 		$oModuleView->assign('folder_id', $folder->getID());
 		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
@@ -110,7 +110,7 @@ class TemplateController extends CmsController {
 		$form->addSubmitButton('save', $button, new TemplateFileSaveHandler($formmapper, $template, $folder));
 		$form->listen($req);
 
-		$oModuleView = new View('template/uploadtemplate.php');
+		$oModuleView = new View(Conf::get('general.dir.templates').'/template/uploadtemplate.php');
 		$oModuleView->assign('form', $form);
 		$oModuleView->assign('folder_id', $folder->getID());
 		$oModuleView->assign('aErrors', $formmapper->getMappingErrors());
@@ -131,12 +131,12 @@ class TemplateController extends CmsController {
 
 		$button = new ActionButton('Save');
 
-		$form = new TemplateFileFolderEditForm($req, $currentFolder);
+		$form = new TemplateFileFolderEditForm($currentFolder);
 		$formmapper = new TemplateFolderMapper($form);
 		$form->addSubmitButton('save', $button, new TemplateFolderSaveHandler($formmapper, $currentFolder, $parentFolder));
-		$form->listen();
+		$form->listen($req);
 
-		$oModule = new View('template/edittemplatefilefolder.php');
+		$oModule = new View(Conf::get('general.dir.templates').'/template/edittemplatefilefolder.php');
 		$oModule->assign('form', $form);
 
 		$oModule->assign('folderid', $req->post('folderid', $parentFolder->getID()));

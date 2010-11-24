@@ -13,10 +13,10 @@ class MediaForm extends Form {
 	 * @param Request $req
 	 * @param TemplateFile $mediaItem
 	 */
-	public function __construct(Request $req, Media $mediaItem) {
+	public function __construct(Media $mediaItem) {
 
 		$this->mediaItem = $mediaItem;
-		parent::__construct($req, Conf::get('general.url.www').'/media/editmedia/'.$mediaItem->getID(), Request::POST, 'mediaform');
+		parent::__construct(Conf::get('general.url.www').'/media/editmedia/'.$mediaItem->getID(), Request::POST, 'mediaform');
 
 	}
 

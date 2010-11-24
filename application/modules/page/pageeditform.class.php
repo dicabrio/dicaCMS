@@ -14,7 +14,11 @@ class PageEditForm extends Form {
 	public function __construct(Page $page) {
 		$this->page = $page;
 
-		parent::__construct(Conf::get('general.url.www').'/page/savepage/'.$page->getID(), Request::POST, 'pageform');
+		$redirect = 'savepage';
+		if ($page->getID() == 0) {
+			$redirect = 'saveeditpage';
+		}
+		parent::__construct(Conf::get('general.url.www').'/page/'.$redirect.'/'.$page->getID(), Request::POST, 'pageform');
 	}
 
 	/**

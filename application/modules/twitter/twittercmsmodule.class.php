@@ -92,7 +92,7 @@ class TwitterCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$view = new View('twitter/twitterchooser.php');
+		$view = new View(Conf::get('general.dir.templates').'/twitter/twitterchooser.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
 		return $view;
