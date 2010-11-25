@@ -9,6 +9,11 @@ class Media extends DataRecord implements DomainEntity {
 	private $file;
 
 	/**
+	 * @var User
+	 */
+	private $owner;
+
+	/**
 	 * @param int $id
 	 * @return void
 	 */
@@ -36,6 +41,7 @@ class Media extends DataRecord implements DomainEntity {
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
 		parent::addColumn('created', DataTypes::DATETIME, false, true);
 		parent::addColumn('location', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('user_id', DataTypes::INT, false, true);
 
 	}
 
@@ -57,6 +63,28 @@ class Media extends DataRecord implements DomainEntity {
 	public function getDescription() {
 
 		return $this->getAttr('description');
+
+	}
+
+	/**
+	 *
+	 */
+	public function getOwner() {
+
+		if ($this->owner === null) {
+			$this->owner = new User($this->getAttr('user_id'));
+		}
+
+		return $this->owner;
+
+	}
+
+	public function setOwner(User $owner) {
+
+		if ($this->getID() == 0) {
+			$this->owner = $owner;
+			$this->setAttr('user_id', $owner->getID());
+		}
 
 	}
 
