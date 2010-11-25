@@ -205,15 +205,17 @@ class PageController extends CmsController {
 				$this->_redirect($redirect);
 			}
 
-			if (!$keepediting) {
-				$this->_redirect('page/folder/'.$folder->getID());
+			if ($keepediting) {
+				$this->_redirect('page/editpage/'.$page->getID());
 			}
+
+			$this->_redirect('page/folder/'.$folder->getID());
 
 		} catch (PageRecordException $e) {
 
 			$data->rollBack();
 			$this->form->getFormElement('template_id')->notMapped();
-			$this->formmapper->addMappingError('page', $e->getMessage());
+			$this->formMapper->addMappingError('page', $e->getMessage());
 
 		} catch (FormMapperException $e) {
 
