@@ -75,9 +75,9 @@ class LoginPageModule implements PageModuleController {
 
 		if ($this->templateFile === null) {
 			return Lang::get('login.notabletologin');
-		}
+		} 
 		
-		$view = new View($this->templateFile->getFilename());
+		$view = new View(Conf::get('upload.dir.templates').'/'.$this->templateFile->getFilename());
 		$view->assign('pagename', $this->page->getName());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));

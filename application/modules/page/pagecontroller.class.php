@@ -218,9 +218,7 @@ class PageController extends CmsController {
 			$this->formMapper->addMappingError('page', $e->getMessage());
 
 		} catch (FormMapperException $e) {
-
-//			$this->getSession()->set('error', $this->formmapper->getMappingErrors());
-
+			// left blank
 		}
 
 		return $this->editpage();
