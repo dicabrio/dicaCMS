@@ -11,10 +11,10 @@ class TemplateFileFolderEditForm extends Form {
 	 * @param Request $oReq
 	 * @param array $aElements
 	 */
-	public function __construct(Request $oReq, TemplateFileFolder $pagefolder) {
+	public function __construct(TemplateFileFolder $pagefolder) {
 
 		$this->templatefolder = $pagefolder;
-		parent::__construct($oReq, Conf::get('general.url.www').'/template/editfolder/'.$pagefolder->getID(), Request::POST, 'templatefolderform');
+		parent::__construct(Conf::get('general.url.www').'/template/editfolder/'.$pagefolder->getID(), Request::POST, 'templatefolderform');
 		
 	}
 

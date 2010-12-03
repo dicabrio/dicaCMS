@@ -43,14 +43,14 @@ class PageController extends CmsController {
 
 		$actions = new Menu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', Lang::get('page.button.newpage')));
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
+//		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($stuff);
 
 		$oTable = new Table($oPageDataSet);
 
-		$oPageOverview = new View('page/pageoverview.php');
+		$oPageOverview = new View(Conf::get('general.dir.templates').'/page/pageoverview.php');
 		$oPageOverview->assign('aErrors', $aErrors);
 		$oPageOverview->assign('actions', $actions);
 		$oPageOverview->assign('oOverview', $oTable);
@@ -147,7 +147,16 @@ class PageController extends CmsController {
 		return $oBaseView->getContents();
 	}
 
-	public function savepage() {
+	public function saveeditpage() {
+		return $this->savepage(true);
+	}
+
+	/**
+	 *
+	 * @param bool $keepediting
+	 * @return string
+	 */
+	public function savepage($keepediting = false) {
 
 		// page inladen
 		$userGroups = UserGroup::findAll();
@@ -170,9 +179,9 @@ class PageController extends CmsController {
 
 		try {
 
-			$this->formMapper->constructModelsFromForm($this->form);
-
 			$data->beginTransaction();
+
+			$this->formMapper->constructModelsFromForm($this->form);
 			$page->update($this->formMapper->getModel('pagename'),
 					$this->formMapper->getModel('template_id'),
 					$this->formMapper->getModel('publishtime'),
@@ -196,13 +205,17 @@ class PageController extends CmsController {
 				$this->_redirect($redirect);
 			}
 
+			if ($keepediting) {
+				$this->_redirect('page/editpage/'.$page->getID());
+			}
+
 			$this->_redirect('page/folder/'.$folder->getID());
 
 		} catch (PageRecordException $e) {
 
 			$data->rollBack();
 			$this->form->getFormElement('template_id')->notMapped();
-			$this->formmapper->addMappingError('page', $e->getMessage());
+			$this->formMapper->addMappingError('page', $e->getMessage());
 
 		} catch (FormMapperException $e) {
 
@@ -244,7 +257,7 @@ class PageController extends CmsController {
 
 		$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
 
-		$oModuleView = new View('page/editpagefolder.php');
+		$oModuleView = new View(Conf::get('general.dir.templates').'/page/editpagefolder.php');
 		$oModuleView->assign('form', $form);
 		$oModuleView->assign('folderid', $parentPageFolder->getID());
 		$oModuleView->assign('pageid', $currentPageFolder->getID());

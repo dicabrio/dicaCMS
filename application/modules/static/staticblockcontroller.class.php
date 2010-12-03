@@ -24,7 +24,7 @@ class StaticblockController extends CmsController {
 
 		$table = new Table($dataset);
 
-		$overview = new View('staticblock/blockoverview.php');
+		$overview = new View(Conf::get('general.dir.templates').'/staticblock/blockoverview.php');
 		$overview->assign('actions', $actions);
 		$overview->assign('oOverview', $table);
 
@@ -51,7 +51,7 @@ class StaticblockController extends CmsController {
 		$form->addSubmitButton('save', $button, new StaticBlockHandler($block, $formmapper));
 		$form->listen($req);
 
-		$editview = new View('staticblock/editblock.php');
+		$editview = new View(Conf::get('general.dir.templates').'/staticblock/editblock.php');
 		$editview->assign('form', $form);
 		$editview->assign('aErrors', $formmapper->getMappingErrors());
 

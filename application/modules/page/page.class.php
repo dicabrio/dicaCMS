@@ -180,18 +180,25 @@ class Page extends DataRecord implements DomainEntity {
 
 
 	/**
-	 * @return string
+	 * @return Date
 	 */
 	public function getPublishTime() {
+
+		$time = $this->getAttr('publishtime');
+		if ('0000-00-00 00:00:00' === $this->getAttr('publishtime') || empty($time)) {
+			return new Date('now');
+		}
+
 		return new Date($this->getAttr('publishtime'));
 	}
 
 	/**
-	 * @return string
+	 * @return Date
 	 */
 	public function getExpireTime() {
 
-		if ('0000-00-00 00:00:00' === $this->getAttr('expiretime')) {
+		$time = $this->getAttr('expiretime');
+		if ('0000-00-00 00:00:00' === $this->getAttr('expiretime') || empty($time)) {
 			return '';
 		}
 

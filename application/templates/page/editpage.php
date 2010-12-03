@@ -23,7 +23,7 @@
 	<li class="active"><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
 	<li><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
 	<?php endif; ?>
-	<li><a href="#access" class="access"><?php echo Lang::get('page.tab.access'); ?></a></li>
+	<!--<li><a href="#access" class="access"><?php echo Lang::get('page.tab.access'); ?></a></li>-->
 </ul>
 <?php echo $form->begin(); ?>
 
@@ -109,13 +109,10 @@
 		<div class="modulelabel">&nbsp;</div>
 		<div class="modulecontent"><?php echo Lang::get('page.label.nomodules'); ?></div>
 	</div>
-		<?php else: ?>
-			<?php foreach ($aModules as $oModule) :?>
-	<div class="pagemodule <?php echo $oModule->sIdentifier; ?>">
-					<?php echo $oModule->getContents(); ?>
-		<div class="clear">&nbsp;</div>
-	</div>
-			<?php endforeach; ?>
+	<?php else: ?>
+		<?php foreach ($aModules as $oModule) :?>
+			<?php echo $oModule->getContents(); ?>
+		<?php endforeach; ?>
 	<?php endif;?>
 </fieldset>
 

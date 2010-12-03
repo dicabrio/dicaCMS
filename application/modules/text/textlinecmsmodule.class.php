@@ -69,7 +69,7 @@ class TextlineCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View('text/textline.php');
+		$oView = new View(Conf::get('general.dir.templates').'/text/textline.php');
 		$oView->sMaxLength = self::MAX_LENGTH;
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;

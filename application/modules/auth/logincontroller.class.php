@@ -35,7 +35,7 @@ class LoginController extends CmsController {
 	 */
 	public function _index() {
 
-		$oView = new View('login/login.php');
+		$oView = new View(Conf::get('general.dir.templates').'/login/login.php');
 		$oView->assign('form', $this->form);
 		$oView->assign('errors', $this->formMapper->getMappingErrors());
 

@@ -112,7 +112,7 @@ class ContactformCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View('contact/contactconfig.php');
+		$oView = new View(Conf::get('general.dir.templates').'/contact/contactconfig.php');
 		$oView->form = $this->form;
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		return $oView;

@@ -107,7 +107,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 		
-		$oView = new View('imageupload/imageuploadform.php');
+		$oView = new View(Conf::get('general.dir.templates').'/imageupload/imageuploadform.php');
 		$oView->form = $this->form;
 
 		$filename = false;

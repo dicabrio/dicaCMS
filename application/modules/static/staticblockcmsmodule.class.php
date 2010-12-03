@@ -86,7 +86,7 @@ class StaticblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$view = new View('staticblock/staticblockchooser.php');
+		$view = new View(Conf::get('general.dir.templates').'/staticblock/staticblockchooser.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
 

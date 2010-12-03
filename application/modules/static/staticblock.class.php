@@ -80,8 +80,7 @@ class StaticBlock extends DataRecord implements DomainEntity {
 	public function getView() {
 
 		$staticblockFile = sprintf(self::C_FORMAT_PATH, '', $this->getAttr('identifier'), $this->getAttr('id'));
-		$view = new View($staticblockFile);
-		return $view;
+		return new View(Conf::get('upload.dir.templates').$staticblockFile);
 
 	}
 

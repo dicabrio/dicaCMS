@@ -107,8 +107,7 @@ class Request
 			return $overwrite;
 		}
 
-		if( isset( $pool[$param] ) )
-		{
+		if(isset($pool[$param])) {
 			return $pool[$param];
 		}
 
