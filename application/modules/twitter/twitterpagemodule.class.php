@@ -60,12 +60,19 @@ class TwitterPageModule implements PageModuleController {
 			return '';
 		}
 		$tweet = current(Tweet::getLast(1));
+		$tweets = Tweet::getLast(3);
+
+		$tweetMessages = array();
+		foreach ($tweets as $tweety) {
+			$tweetMessages[] = array('message' => $tweety->getMessage(), 'date' => $tweety->getDate());
+		}
 
 		$view = new View(Conf::get('upload.dir.templates').'/'.$this->templateFile->getFilename());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 		$view->assign('twittermessage', $tweet->getMessage());
+		$view->assign('twittermessages', $tweetMessages);
 		$view->assign('twitteraccount', $this->twitterAccount);
 		$view->assign('pagename', $this->page->getName());
 

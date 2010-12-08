@@ -47,6 +47,12 @@ class Tweet extends DataRecord {
 		
 	}
 
+	public function getDate() {
+
+		return $this->getAttr('datum');
+		
+	}
+
 	private function parseTweet($tweet) {
 
 		$patterns = array(
