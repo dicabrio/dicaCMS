@@ -23,6 +23,12 @@ class TwitterPageModule implements PageModuleController {
 	private $twitterAccount;
 
 	/**
+	 *
+	 * @var string
+	 */
+	private $twitterAmount;
+	
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
@@ -44,8 +50,10 @@ class TwitterPageModule implements PageModuleController {
 
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
 
-		$settingValue = Setting::getByName('twitteraccount');
-		$this->twitterAccount = $settingValue->getValue();
+		$accountSetting = Setting::getByName('twitteraccount');
+		$amountSetting = Setting::getByName('twitteramount');
+		$this->twitterAccount = $accountSetting->getValue();
+		$this->twitterAmount = $amountSetting->getValue();
 
 		$this->getTweets();
 
@@ -60,7 +68,7 @@ class TwitterPageModule implements PageModuleController {
 			return '';
 		}
 		$tweet = current(Tweet::getLast(1));
-		$tweets = Tweet::getLast(3);
+		$tweets = Tweet::getLast((int)$this->twitterAmount);
 
 		$tweetMessages = array();
 		foreach ($tweets as $tweety) {

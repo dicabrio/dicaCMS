@@ -93,7 +93,7 @@ class Tweet extends DataRecord {
 	
 	public static function getLast($limit = 1) {
 		
-		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, null, 'tweet_id DESC', $limit);
+		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, null, 'id DESC', $limit);
 		
 		if (count($aReturnVals) > 0) {
 			return $aReturnVals;
@@ -104,7 +104,7 @@ class Tweet extends DataRecord {
 
 	public static function getContributors($limit = 15) {
 
-		$sql = "SELECT * FROM ".__CLASS__." GROUP BY user_id ORDER BY tweet_id DESC LIMIT ".$limit;
+		$sql = "SELECT * FROM ".__CLASS__." GROUP BY user_id ORDER BY id DESC LIMIT ".$limit;
 		$aReturnVals = parent::findBySql(__CLASS__, $sql);
 
 		if (count($aReturnVals) > 0) {
@@ -116,7 +116,7 @@ class Tweet extends DataRecord {
 
 	public static function getAll() {
 
-		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, null, 'tweet_id ASC');
+		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, null, 'id ASC');
 
 		if (count($aReturnVals) > 0) {
 			return $aReturnVals;

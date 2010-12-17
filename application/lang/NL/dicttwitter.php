@@ -3,8 +3,8 @@
 
 $lang = array(
 	'label' => array(
-		'account' => 'Pagina\'s',
+		'account' => 'Twitteraccount (zonder @)',
 		'template' => 'Template',
-		'amount' => 'Bestanden',
+		'amount' => 'Aantal tweets',
 	)
 );

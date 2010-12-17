@@ -32,7 +32,9 @@ class Setting extends DataRecord {
 			return current($result);
 		}
 
-		return new Setting();
+		$setting = new Setting();
+		$setting->setAttr('name', $name);
+		return $setting;
 	}
 
 	/**
