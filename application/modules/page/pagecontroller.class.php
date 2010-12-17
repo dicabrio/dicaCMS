@@ -126,9 +126,6 @@ class PageController extends CmsController {
 		$session->set('page', null);
 		$session->set(self::C_CURRENT_FOLDER, $page->getParent()->getID());
 
-		$pageBuilder = new PageBuilder($page);
-		$page = $pageBuilder->buildPageFromTemplate();
-
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
 		$userGroups = UserGroup::findAll();
 
@@ -162,12 +159,10 @@ class PageController extends CmsController {
 		$userGroups = UserGroup::findAll();
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
 		$page = new Page(Util::getUrlSegment(2));
-		$pageBuilder = new PageBuilder($page);
 		$folder = new PageFolder($this->getSession()->get(self::C_CURRENT_FOLDER));
 		$this->formMapper = new PageMapper();
 
 		$page->setParent($folder);
-		$page = $pageBuilder->buildPageFromTemplate();
 		$this->getEditPageForm($page, $templates, $userGroups);
 
 		$pageEditView = new PageEditViewBuilder($page);

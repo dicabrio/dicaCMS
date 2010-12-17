@@ -6,18 +6,15 @@ class Page extends DataRecord implements DomainEntity {
 	 * @var TemplateFile
 	 */
 	private $oTemplate;
-
 	/**
 	 * @var array
 	 */
 	private $aModules;
-
 	/**
 	 *
 	 * @var array
 	 */
 	private $aRemoveModules = array();
-
 	/**
 	 *
 	 * @var Folder
@@ -57,9 +54,7 @@ class Page extends DataRecord implements DomainEntity {
 		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
-
 	}
-
 
 	/**
 	 *
@@ -83,13 +78,11 @@ class Page extends DataRecord implements DomainEntity {
 		$this->setAttr('template_id', $template->getID());
 		$this->setAttr('name', $pagename);
 		$this->setAttr('publishtime', $publishtime->getValue());
-		$this->setAttr('expiretime', (string)$expiretime);
+		$this->setAttr('expiretime', (string) $expiretime);
 		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
-
 	}
-
 
 	/**
 	 * get The pagename
@@ -129,37 +122,47 @@ class Page extends DataRecord implements DomainEntity {
 	 * @return array
 	 */
 	public function getModules() {
+
 		if ($this->aModules === null) {
-			$this->aModules = PageModule::getByPage($this);
+			$this->aModules = array();
+
+			$this->getTemplate();
+			$viewParser = new ViewParser($this->oTemplate);
+			$parsedModuleLabels = $viewParser->getLabels();
+
+			$moduleLabels = array();
+			foreach ($parsedModuleLabels as $moduleLabel) {
+				$this->aModules[$moduleLabel['id']] = $moduleLabel['module'];
+			}
+
+			$storedModules = PageModule::getByPage($this);
+
+			$tmpModuleArray = array();
+			foreach ($this->aModules as $identifier => $moduleType) {
+
+				if (isset($storedModules[$identifier]) && $moduleType == $storedModules[$identifier]->getType()) {
+					$pageModule = $storedModules[$identifier];
+					unset($storedModules[$identifier]);
+				} else {
+					$pageModule = new PageModule();
+					$pageModule->setType($moduleType);
+					$pageModule->setIdentifier($identifier);
+					$pageModule->setPage($this);
+					$pageModule->save();
+				}
+				
+				$tmpModuleArray[$identifier] = $pageModule;
+			}
+
+			$this->aModules = $tmpModuleArray;
+
+			foreach ($storedModules as $module) {
+				$module->delete();
+			}
+
 		}
 
 		return $this->aModules;
-	}
-
-	/**
-	 * add a module to this page
-	 *
-	 * @param string $oModule
-	 * @return void
-	 */
-	public function addModule(PageModule $oModule) {
-		$this->getModules(); // init
-
-		$oModule->setPage($this);
-
-		if ($oModule->getID() == 0) {
-			$oModule->save();
-		}
-
-		if (isset($this->aModules[$oModule->getIdentifier()])) {
-			$oldModule = $this->aModules[$oModule->getIdentifier()];
-			if ($oldModule !== $oModule->getType()) {
-				// the current module is from another type. Flag the old module to be deleted
-				$this->aRemoveModules[] = $oldModule;
-			}
-		}
-
-		$this->aModules[$oModule->getIdentifier()] = $oModule;
 	}
 
 	/**
@@ -177,7 +180,6 @@ class Page extends DataRecord implements DomainEntity {
 
 		return null;
 	}
-
 
 	/**
 	 * @return Date
@@ -243,14 +245,12 @@ class Page extends DataRecord implements DomainEntity {
 
 		$this->setAttr('folder_id', $folder->getID());
 		$this->parent = $folder;
-		
 	}
 
 	public function setTemplate(TemplateFile $template) {
 
 		$this->oTemplate = $template;
 		$this->setAttr('template_id', $template->getID());
-
 	}
 
 	/**
@@ -301,7 +301,6 @@ class Page extends DataRecord implements DomainEntity {
 		foreach ($this->aRemoveModules as $module) {
 			$module->delete();
 		}
-
 	}
 
 	public function delete() {
@@ -311,9 +310,7 @@ class Page extends DataRecord implements DomainEntity {
 		}
 
 		parent::delete();
-
 	}
-
 
 	/**
 	 * Find a page that is an exact match on the given pagename. It will return only one occurence
@@ -349,6 +346,7 @@ class Page extends DataRecord implements DomainEntity {
 	public static function findActive() {
 		return parent::findAll('Page', parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
 	}
+
 }
 
 class PageRecordException extends RecordException {

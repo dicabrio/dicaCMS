@@ -68,13 +68,20 @@ class TwitterCmsModule implements CmsModuleController {
 
 	private function defineForm() {
 
-		$this->selectElement = new Select($this->oPageModule->getIdentifier());
+		$identifier = $this->oPageModule->getIdentifier();
+
+		$this->twitterAccountName = new Input('text', $identifier.'_account', '');
+		$this->twitterAmount = new Input('text', $identifier.'_amount', '');
+
+		$this->selectElement = new Select($identifier);
 		$this->selectElement->setValue($this->templateFile->getID());
 		$this->selectElement->addOption(0, Lang::get('general.choose'));
 
 		foreach ($this->options as $templateOption) {
 			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
+		$this->form->addFormElement($this->twitterAccountName->getName(), $this->twitterAccountName);
+		$this->form->addFormElement($this->twitterAmount->getName(), $this->twitterAmount);
 		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
 
 	}
