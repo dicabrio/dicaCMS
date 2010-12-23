@@ -13,21 +13,17 @@ class StaticblockCmsModule implements CmsModuleController {
 	private $oStaticBlock;
 
 	/**
-	 * @var array
-	 */
-	private $aErrors;
-
-	/**
-	 * @var CmsController
-	 */
-	private $oCmsController;
-
-	/**
 	 * @var Form
 	 */
 	private $form;
 
 	/**
+	 * @var Select
+	 */
+	private $selectElement;
+
+	/**
+	 *
 	 * @var FormMapper
 	 */
 	private $mapper;
@@ -39,12 +35,10 @@ class StaticblockCmsModule implements CmsModuleController {
 	 * @param Page $oPage
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
-		$this->oCmsController = $oCmsController;
 
 		$this->load();
 		$this->defineForm();
@@ -68,15 +62,21 @@ class StaticblockCmsModule implements CmsModuleController {
 
 		$blocks = StaticBlock::find();
 
-		$selectStaticBlock = new Select($this->oPageModule->getIdentifier());
-		$selectStaticBlock->setValue($this->oStaticBlock->getID());
+		$this->selectElement = new Select($this->oPageModule->getIdentifier());
+		$this->selectElement->setValue($this->oStaticBlock->getID());
 
 		foreach ($blocks as $block) {
-			$selectStaticBlock->addOption($block->getID(), $block->getIdentifier());
+			$this->selectElement->addOption($block->getID(), $block->getIdentifier());
 		}
 
-		$this->form->addFormElement($selectStaticBlock->getName(), $selectStaticBlock);
-		$this->mapper->addFormElementToDomainEntityMapping($selectStaticBlock->getName(), "Staticblock");
+		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+
+	}
+
+	public function addFormMapping(FormMapper $mapper) {
+
+		$mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "Staticblock");
+		$this->mapper = $mapper;
 
 	}
 
@@ -86,7 +86,7 @@ class StaticblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$view = new View('staticblock/staticblockchooser.php');
+		$view = new View(Conf::get('general.dir.templates').'/staticblock/staticblockchooser.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
 

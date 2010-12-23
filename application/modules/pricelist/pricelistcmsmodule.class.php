@@ -25,6 +25,11 @@ class PricelistCmsModule implements CmsModuleController {
 	private $mapper;
 
 	/**
+	 * @var FormElement
+	 */
+	private $contentFormElement;
+
+	/**
 	 * construct the imageupload module
 	 *
 	 * @param PageModule $oMod
@@ -34,11 +39,10 @@ class PricelistCmsModule implements CmsModuleController {
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
 
 		// load the data
 		$this->load();
@@ -48,10 +52,16 @@ class PricelistCmsModule implements CmsModuleController {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
-		$contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
-		$this->form->addFormElement($contentFormElement->getName(), $contentFormElement);
-		$this->mapper->addFormElementToDomainEntityMapping($contentFormElement->getName(), 'PriceListXML');
+		$this->contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->form->addFormElement($this->contentFormElement->getName(), $this->contentFormElement);
 
+	}
+
+	public function addFormMapping(FormMapper $mapper) {
+
+		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->contentFormElement->getName(), 'PriceListXML');
+		
 	}
 
 
@@ -61,7 +71,7 @@ class PricelistCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View('pricelist/pricelistfeed.php');
+		$oView = new View(Conf::get('general.dir.templates').'/pricelist/pricelistfeed.php');
 		$oView->sMaxLength = self::MAX_LENGTH;
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;

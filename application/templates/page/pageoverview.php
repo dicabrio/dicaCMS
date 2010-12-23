@@ -16,14 +16,6 @@
 				<?php endforeach; ?>
 			<?php endif; ?>
 			
-			<form method="post" action="<?php echo $sSearchFormAction; ?>">
-			<?php if (isset($oSearch)) : ?>
-			<?php echo $oSearch->getContents(); ?>
-			<?php endif; ?>
-			</form>
-			
-			<form method="post" action="<?php echo $sPageFormAction; ?>">
 			<?php if (isset($oOverview)) : ?>
 			<?php echo $oOverview->getContents(); ?>
 			<?php endif; ?>
-			</form>

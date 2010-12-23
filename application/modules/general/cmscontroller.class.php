@@ -35,7 +35,7 @@ class CmsController extends SecureController {
 	public function __construct($sMethod, $sTitle='') {
 		parent::__construct($sMethod);
 
-		$this->oBaseView = new BaseView('baseview.php', $sTitle);
+		$this->oBaseView = new BaseView(Conf::get('general.dir.templates').'/baseview.php', $sTitle);
 
 		$this->oMainMenu = new Menu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
@@ -53,7 +53,7 @@ class CmsController extends SecureController {
 		foreach ($moduleMenu as $module) {
 			$menuItem = new MenuItem(
 					Conf::get('general.url.www').$module->getUrl(),
-					Lang::get('module.menuname.'.$module->getName()),
+					Lang::get($module->getName().'.menuname'),
 					$module->getName(),
 					($sActive == $module->getName()));
 			$this->oSubMenu->addItem($menuItem);
@@ -63,8 +63,8 @@ class CmsController extends SecureController {
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);
 
-		$this->oBaseView->addScript('jquery.js');
-		$this->oBaseView->addScript('general.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/jquery.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/general.js');
 
 		$this->oDatabase = DataFactory::getInstance('default');
 	}

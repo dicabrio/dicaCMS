@@ -1,7 +1,7 @@
 <?php
 
 $lang = array (
-	'title' => 'Tekst blok',
+	'title' => 'Tekstblok',
 	'description' => 'Afbeelding omschrijving',
 );
 

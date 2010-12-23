@@ -54,6 +54,9 @@ class PageModule extends DataRecord {
 	}
 
 	/**
+	 * This is the module type.
+	 * Examples: TextBlock, TextLine, StaticBlock, etc
+	 *
 	 * @return string
 	 */
 	public function getType() {

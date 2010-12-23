@@ -8,6 +8,8 @@ class Authentication {
 
 	const KEY_IP = 'user_ip';
 
+	const C_AUTH_SESSIONNAME = 'USER_AUTH';
+
 	private static $oSession;
 
 	private static $instance;
@@ -36,11 +38,15 @@ class Authentication {
 	}
 
 	/**
-	 * TODO create implementation
-	 * @return unknown_type
+	 * get the loggedin User
+	 * @return User
 	 */
-	public function hasRights() {
-		//
+	public function getUser() {
+		$userID = 0;
+		if ($this->isLoggedIn()) {
+			$userID = self::$oSession->get(self::KEY_USERID);
+		}
+		return new User($userID);
 	}
 
 	/**

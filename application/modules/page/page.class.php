@@ -6,17 +6,20 @@ class Page extends DataRecord implements DomainEntity {
 	 * @var TemplateFile
 	 */
 	private $oTemplate;
-
 	/**
 	 * @var array
 	 */
 	private $aModules;
-
 	/**
 	 *
 	 * @var array
 	 */
 	private $aRemoveModules = array();
+	/**
+	 *
+	 * @var Folder
+	 */
+	private $parent;
 
 	/**
 	 * constructor
@@ -24,10 +27,11 @@ class Page extends DataRecord implements DomainEntity {
 	 * @param int $id
 	 */
 	public function __construct($id=null) {
-		parent::__construct(__CLASS__, $id);
+		parent::__construct('Page', $id);
 
 		if ($id == 0) {
 			$this->setAttr('created', date("Y-m-d H:i:s"));
+			$this->setAttr('type', 'basic');
 		}
 	}
 
@@ -39,6 +43,7 @@ class Page extends DataRecord implements DomainEntity {
 
 		parent::addColumn('id', DataTypes::INT, false, true);
 		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('type', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('title', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('template_id', DataTypes::INT, false, true);
 		parent::addColumn('publishtime', DataTypes::DATETIME, 255, true);
@@ -49,11 +54,11 @@ class Page extends DataRecord implements DomainEntity {
 		parent::addColumn('description', DataTypes::TEXT, false, true);
 		parent::addColumn('active', DataTypes::INT, false, true);
 		parent::addColumn('folder_id', DataTypes::INT, false, true);
-
 	}
 
-		
 	/**
+	 *
+	 * @TODO refactor to singel method sets. Maybe we can use the mapper. Give the mapper and ask the mapper for certain data
 	 *
 	 * @param String $pagename
 	 * @param View $template
@@ -68,39 +73,16 @@ class Page extends DataRecord implements DomainEntity {
 			$publishtime = new Date("now");
 		}
 
-		$this->setAttr('name', $pagename);
+		$this->oTemplate = $template;
+
 		$this->setAttr('template_id', $template->getID());
+		$this->setAttr('name', $pagename);
 		$this->setAttr('publishtime', $publishtime->getValue());
-		$this->setAttr('expiretime', (string)$expiretime);
+		$this->setAttr('expiretime', (string) $expiretime);
 		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
-
 	}
-
-
-	/**
-	 * @param string $pagename
-	 * @return Page
-	 */
-	public static function findByName($pagename) {
-		$aPages = parent::findAll(__CLASS__, parent::ALL, new Criteria(' name = :name', array('name' => $pagename)));
-
-		if (count($aPages) > 0) {
-			return reset($aPages);
-		}
-
-		return null;
-	}
-
-	public static function findInFolder(PageFolder $folder) {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid ', array('parentid' => $folder->getID())));
-	}
-
-	public static function findActive() {
-		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
-	}
-
 
 	/**
 	 * get The pagename
@@ -140,37 +122,47 @@ class Page extends DataRecord implements DomainEntity {
 	 * @return array
 	 */
 	public function getModules() {
+
 		if ($this->aModules === null) {
-			$this->aModules = PageModule::getByPage($this);
+			$this->aModules = array();
+
+			$this->getTemplate();
+			$viewParser = new ViewParser($this->oTemplate);
+			$parsedModuleLabels = $viewParser->getLabels();
+
+			$moduleLabels = array();
+			foreach ($parsedModuleLabels as $moduleLabel) {
+				$this->aModules[$moduleLabel['id']] = $moduleLabel['module'];
+			}
+
+			$storedModules = PageModule::getByPage($this);
+
+			$tmpModuleArray = array();
+			foreach ($this->aModules as $identifier => $moduleType) {
+
+				if (isset($storedModules[$identifier]) && $moduleType == $storedModules[$identifier]->getType()) {
+					$pageModule = $storedModules[$identifier];
+					unset($storedModules[$identifier]);
+				} else {
+					$pageModule = new PageModule();
+					$pageModule->setType($moduleType);
+					$pageModule->setIdentifier($identifier);
+					$pageModule->setPage($this);
+					$pageModule->save();
+				}
+				
+				$tmpModuleArray[$identifier] = $pageModule;
+			}
+
+			$this->aModules = $tmpModuleArray;
+
+			foreach ($storedModules as $module) {
+				$module->delete();
+			}
+
 		}
 
 		return $this->aModules;
-	}
-
-	/**
-	 * add a module to this page
-	 *
-	 * @param string $oModule
-	 * @return void
-	 */
-	public function addModule(PageModule $oModule) {
-		$this->getModules(); // init
-		
-		$oModule->setPage($this);
-		
-		if ($oModule->getID() == 0) {
-			$oModule->save();
-		}
-
-		if (isset($this->aModules[$oModule->getIdentifier()])) {
-			$oldModule = $this->aModules[$oModule->getIdentifier()];
-			if ($oldModule !== $oModule->getType()) {
-				// the current module is from another type. Flag the old module to be deleted
-				$this->aRemoveModules[] = $oldModule;
-			}
-		}
-
-		$this->aModules[$oModule->getIdentifier()] = $oModule;
 	}
 
 	/**
@@ -189,23 +181,29 @@ class Page extends DataRecord implements DomainEntity {
 		return null;
 	}
 
-
 	/**
-	 * @return string
+	 * @return Date
 	 */
 	public function getPublishTime() {
+
+		$time = $this->getAttr('publishtime');
+		if ('0000-00-00 00:00:00' === $this->getAttr('publishtime') || empty($time)) {
+			return new Date('now');
+		}
+
 		return new Date($this->getAttr('publishtime'));
 	}
 
 	/**
-	 * @return string
+	 * @return Date
 	 */
 	public function getExpireTime() {
-		
-		if ('0000-00-00 00:00:00' === $this->getAttr('expiretime')) {
+
+		$time = $this->getAttr('expiretime');
+		if ('0000-00-00 00:00:00' === $this->getAttr('expiretime') || empty($time)) {
 			return '';
 		}
-		
+
 		return new Date($this->getAttr('expiretime'));
 	}
 
@@ -224,16 +222,35 @@ class Page extends DataRecord implements DomainEntity {
 	}
 
 	/**
-	 * Checks wether this Image is active
-	 *
-	 * @return bool
+	 * @return PageFolder
 	 */
-	public function isActive() {
-		if ($this->getAttr('active') == 1) {
-			return true;
+	public function getParent() {
+
+		if ($this->parent === null) {
+			$this->parent = new PageFolder($this->getAttr('folder_id'));
 		}
 
-		return false;
+		return $this->parent;
+	}
+
+	public function getDescription() {
+		return $this->getAttr('description');
+	}
+
+	public function getKeywords() {
+		return $this->getAttr('keywords');
+	}
+
+	public function setParent(PageFolder $folder) {
+
+		$this->setAttr('folder_id', $folder->getID());
+		$this->parent = $folder;
+	}
+
+	public function setTemplate(TemplateFile $template) {
+
+		$this->oTemplate = $template;
+		$this->setAttr('template_id', $template->getID());
 	}
 
 	/**
@@ -251,25 +268,16 @@ class Page extends DataRecord implements DomainEntity {
 	}
 
 	/**
-	 * @return PageFolder
+	 * Checks wether this Image is active
+	 *
+	 * @return bool
 	 */
-	public function getParent() {
-		
-		$page = new PageFolder($this->getAttr('folder_id'));
+	public function isActive() {
+		if ($this->getAttr('active') == 1) {
+			return true;
+		}
 
-		return $page;
-	}
-
-	public function getDescription() {
-		return $this->getAttr('description');
-	}
-
-	public function getKeywords() {
-		return $this->getAttr('keywords');
-	}
-
-	public function setParent(PageFolder $folder) {
-		$this->setAttr('folder_id', $folder->getID());
+		return false;
 	}
 
 	/**
@@ -293,7 +301,6 @@ class Page extends DataRecord implements DomainEntity {
 		foreach ($this->aRemoveModules as $module) {
 			$module->delete();
 		}
-		
 	}
 
 	public function delete() {
@@ -303,9 +310,46 @@ class Page extends DataRecord implements DomainEntity {
 		}
 
 		parent::delete();
-
 	}
+
+	/**
+	 * Find a page that is an exact match on the given pagename. It will return only one occurence
+	 *
+	 * @param string $pagename
+	 * @return Page
+	 */
+	public static function findByName($pagename) {
+		$aPages = parent::findAll('Page', parent::ALL, new Criteria(' name = :name', array('name' => $pagename)));
+
+		if (count($aPages) > 0) {
+			return reset($aPages);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get every page that is placed in the given folder. When nothing is there this method will return an empty array
+	 *
+	 * @param PageFolder $folder
+	 * @return array
+	 */
+	public static function findInFolder(PageFolder $folder) {
+		return parent::findAll('Page', parent::ALL, new Criteria(' folder_id = :parentid ', array('parentid' => $folder->getID())));
+	}
+
+	/**
+	 * Find al active pages in the database.
+	 *
+	 * @return array
+	 */
+	public static function findActive() {
+		return parent::findAll('Page', parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
+	}
+
 }
 
-class PageRecordException extends RecordException {}
+class PageRecordException extends RecordException {
+
+}
 

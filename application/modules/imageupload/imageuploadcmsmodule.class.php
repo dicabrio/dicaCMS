@@ -6,26 +6,35 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 * @var PageModule
 	 */
 	private $oPageModule;
-
 	/**
 	 * @var Form
 	 */
 	private $form;
-
 	/**
 	 * @var FormMapper
 	 */
 	private $mapper;
-
 	/**
 	 * @var Media
 	 */
 	private $mediaItem;
-
 	/**
 	 * @var string
 	 */
 	private $defaultImage;
+	/**
+	 * @var FormElement
+	 */
+	private $fileInputName;
+	/**
+	 * @var FormElement
+	 */
+	private $titleInputName;
+	/**
+	 *
+	 * @var FormElement
+	 */
+	private $descriptionInputName;
 
 	/**
 	 * construct the imageupload module
@@ -37,16 +46,13 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $oCmsController=null) {
+	public function __construct(PageModule $oMod, Form $form) {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
-		$this->mapper = $mapper;
-		$this->cmsController = $oCmsController;
 
 		$this->load();
 		$this->defineForm();
-
 	}
 
 	private function load() {
@@ -63,22 +69,26 @@ class ImageuploadCmsModule implements CmsModuleController {
 	private function defineForm() {
 
 		// define upload field
-		$fileInput = new Input('file', $this->oPageModule->getIdentifier());
-		$fileInputName = $fileInput->getName();
-		$this->form->addFormElement($fileInputName, $fileInput);
-		$this->mapper->addFormElementToDomainEntityMapping($fileInputName, "ImageUpload");
+		$this->fileInput = new Input('file', $this->oPageModule->getIdentifier());
+		$this->fileInputName = $this->fileInput->getName();
+		$this->form->addFormElement($this->fileInputName, $this->fileInput);
 
 		// define description (alt text) field
-		$descriptionInput = new Input("text", $this->oPageModule->getIdentifier()."title", $this->mediaItem->getTitle());
-		$descriptionInputName = $descriptionInput->getName();
-		$this->form->addFormElement($descriptionInputName, $descriptionInput);
-		$this->mapper->addFormElementToDomainEntityMapping($descriptionInputName, "TextLine");
+		$this->titleInput = new Input("text", $this->oPageModule->getIdentifier() . "title", $this->mediaItem->getTitle());
+		$this->titleInputName = $this->titleInput->getName();
+		$this->form->addFormElement($this->titleInputName, $this->titleInput);
 
-		$descriptionInput = new TextArea($this->oPageModule->getIdentifier()."description", $this->mediaItem->getDescription());
-		$descriptionInputName = $descriptionInput->getName();
-		$this->form->addFormElement($descriptionInputName, $descriptionInput);
-		$this->mapper->addFormElementToDomainEntityMapping($descriptionInputName, "DomainText");
+		$this->descriptionInput = new TextArea($this->oPageModule->getIdentifier() . "description", $this->mediaItem->getDescription());
+		$this->descriptionInputName = $this->descriptionInput->getName();
+		$this->form->addFormElement($this->descriptionInputName, $this->descriptionInput);
+	}
 
+	public function addFormMapping(FormMapper $mapper) {
+
+		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->fileInputName, "ImageUpload");
+		$this->mapper->addFormElementToDomainEntityMapping($this->titleInputName, "TextLine");
+		$this->mapper->addFormElementToDomainEntityMapping($this->descriptionInputName, "DomainText");
 	}
 
 	/**
@@ -86,8 +96,8 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 * @see modules/Module#getEditor()
 	 */
 	public function getEditor() {
-		
-		$oView = new View('imageupload/imageuploadform.php');
+
+		$oView = new View(Conf::get('general.dir.templates') . '/imageupload/imageuploadform.php');
 		$oView->form = $this->form;
 
 		$filename = false;
@@ -105,7 +115,8 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$oView->filename = $filename;
 		$oView->alttext = $alttext;
 		$oView->defaultimage = $this->getDefaultImage();
-		
+		$oView->sIdentifier = $this->oPageModule->getIdentifier();
+
 
 		return $oView;
 	}
@@ -119,23 +130,26 @@ class ImageuploadCmsModule implements CmsModuleController {
 		// when overhere... there shouldn't be any errors from the form
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 
-		$title = $this->mapper->getModel($sModIdentifier."title");
-		$description = $this->mapper->getModel($sModIdentifier."description");
+		$title = $this->mapper->getModel($sModIdentifier . "title");
+		$description = $this->mapper->getModel($sModIdentifier . "description");
 		$upload = $this->mapper->getModel($sModIdentifier);
 
 		$upload->moveTo(Conf::get('upload.dir.general'));
 		$file = $upload->getFile();
 
-		$new = false;
-		if ($this->mediaItem->getID() == 0) {
-			$new = true;
-		}
-		
-		$this->mediaItem->update($title, $description, $file);
-		$this->mediaItem->save();
+		if ($file !== null) {
 
-		if ($new) {
-			Relation::add('pagemodule', 'media', $this->oPageModule, $this->mediaItem);
+			$new = false;
+			if ($this->mediaItem->getID() == 0) {
+				$new = true;
+			}
+
+			$this->mediaItem->update($title, $description, $file);
+			$this->mediaItem->save();
+
+			if ($new) {
+				Relation::add('pagemodule', 'media', $this->oPageModule, $this->mediaItem);
+			}
 		}
 	}
 
@@ -155,6 +169,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 	protected function getDefaultImage() {
 
 		return $this->defaultImage;
-		
 	}
+
 }

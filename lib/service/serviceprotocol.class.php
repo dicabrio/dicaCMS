@@ -35,5 +35,3 @@ interface ServiceProtocol
 	 */
 	public function error($message);
 }
-
-?>

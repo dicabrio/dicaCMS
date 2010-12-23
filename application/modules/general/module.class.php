@@ -88,17 +88,5 @@ class Module extends DataRecord implements DomainEntity {
 		return "jemoeder";
 	}
 
-//	public function equals($object) {
-//		if (get_class($this) != get_class($object)) {
-//			return false;
-//		}
-//
-//		if ($this->getID() != $object->getID()) {
-//			return false;
-//		}
-//
-//		return true;
-//	}
-
 }
 

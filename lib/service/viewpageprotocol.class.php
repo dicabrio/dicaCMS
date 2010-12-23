@@ -19,11 +19,6 @@ class ViewPageProtocol implements ServiceProtocol {
 	private $arguments;
 
 	/**
-	 * @var Controller
-	 */
-	private $controller;
-
-	/**
 	 * @var string
 	 */
 	private $result;
@@ -38,6 +33,7 @@ class ViewPageProtocol implements ServiceProtocol {
 			
 			$oPageViewer = new ViewPageController();
 			$sPagename = Util::getUrlSegment(0);
+
 			
 			$this->result = $oPageViewer->show($sPagename);
 			
@@ -56,6 +52,8 @@ class ViewPageProtocol implements ServiceProtocol {
 	 * @return string
 	 */
 	public function encode() {
+
+
 		return $this->result;
 	}
 

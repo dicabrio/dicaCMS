@@ -32,7 +32,9 @@ class Setting extends DataRecord {
 			return current($result);
 		}
 
-		return new Setting();
+		$setting = new Setting();
+		$setting->setAttr('name', $name);
+		return $setting;
 	}
 
 	/**
@@ -42,6 +44,12 @@ class Setting extends DataRecord {
 	public function getValue() {
 
 		return $this->getAttr('value');
+		
+	}
+
+	public function setValue($value) {
+
+		$this->setAttr('value', $value);
 		
 	}
 

@@ -7,12 +7,10 @@ interface CmsModuleController {
 	 * 
 	 * @param Page $oPage
 	 * @param Form $form
-	 * @param FormMapper $mapper
-	 * @param CmsController $controller
 	 * 
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form, FormMapper $mapper, CmsController $controller = null);
+	public function __construct(PageModule $oMod, Form $form);
 	
 	/**
 	 * This method will return the source of how to edit.
@@ -34,5 +32,11 @@ interface CmsModuleController {
 	 * @return string
 	 */
 	public function getIdentifier();
+
+	/**
+	 *
+	 * @param FormMapper $mapper
+	 */
+	public function addFormMapping(FormMapper $mapper);
 
 }

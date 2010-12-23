@@ -59,10 +59,10 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 
 			$attributes = array('class' => 'button '.$action);
 			if (in_array($action, array('deleteblock'))) {
-				$attributes['confirm'] = Lang::get('static.suredeleteblock');
+				$attributes['confirm'] = Lang::get('staticblock.suredeleteblock');
 			}
 
-			$actionstring .= Html::getAnchor(	Lang::get('static.button.'.$action),
+			$actionstring .= Html::getAnchor(	Lang::get('staticblock.button.'.$action),
 												Conf::get('general.url.www').'/staticblock/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}

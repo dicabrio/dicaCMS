@@ -1,9 +1,29 @@
+<?php 
+
+	$this->addStyle('http://yui.yahooapis.com/2.8.1/build/assets/skins/sam/skin.css');
+	$this->addStyle(Conf::get('general.url.css').'/editors.css');
+	
+	$this->addScript('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
+	$this->addScript('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');
+	$this->addScript('http://yui.yahooapis.com/2.8.1/build/container/container_core-min.js');
+	$this->addScript('http://yui.yahooapis.com/2.8.1/build/menu/menu-min.js');
+	$this->addScript('http://yui.yahooapis.com/2.8.1/build/editor/editor-min.js');
+	
+	$this->addScript(Conf::get('general.url.js').'/tabbing.js');
+	$this->addScript(Conf::get('general.url.js').'/editors.js');
+
+?>
 <?php if (isset($breadcrumb)) : ?>
 	<?php echo $breadcrumb->getContents(); ?>
 <?php endif; ?>
 <ul id="tabmenu">
+	<?php if (count($aModules) == 0) : ?>
 	<li class="active"><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
-	<li><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
+	<?php else : ?>
+	<li class="active"><a href="#content" class="content"><?php echo Lang::get('page.tab.content'); ?></a></li>
+	<li><a href="#pageinfo" class="pageinfo"><?php echo Lang::get('page.tab.pageinfo'); ?></a></li>
+	<?php endif; ?>
+	<!--<li><a href="#access" class="access"><?php echo Lang::get('page.tab.access'); ?></a></li>-->
 </ul>
 <?php echo $form->begin(); ?>
 
@@ -81,30 +101,49 @@
 		<div class="clear">&nbsp;</div>
 	</div>
 </fieldset>
-<?php if ($pageid != 0) :?>
+
 <fieldset class="tab" id="contenttab">
-		<?php if (count($aModules) == 0) : ?>
+	<?php if (count($aModules) == 0) : ?>
+		
 	<div class="pagemodule">
-		<div class="modulelabel"><?php echo Lang::get('page.label.nomodules'); ?></div>
-		<div class="modulecontent"></div>
+		<div class="modulelabel">&nbsp;</div>
+		<div class="modulecontent"><?php echo Lang::get('page.label.nomodules'); ?></div>
 	</div>
-		<?php else: ?>
-			<?php foreach ($aModules as $oModule) :?>
-	<div class="pagemodule <?php echo $oModule->sIdentifier; ?>">
-					<?php echo $oModule->getContents(); ?>
-		<div class="clear">&nbsp;</div>
-	</div>
-			<?php endforeach; ?>
-		<?php endif;?>
+	<?php else: ?>
+		<?php foreach ($aModules as $oModule) :?>
+			<?php echo $oModule->getContents(); ?>
+		<?php endforeach; ?>
+	<?php endif;?>
 </fieldset>
-<?php endif; ?>
+
+<fieldset class="tab" id="accesstab">
+	<div class="pagemodule">
+		<div class="modulelabel">&nbsp;</div>
+		<div class="modulecontent">
+			<?php if (count($userGroups) == 0) : ?>
+			<?php echo Lang::get('page.label.nousergroups'); ?>
+			<?php else : ?>
+			<ul>
+				<?php foreach ($userGroups as $userGroup) : ?>
+				<li><?php echo $form->getFormElement('usergroup_'.$userGroup->getID()); ?> <?php echo $userGroup->getTitle(); ?></li>
+				<?php endforeach; ?>
+			</ul>
+			<?php endif; ?>
+		</div>
+	</div>
+</fieldset>
 
 <fieldset class="actions">
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
+			<?php echo $form->getFormElement('save'); ?>
+
+			<?php if ($pagesavedredirect !== null) : ?>
+			<a href="<?php echo Conf::get('general.url.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<?php else : ?>
 			<a href="<?php echo Conf::get('general.url.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<?php endif; ?>
 		</div>
 	</div>
 </fieldset>

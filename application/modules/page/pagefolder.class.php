@@ -14,6 +14,10 @@ class PageFolder extends Folder {
 		
 	}
 
+	public static function findByName($folderName) {
+		return parent::findByName(__CLASS__, $folderName);
+	}
+
 }
 
 

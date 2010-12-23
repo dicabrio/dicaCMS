@@ -2,7 +2,7 @@
 	<?php echo $breadcrumb->getContents(); ?>
 <?php endif; ?>
 <ul id="tabmenu">
-	<li class="active"><a href="#" class="pageinfo">Staticblock information</a></li>
+	<li class="active"><a href="#" class="pageinfo"><?php echo Lang::get('staticblock.tab.information'); ?></a></li>
 </ul>
 
 <?php echo $form->begin(); ?>
@@ -24,7 +24,7 @@
 		<div class="clear">&nbsp;</div>
 	</div>
 	<div class="pagemodule">
-		<div class="modulelabel">Content:</div>
+		<div class="modulelabel"><?php echo Lang::get('staticblock.content'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('content')->addAttribute('class', 'moduletextblock'); ?>
 		</div>
@@ -33,7 +33,7 @@
 </fieldset>
 <fieldset class="actions">
 	<div class="pagemodule">
-		<div class="modulelabel">Actions:</div>
+		<div class="modulelabel"><?php echo Lang::get('general.actions'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
 			<a href="<?php echo Conf::get('general.url.www').'/staticblock'; ?>" class="button">Cancel</a>

@@ -1,6 +1,13 @@
 <?php
 
 class User extends DataRecord {
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $userGroups = null;
+
 	/**
 	 * constructor
 	 *
@@ -34,6 +41,26 @@ class User extends DataRecord {
 	 */
 	public function getUsername() {
 		return $this->getAttr('username');
+	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public function getUserGroups() {
+
+		if ($this->userGroups === null) {
+			$this->userGroups = UserGroup::findByUser($this);
+		}
+
+		return $this->userGroups;
+	}
+
+	public function addUserGroup(UserGroup $group) {
+
+		$this->getUserGroups();
+		$this->userGroups[] = $group;
+		
 	}
 
 	/**
@@ -81,6 +108,26 @@ class User extends DataRecord {
 	}
 
 	/**
+	 *
+	 * @param Area $area 
+	 */
+	public function watch(Area $area) {
+
+		$userGroupsOfArea = $area->getUserGroups();
+		if (count($userGroupsOfArea) > 0) {
+			$this->inAllowedUserGroup($userGroupsOfArea);
+		}
+	}
+	
+	private function inAllowedUserGroup($userGroupsOfArea) {
+		if (count(array_intersect_key($this->getUserGroups(), $userGroupsOfArea)) == 0) {
+			//check if you have a similar usergroup
+			throw new UserException('no-rights');
+		}
+	}
+
+
+	/**
 	 * find user by username and password. It finds only users that are active
 	 *
 	 * @param string $sUsername
@@ -102,3 +149,4 @@ class User extends DataRecord {
 
 }
 
+class UserException extends Exception {}

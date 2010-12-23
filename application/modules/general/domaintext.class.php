@@ -34,7 +34,7 @@ class DomainText implements DomainEntity {
 	}
 
 	public function __toString() {
-		return $this->sValue;
+		return $this->sValue."";
 	}
 
 	public function equals($oObject) {

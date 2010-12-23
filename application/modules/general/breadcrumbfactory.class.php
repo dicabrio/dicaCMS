@@ -57,7 +57,7 @@ class BreadcrumbFactory {
 				}
 			}
 			
-			$this->breadcrumb->addItem($this->buildMenuItem(false, $this->currentfolder->getName()));
+			$this->breadcrumb->addItem($this->buildMenuItem($this->baseurl.'/folder/'.$this->currentfolder->getID(), $this->currentfolder->getName()));
 		}
 		
 		return $this->breadcrumb;

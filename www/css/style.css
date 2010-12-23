@@ -13,8 +13,7 @@ h1 {
 	font-size: 30px;
 }
 
-#header
-{
+#header {
 	background-image: -moz-linear-gradient(left, right, from(rgb(200,200,200)), to(rgb(169,169,169)));
 	background-image: -webkit-gradient(linear,
 				left bottom,
@@ -29,8 +28,7 @@ h1 {
 	text-shadow: rgba(255,255,255,1) 0px 1px 0px;
 }
 
-#headerNav li
-{
+#headerNav li {
 	display: inline;
 	margin: 0 5px 0 0;
 	text-shadow: none;

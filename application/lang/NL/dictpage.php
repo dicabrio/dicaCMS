@@ -33,12 +33,14 @@ $lang = array(
 		'redirect' => 'Pagina doorverwijzing',
 		'active' => 'Actief',
 		'actions' => 'Acties',
-		'nomodules' => 'Geen modules aangegeven in de template'
+		'nomodules' => 'Er zijn geen modules beschikbaar voor deze pagina',
+		'nousergroups' => 'Er zijn geen gebruikersgroepen beschikbaar',
 	),
 
 	'tab' => array(
 		'content' => 'Inhoud',
 		'pageinfo' => 'Pagina informatie',
+		'access' => 'Toegang',
 	),
 
 	'breadcrumb' => array(
@@ -50,5 +52,8 @@ $lang = array(
 	),
 
 	'pagenameexample' => '(contact.html zonder .html)',
+	'inhoud_2-file-dimensions-too-big' => 'Het te uploaden bestand is te groot',
+	'inhoud_2-uploaded-file-too-big' => 'Het te uploaden bestand is te groot',
+	'pagename-empty' => 'Pagina-url mag niet leeg zijn',
 
 );

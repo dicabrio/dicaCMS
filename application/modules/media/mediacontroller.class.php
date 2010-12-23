@@ -21,7 +21,7 @@ class MediaController extends CmsController {
 		$tableDataSet->setValues($media);
 		$table = new Table($tableDataSet);
 
-		$overview = new View('media/mediaoverview.php');
+		$overview = new View(Conf::get('general.dir.templates').'/media/mediaoverview.php');
 		$overview->assign('aErrors', $aErrors);
 		$overview->assign('actions', $actions);
 		$overview->assign('oOverview', $table);
@@ -43,10 +43,10 @@ class MediaController extends CmsController {
 		$saveButton = new ActionButton('Save');
 		$saveHandler = new MediaSaveHandler($mediaMapper, $mediaItem);
 
-		$form = new MediaForm($req, $mediaItem);
+		$form = new MediaForm($mediaItem);
 		$form->addSubmitButton('save', $saveButton, $saveHandler);
 
-		$form->listen();
+		$form->listen($req);
 
 		try {
 			$file = $mediaItem->getFile();
@@ -61,7 +61,7 @@ class MediaController extends CmsController {
 			$updatemode = false;
 		}
 
-		$view = new View('media/uploadmedia.php');
+		$view = new View(Conf::get('general.dir.templates').'/media/uploadmedia.php');
 		$view->assign('form', $form);
 		$view->assign('filename', $filename);
 		$view->assign('updatemode', $updatemode);

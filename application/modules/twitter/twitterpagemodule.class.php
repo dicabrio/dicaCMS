@@ -23,6 +23,12 @@ class TwitterPageModule implements PageModuleController {
 	private $twitterAccount;
 
 	/**
+	 *
+	 * @var string
+	 */
+	private $twitterAmount;
+	
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
@@ -44,8 +50,10 @@ class TwitterPageModule implements PageModuleController {
 
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
 
-		$settingValue = Setting::getByName('twitteraccount');
-		$this->twitterAccount = $settingValue->getValue();
+		$accountSetting = Setting::getByName('twitteraccount');
+		$amountSetting = Setting::getByName('twitteramount');
+		$this->twitterAccount = $accountSetting->getValue();
+		$this->twitterAmount = $amountSetting->getValue();
 
 		$this->getTweets();
 
@@ -60,12 +68,19 @@ class TwitterPageModule implements PageModuleController {
 			return '';
 		}
 		$tweet = current(Tweet::getLast(1));
+		$tweets = Tweet::getLast((int)$this->twitterAmount);
 
-		$view = new View($this->templateFile->getFilename());
+		$tweetMessages = array();
+		foreach ($tweets as $tweety) {
+			$tweetMessages[] = array('message' => $tweety->getMessage(), 'date' => $tweety->getDate());
+		}
+
+		$view = new View(Conf::get('upload.dir.templates').'/'.$this->templateFile->getFilename());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('mediaurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 		$view->assign('twittermessage', $tweet->getMessage());
+		$view->assign('twittermessages', $tweetMessages);
 		$view->assign('twitteraccount', $this->twitterAccount);
 		$view->assign('pagename', $this->page->getName());
 

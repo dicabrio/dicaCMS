@@ -66,10 +66,6 @@ Util::importModules(APP_DIR.'/modules');
 Conf::setServer(DOMAIN);
 Conf::setDirectory(CONFIG_DIR);
 
-// Set templates dir.
-// Change if you like in the config file
-View::setTemplateDirectory(Conf::get('general.dir.templates'));
-
 // Set lang dir. 
 // Change if you like in the config file
 Lang::setDirectory(Conf::get('general.dir.lang'));

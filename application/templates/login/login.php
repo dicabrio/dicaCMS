@@ -34,6 +34,7 @@
 				-opera-border-radius: <?php echo $borderrad; ?>px;
 				-khtml-border-radius: <?php echo $borderrad; ?>px;
 				border-radius: <?php echo $borderrad; ?>px;
+				background-image: -moz-linear-gradient(top, #efefef, #b9b9b9);
 				background-image: -webkit-gradient(linear,
 					left bottom,
 					left top,
@@ -45,7 +46,7 @@
 			}
 
 			body {
-				background-image: -moz-linear-gradient(left, right, from(rgb(54,97,93)), to(rgb(52,168,161)));
+				background-image: -moz-linear-gradient(top, rgb(54,97,93), rgb(52,168,161));
 				background-image: -webkit-gradient(linear,
 					left bottom,
 					left top,
@@ -105,10 +106,10 @@
 						<?php echo $form->begin(); ?>
 						<fieldset>
 							<legend>dicaCMS <?php echo Lang::get('login.legend'); ?></legend>
-							<?php if (count($aErrors) > 0) : ?>
+							<?php if (count($errors) > 0) : ?>
 							<ul class="error">
-									<?php foreach ($aErrors as $sError) : ?>
-								<li><?php echo Lang::get('login.'.$sError); ?></li>
+									<?php foreach ($errors as $error) : ?>
+								<li><?php echo Lang::get('login.'.$error); ?></li>
 									<?php endforeach; ?>
 							</ul>
 							<?php endif; ?>
@@ -137,7 +138,7 @@
 								<tr>
 									<td></td>
 									<td>
-										<?php echo $form->getSubmitButton('login'); ?>
+										<?php echo $form->getFormElement('login'); ?>
 
 									</td>
 								</tr>

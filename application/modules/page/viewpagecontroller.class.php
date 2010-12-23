@@ -12,12 +12,17 @@ class ViewPageController {
 	 */
 	private $request;
 
+	/**
+	 * @var Session;
+	 */
+	private $session;
+
 	public function __construct() {
 		// we should check for permissions
 		// change the template directory. This differs from the standard
 
-		View::setTemplateDirectory(Conf::get('upload.dir.templates'));
 		$this->request = Request::getInstance();
+		$this->session = Session::getInstance();
 
 	}
 
@@ -48,7 +53,7 @@ class ViewPageController {
 
 	}
 
-	private function redirect($sRedirect) {
+	private function redirect($sRedirect, $type = null) {
 		if (empty($sRedirect)) {
 			$sRedirect = Conf::get('general.url.www');
 		}
@@ -56,12 +61,15 @@ class ViewPageController {
 			$sRedirect = Conf::get('general.url.www').$sRedirect;
 		}
 
-		header("HTTP/1.1 301 Moved Permanently" );
+		if ($type == '301') {
+			header("HTTP/1.1 301 Moved Permanently" );
+		}
 		header("Location: ".$sRedirect );
 		exit;
 	}
 
 	private function mayShow(Page $oPage) {
+
 		$sToday = strtotime('now');
 		$sPublish = strtotime($oPage->getPublishTime());
 		$sExpire = $oPage->getExpireTime();
@@ -73,15 +81,26 @@ class ViewPageController {
 		}
 
 		if ($sPublish >= $sToday || $sToday >= $sExpire || !$oPage->isActive() || $oPage->getTemplate() === null) {
+			$this->redirect($oPage->getRedirect(), '301');
+		}
 
-			$this->redirect($oPage->getRedirect());
+		$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
+		$user = $oAuth->getUser();
+		$area = Area::findByPage($oPage);
+
+		try {
+			$user->watch($area);
+		} catch (UserException $e) {
+			$this->session->set('flash', 'access-denied');
+			$this->session->set('front-end-redirect', $oPage->getName().'.html');
+			$this->redirect('/'.$area->getUrl());
 		}
 	}
 
 	private function getView(Page $oPage) {
 
 		$oTemplateFile = $oPage->getTemplate();
-		return new View($oTemplateFile->getFilename());
+		return new View(Conf::get('upload.dir.templates').'/'.$oTemplateFile->getFilename());
 		
 	}
 
@@ -98,7 +117,6 @@ class ViewPageController {
 			if ($oModule instanceof PageModule) {
 
 				$sModuleClass = $oModule->getType().'PageModule';
-
 				$oReflection = new ReflectionClass($sModuleClass);
 				$oModuleController = new $sModuleClass($oModule, $oPage, $this->request);
 
