@@ -1,16 +1,6 @@
 <?php 
 
-	$this->addStyle('http://yui.yahooapis.com/2.8.1/build/assets/skins/sam/skin.css');
-	$this->addStyle(Conf::get('general.url.css').'/editors.css');
-	
-	$this->addScript('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
-	$this->addScript('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');
-	$this->addScript('http://yui.yahooapis.com/2.8.1/build/container/container_core-min.js');
-	$this->addScript('http://yui.yahooapis.com/2.8.1/build/menu/menu-min.js');
-	$this->addScript('http://yui.yahooapis.com/2.8.1/build/editor/editor-min.js');
-	
 	$this->addScript(Conf::get('general.url.js').'/tabbing.js');
-	$this->addScript(Conf::get('general.url.js').'/editors.js');
 
 ?>
 <?php if (isset($breadcrumb)) : ?>

@@ -32,11 +32,11 @@ function __autoload($psClassName) {
 }
 
 function test($pVar) {
+	echo '<pre style="background: white; padding: 5px; border: 1px solid black; position: absolute; top: 0; right: 0; max-width: 500px;" class="trace">';
 	if (is_string($pVar)) {
-		echo '<pre style="background: white; padding: 5px; border: 1px solid black;">>'.$pVar.'<</pre>';
+		echo '>'.$pVar.'<';
 	} else {
-		echo '<pre style="background: white; padding: 5px; border: 1px solid black;">';
 		print_r($pVar);
-		echo '</pre>';
 	}
+	echo '</pre>';
 }

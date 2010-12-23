@@ -6,7 +6,7 @@
  * User Robert Cabri <robert@dicabrio.com>
  */
 
-define('DEBUG', false);
+define('DEBUG', true);
 
 define('LANG', 'NL');
 
