@@ -71,7 +71,7 @@ class PageEditViewBuilder {
 	 */
 	private function buildBreadcrumb() {
 
-		$breadcrumbFac = new BreadcrumbFactory($this->folder, Conf::get('general.url.www').'/page');
+		$breadcrumbFac = new BreadcrumbFactory($this->folder, Conf::get('general.cmsurl.www').'/page');
 		$breadcrumb = $breadcrumbFac->build();
 
 		if ($this->page !== null) {

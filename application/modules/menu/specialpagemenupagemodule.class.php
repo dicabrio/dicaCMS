@@ -54,7 +54,7 @@ class SpecialpagemenuPageModule implements PageModuleController {
 			if ($this->page->getName() == $page->getName()) {
 				$str .= '
 					<li class="mainMenuItem mainMenuItemOpened">
-						<a class="opened" href="' . Conf::get('general.url.www') . '/' . $page->getName() . '.html" title="' . $page->getTitle() . '" id="currentItem">' . $page->getTitle() . '</a>
+						<a class="opened" href="' . Conf::get('general.cmsurl.www') . '/' . $page->getName() . '.html" title="' . $page->getTitle() . '" id="currentItem">' . $page->getTitle() . '</a>
 						<div class="when whencurrentItem" id="currentContent">
 
 							<div class="content" >
@@ -75,7 +75,7 @@ class SpecialpagemenuPageModule implements PageModuleController {
 			} else {
 				$str .= '
 					<li class="mainMenuItem">
-						<a class="closed" href="' . Conf::get('general.url.www') . '/' . $page->getName() . '.html" title="' . $page->getTitle() . '">' . $page->getTitle() . '</a>
+						<a class="closed" href="' . Conf::get('general.url.www') . '/' . $page->getName() . '/" title="' . $page->getTitle() . '">' . $page->getTitle() . '</a>
 					</li>';
 			}
 		}

@@ -140,9 +140,9 @@
 			<?php echo $form->getFormElement('save'); ?>
 
 			<?php if ($pagesavedredirect !== null) : ?>
-			<a href="<?php echo Conf::get('general.url.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<a href="<?php echo Conf::get('general.cmsurl.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
 			<?php else : ?>
-			<a href="<?php echo Conf::get('general.url.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
+			<a href="<?php echo Conf::get('general.cmsurl.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
 			<?php endif; ?>
 		</div>
 	</div>

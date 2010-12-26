@@ -63,7 +63,7 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('staticblock.button.'.$action),
-												Conf::get('general.url.www').'/staticblock/'.$action.'/'.$pid,
+												Conf::get('general.cmsurl.www').'/staticblock/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}
 

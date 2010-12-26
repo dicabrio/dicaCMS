@@ -22,7 +22,7 @@ class BlogController extends CmsController {
 		$blogItems = Blog::findAll();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/blog/editblog', Lang::get('blog.button.newblog')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/blog/editblog', Lang::get('blog.button.newblog')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($blogItems);
@@ -88,7 +88,7 @@ class BlogController extends CmsController {
 			$data->commit();
 
 			$session = Session::getInstance();
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
 
 		} catch (RecordException $e) {
 			$aErrors[] = 'page.somthingwrong';

@@ -6,7 +6,7 @@
 	<div class="modulecontent">
 		<?php if ($filename) : ?>
 		<div style="float: left; border: 1px solid #eee; margin: 0 10px 0 0; text-align: center; padding: 5px;">
-			<img style="border: 1px solid #ccc;" src="<?php echo Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$filename; ?>" alt="<?php echo $alttext; ?>" />
+			<img style="border: 1px solid #ccc;" src="<?php echo Conf::get('general.cmsurl.www').Conf::get('upload.url.general').'/'.$filename; ?>" alt="<?php echo $alttext; ?>" />
 		</div>
 		<?php else: ?>
 		<div style="float: left; margin: 0 10px 0 0; position: relative;">

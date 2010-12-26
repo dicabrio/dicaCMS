@@ -42,8 +42,8 @@ class PageController extends CmsController {
 		$stuff = $folder->getChildren();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editpage', Lang::get('page.button.newpage')));
-//		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/page/editfolder', Lang::get('page.button.newfolder')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/editpage', Lang::get('page.button.newpage')));
+//		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($stuff);
@@ -55,8 +55,8 @@ class PageController extends CmsController {
 		$oPageOverview->assign('actions', $actions);
 		$oPageOverview->assign('oOverview', $oTable);
 		$oPageOverview->assign('oBreadCrumb', $this->buildBreadcrumb($folder));
-		$oPageOverview->assign('sSearchFormAction', Conf::get('general.url.www').Conf::get('page.url.searchpage'));
-		$oPageOverview->assign('sPageFormAction', Conf::get('general.url.www').Conf::get('page.url.showpage'));
+		$oPageOverview->assign('sSearchFormAction', Conf::get('general.cmsurl.www').Conf::get('page.url.searchpage'));
+		$oPageOverview->assign('sPageFormAction', Conf::get('general.cmsurl.www').Conf::get('page.url.showpage'));
 		$oPageOverview->assign('sSucces', $sSuccess);
 
 		$oBaseView = parent::getBaseView();
@@ -73,7 +73,7 @@ class PageController extends CmsController {
 	 */
 	private function buildBreadcrumb(Folder $pagefolder, Page $oPage=null) {
 
-		$breadcrumbFac = new BreadcrumbFactory($pagefolder, Conf::get('general.url.www').'/page');
+		$breadcrumbFac = new BreadcrumbFactory($pagefolder, Conf::get('general.cmsurl.www').'/page');
 		$breadcrumb = $breadcrumbFac->build();
 
 		if ($oPage !== null) {
@@ -245,7 +245,7 @@ class PageController extends CmsController {
 		if ($folderName == '') {
 			$folderName = Lang::get('breadcrumb.root');
 		}
-		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.www').'/page/folder/'.$parentPageFolder->getID(), $folderName));
+		$breadcrumb->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/folder/'.$parentPageFolder->getID(), $folderName));
 
 		$breadcrumbname = Lang::get('page.breadcrumb.editpagefolder', $currentPageFolder->getName());
 		if ($currentPageFolder->getID() == 0) {
@@ -279,7 +279,7 @@ class PageController extends CmsController {
 			$data->commit();
 
 			$session = Session::getInstance();
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
 		} catch (RecordException $e) {
 			$aErrors[] = 'page.somthingwrong';
 			$aErrors[] = $e->getMessage();
@@ -304,7 +304,7 @@ class PageController extends CmsController {
 			$data->commit();
 
 			$session = Session::getInstance();
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
 
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';

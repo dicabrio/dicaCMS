@@ -44,7 +44,7 @@ class LoginHandler implements FormHandler {
 					$redirect = 'dropbox.html';
 				}
 
-				$this->req->redirect(Conf::get('general.url.www').'/'.$redirect);
+				$this->req->redirect(Conf::get('general.cmsurl.www').'/'.$redirect);
 			}
 
 			$this->mapper->addMappingError('login', 'errorusernameorpass');

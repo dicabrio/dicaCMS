@@ -16,7 +16,7 @@ class TemplateFileForm extends Form {
 	public function __construct(Request $req, TemplateFile $tpl) {
 
 		$this->tpl = $tpl;
-		parent::__construct(Conf::get('general.url.www').'/template/edittemplate/'.$tpl->getID(), Request::POST, 'templatefileform');
+		parent::__construct(Conf::get('general.cmsurl.www').'/template/edittemplate/'.$tpl->getID(), Request::POST, 'templatefileform');
 
 	}
 

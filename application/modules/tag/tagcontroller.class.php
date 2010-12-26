@@ -55,7 +55,7 @@ class TagController extends CmsController {
 		$button = new ActionButton('save');
 
 		if ($this->form == null) {
-			$this->form = new Form(Conf::get('general.url.www').'/'.self::CONTROLLER.'/save/'.$tag->getID(), Request::POST, 'editTag');
+			$this->form = new Form(Conf::get('general.cmsurl.www').'/'.self::CONTROLLER.'/save/'.$tag->getID(), Request::POST, 'editTag');
 			$this->form->addFormElement($name->getName(), $name);
 			$this->form->addFormElement('save', $button);
 		}

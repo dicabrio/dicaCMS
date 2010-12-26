@@ -1,14 +1,14 @@
 RewriteEngine on
 
-# handle requests for site pages like http://www.domain.com/pagename.html
+# handle requests for cmspages http://www.domain.com/cms/login/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)\.html$ pagehandler.php?url=$1 [L,QSA]
+RewriteRule ^cms/(.+)$ cmshandler.php?url=$1 [L,QSA]
 
-# handle requests for cmspages http://www.domain.com/login/
+# handle requests for site pages like http://www.domain.com/pagename/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ cmshandler.php?url=$1 [L,QSA]
+RewriteRule ^(.+)$ pagehandler.php?url=$1 [L,QSA]
 
 # default page
 RewriteRule ^$ pagehandler.php?url=index [L]
