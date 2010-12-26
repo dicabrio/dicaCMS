@@ -70,7 +70,7 @@ class Form {
 	 */
 	private function getValueFromRequest(FormElement $formElement) {
 
-		if ($this->request instanceof Request) {
+		if ($this->isSubmitted()) {
 			$formElementName = $formElement->getName();
 
 			if ($formElement->getType() == 'file') {
@@ -78,8 +78,6 @@ class Form {
 			} else {
 				return $this->request->request($formElementName);
 			}
-		} else {
-			return null;
 		}
 	}
 
@@ -97,7 +95,7 @@ class Form {
 			$this->sFormEnctype = ' enctype="multipart/form-data"';
 		}
 
-		if ($oFormElement->getType() !== 'submit') {
+		if ($this->isSubmitted() && $oFormElement->getType() !== 'submit') {
 			$oFormElement->setValue($this->getValueFromRequest($oFormElement));
 		}
 
@@ -196,9 +194,9 @@ class Form {
 
 		$this->request = $request;
 
-//		if ($request->method() == Request::POST) {
-		$this->populateFormElementsWithRequestData();
-//		}
+		if ($this->isSubmitted()) {
+			$this->populateFormElementsWithRequestData();
+		}
 
 
 		foreach ($this->aSubmitButtonsAndHandlers as $aSingleSubmitButtonAndHandler) {
@@ -245,6 +243,19 @@ class Form {
 	public function getIdentifier() {
 
 		return $this->sFormIdentifier;
+	}
+
+	/**
+	 * check if this form is submitted
+	 * @return Boolean
+	 */
+	private function isSubmitted() {
+
+		if ($this->request instanceof Request) {
+			return ($this->request->method() == Request::POST);
+		}
+
+		return false;
 	}
 
 }
