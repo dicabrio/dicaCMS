@@ -2,7 +2,6 @@ $(function () {
 
 	TabSystem.init();
 	
-	
 	var editorsEnabled = false;
 	
 	TabSystem.addListener('content', function () {
@@ -14,7 +13,7 @@ $(function () {
 
 		var editors = [];
 
-		$('.moduletextblock').each(function () {
+		$('.yui-skin-sam .moduletextblock').each(function () {
 
 			var myEditor = new YAHOO.widget.Editor($(this).attr('id'), {
 				height: '200px',

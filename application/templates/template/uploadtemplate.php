@@ -1,3 +1,9 @@
+<?php
+
+	$this->addScript(Conf::get('general.url.js').'/edit_area/edit_area_full.js');
+	$this->addScript(Conf::get('general.url.js').'/codeeditor.js');
+
+?>
 <?php if (isset($breadcrumb)) : ?>
 	<?php echo $breadcrumb->getContents(); ?>
 <?php endif; ?>

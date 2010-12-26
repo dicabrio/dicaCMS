@@ -6,10 +6,6 @@ class Tweet extends DataRecord {
 	public function __construct($id=null) {
 		
 		parent::__construct(__CLASS__, $id);
-
-		if (!$id) {
-			$this->setAttr('update', date('Y-m-d H:i:s'));
-		}
 		
 	}
 	

@@ -166,8 +166,9 @@ class FileManager {
 	 */
 	public function getMimeType() {
 
-		$fileinfo = new finfo(FILEINFO_MIME);
-		return $fileinfo->file($this->getFullPath());
+		return "";
+//		$fileinfo = new finfo(FILEINFO_MIME);
+//		return $fileinfo->file($this->getFullPath());
 
 	}
 
