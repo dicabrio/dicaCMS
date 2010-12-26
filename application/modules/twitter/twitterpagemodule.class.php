@@ -71,7 +71,6 @@ class TwitterPageModule implements PageModuleController {
 		$tweet = current(Tweet::getLast(1));
 		$tweets = Tweet::getLast((int)$this->twitterAmount);
 
-
 		$tweetMessages = array();
 		foreach ($tweets as $tweety) {
 			$tweetMessages[] = array('message' => $tweety->getMessage(), 'date' => $tweety->getDate());
@@ -106,7 +105,6 @@ class TwitterPageModule implements PageModuleController {
 	private function getTweets() {
 
 		$lastTweet = current(Tweet::getLast());
-			test($lastTweet->getUpdate());
 
 		if (strtotime($lastTweet->getUpdate()) < strtotime('now - 30 minutes')) {
 

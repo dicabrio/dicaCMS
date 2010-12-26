@@ -24,7 +24,7 @@ if (isset($htmlEditor) && $htmlEditor == true) {
 	<?php else : ?>
 	<div class="modulecontent">
 	<?php endif; ?>
-		<?php echo $form->getFormElement($sIdentifier)->addAttribute('class', 'moduletextblock '.$sIdentifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
+	<?php echo $form->getFormElement($sIdentifier)->addAttribute('class', 'moduletextblock '.$sIdentifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
 	</div>
 	<div class="clear">&nbsp;</div>
 </div>

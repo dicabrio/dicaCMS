@@ -109,8 +109,12 @@ class PageEditViewBuilder {
 		foreach ($pageModules as $pageModule) {
 
 			$moduleController = $this->buildCmsModuleController($pageModule);
+			$moduleLabel = $pageModule->getType().'_'.$pageModule->getIdentifier();
+
+			$this->view->assign($moduleLabel, $moduleController->getEditor());
+
 			$this->pageModuleControllers[] = $moduleController;
-			$this->pageModuleControllerViews[] = $moduleController->getEditor();
+			$this->pageModuleControllerViews[] = $moduleLabel;
 
 		}
 

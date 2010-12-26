@@ -127,6 +127,15 @@ class View {
 	 * @param View $oView
 	 */
 	public function setParent(View $oView) {
+
+		foreach ($this->scripts as $script) {
+			$oView->addScript($script);
+		}
+
+		foreach ($this->style as $style) {
+			$oView->addStyle($style);
+		}
+
 		$this->m_oParentView = $oView;
 	}
 

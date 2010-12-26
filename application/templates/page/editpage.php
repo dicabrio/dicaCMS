@@ -100,8 +100,8 @@
 		<div class="modulecontent"><?php echo Lang::get('page.label.nomodules'); ?></div>
 	</div>
 	<?php else: ?>
-		<?php foreach ($aModules as $oModule) :?>
-			<?php echo $oModule->getContents(); ?>
+		<?php foreach ($aModules as $moduleLabel) :?>
+			<?php echo $$moduleLabel; ?>
 		<?php endforeach; ?>
 	<?php endif;?>
 </fieldset>
