@@ -62,17 +62,24 @@ class Form {
 	}
 
 	/**
+	 * This method will get a value from a request. It checks if the request object exists
+	 * IF not it returns null
+	 *
 	 * @param string $sRequestKey
 	 * @return mixed
 	 */
 	private function getValueFromRequest(FormElement $formElement) {
 
-		$formElementName = $formElement->getName();
+		if ($this->request instanceof Request) {
+			$formElementName = $formElement->getName();
 
-		if ($formElement->getType() == 'file') {
-			return $this->request->files($formElementName);
+			if ($formElement->getType() == 'file') {
+				return $this->request->files($formElementName);
+			} else {
+				return $this->request->request($formElementName);
+			}
 		} else {
-			return $this->request->request($formElementName);
+			return null;
 		}
 	}
 
@@ -88,6 +95,10 @@ class Form {
 
 		if ($oFormElement->getType() == 'file') {
 			$this->sFormEnctype = ' enctype="multipart/form-data"';
+		}
+
+		if ($oFormElement->getType() !== 'submit') {
+			$oFormElement->setValue($this->getValueFromRequest($oFormElement));
 		}
 
 		$this->aFormElementsByIdentifier[$sIdentifier] = $oFormElement;
@@ -185,9 +196,9 @@ class Form {
 
 		$this->request = $request;
 
-		if ($request->method() == Request::POST) {
-			$this->populateFormElementsWithRequestData();
-		}
+//		if ($request->method() == Request::POST) {
+		$this->populateFormElementsWithRequestData();
+//		}
 
 
 		foreach ($this->aSubmitButtonsAndHandlers as $aSingleSubmitButtonAndHandler) {
@@ -195,7 +206,6 @@ class Form {
 			$oHandler = $aSingleSubmitButtonAndHandler['FormHandler'];
 			$sValueFromRequest = $this->getValueFromRequest($oButton);
 			if ($sValueFromRequest == $oButton->getValue()) {
-				$this->populateFormElementsWithRequestData();
 				$oHandler->handleForm($this);
 			}
 		}

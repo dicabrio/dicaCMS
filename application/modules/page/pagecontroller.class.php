@@ -129,8 +129,8 @@ class PageController extends CmsController {
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
 		$userGroups = UserGroup::findAll();
 
-		// view stuff
 		$this->getEditPageForm($page, $templates, $userGroups);
+		// view stuff
 
 		$pageEditView = new PageEditViewBuilder($page);
 		$pageEditView->buildFormForModules($this->form);
@@ -144,6 +144,10 @@ class PageController extends CmsController {
 		return $oBaseView->getContents();
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function saveeditpage() {
 		return $this->savepage(true);
 	}

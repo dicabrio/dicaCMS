@@ -279,6 +279,10 @@ ul#actions li a {
 	width: 400px;
 }
 
+input#about_insertimage_width, input#about_insertimage_height {
+	width: 27px;
+}
+
 input[type=text], textarea, select {
 	padding: 3px;
 	font-size: 13px;

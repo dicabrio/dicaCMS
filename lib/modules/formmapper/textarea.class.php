@@ -1,29 +1,26 @@
 <?php
+
 /**
  * A basic input field
  */
 class TextArea implements FormElement {
 
-/**
- * @var string
- */
+	/**
+	 * @var string
+	 */
 	private $sName;
-
 	/**
 	 * @var string
 	 */
 	private $sValue;
-
 	/**
 	 * @var string
 	 */
 	private $sStyle;
-
 	/**
 	 * @var array
 	 */
 	private $attributes = array();
-
 	private $mapping;
 
 	/**
@@ -66,9 +63,14 @@ class TextArea implements FormElement {
 				$sAttributes .= sprintf(' %s="%s"', $name, $value);
 			}
 
-			return sprintf('<textarea id="%s" name="%s" %s %s>%s</textarea>', $this->sName, $this->sName, $this->sStyle, $sAttributes, htmlentities($this->sValue, ENT_COMPAT, 'UTF-8'));
+			return sprintf('<textarea id="%s" name="%s" %s %s>%s</textarea>',
+					$this->sName,
+					$this->sName,
+					$this->sStyle,
+					$sAttributes,
+					htmlentities($this->sValue, ENT_COMPAT, 'UTF-8'));
 		} catch (Exception $e) {
-			return (string)$e->getMessage();
+			return (string) $e->getMessage();
 		}
 	}
 
@@ -80,7 +82,6 @@ class TextArea implements FormElement {
 
 		$this->attributes[$attribute] = $value;
 		return $this;
-		
 	}
 
 	/**

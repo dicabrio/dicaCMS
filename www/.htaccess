@@ -5,6 +5,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^cms/(.+)$ cmshandler.php?url=$1 [L,QSA]
 
+# default page
+RewriteRule ^cms(/)?$ cmshandler.php?url=dashboard [L]
+
 # handle requests for site pages like http://www.domain.com/pagename/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
