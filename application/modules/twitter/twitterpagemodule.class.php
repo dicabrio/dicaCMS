@@ -67,6 +67,7 @@ class TwitterPageModule implements PageModuleController {
 		if ($this->templateFile === null) {
 			return '';
 		}
+		
 		$tweet = current(Tweet::getLast(1));
 		$tweets = Tweet::getLast((int)$this->twitterAmount);
 
@@ -104,8 +105,9 @@ class TwitterPageModule implements PageModuleController {
 	private function getTweets() {
 
 		$lastTweet = current(Tweet::getLast());
+
 		if (strtotime($lastTweet->getUpdate()) < strtotime('now - 30 minutes')) {
-			
+
 			$tweetConnectionString = sprintf('http://twitter.com/users/show/%s.json', $this->twitterAccount);
 			$twitterresource = curl_init();
 			curl_setopt($twitterresource, CURLOPT_USERAGENT, 'PHP Twitter/TweetStory');
@@ -116,6 +118,7 @@ class TwitterPageModule implements PageModuleController {
 
 			$result = json_decode($jsonstring);
 			$data = DataFactory::getInstance();
+
 
 			$data->beginTransaction();
 			try {
@@ -134,7 +137,7 @@ class TwitterPageModule implements PageModuleController {
 				$data->commit();
 
 			} catch (Exception $e) {
-				
+
 				$data->rollBack();
 
 				$lastTweet->setUpdate(new Date('now'));

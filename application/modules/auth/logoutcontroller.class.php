@@ -26,6 +26,6 @@ class LogoutController implements Controller {
 	}
 
 	public function _redirect($url) {
-		Util::gotoPage(Conf::get('general.url.www').'/'.$url);
+		Util::gotoPage(Conf::get('general.cmsurl.www').'/'.$url);
 	}
 }

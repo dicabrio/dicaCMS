@@ -35,7 +35,7 @@ class StaticBlockHandler implements FormHandler {
 			$this->block->save();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/staticblock/');
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/staticblock/');
 
 		} catch (FormMapperException $e) {
 

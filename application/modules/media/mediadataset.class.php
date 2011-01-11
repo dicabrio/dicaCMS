@@ -71,7 +71,7 @@ class MediaDataSet extends AbstractTableDataSet {
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('media.button.'.$action),
-												Conf::get('general.url.www').'/media/'.$action.'/'.$pid,
+												Conf::get('general.cmsurl.www').'/media/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}
 

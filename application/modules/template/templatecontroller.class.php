@@ -35,10 +35,10 @@ class TemplateController extends CmsController {
 		$aItems = $parentFolder->getChildren();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/template/edittemplate', Lang::get('template.button.newfile')));
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/template/editfolder', Lang::get('template.button.newfolder')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/edittemplate', Lang::get('template.button.newfile')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/editfolder', Lang::get('template.button.newfolder')));
 
-		$breadcrumbFac = new BreadcrumbFactory($parentFolder, Conf::get('general.url.www').'/template');
+		$breadcrumbFac = new BreadcrumbFactory($parentFolder, Conf::get('general.cmsurl.www').'/template');
 		$breadcrumb = $breadcrumbFac->build();
 
 		$oTemplateDataSet = new TemplateDataSet();
@@ -47,8 +47,8 @@ class TemplateController extends CmsController {
 		$oTable = new Table($oTemplateDataSet);
 
 		$oTemplateOverview = new View(Conf::get('general.dir.templates').'/template/templateoverview.php');
-		$oTemplateOverview->assign('sSearchFormAction', Conf::get('general.url.www').Conf::get('template.url.searchtemplate'));
-		$oTemplateOverview->assign('sShowFormAction', Conf::get('general.url.www').Conf::get('template.url.showtemplate'));
+		$oTemplateOverview->assign('sSearchFormAction', Conf::get('general.cmsurl.www').Conf::get('template.url.searchtemplate'));
+		$oTemplateOverview->assign('sShowFormAction', Conf::get('general.cmsurl.www').Conf::get('template.url.showtemplate'));
 		$oTemplateOverview->assign('aErrors', $aErrors);
 		$oTemplateOverview->assign('oOverview', $oTable);
 		$oTemplateOverview->assign('actions', $actions);
@@ -164,7 +164,7 @@ class TemplateController extends CmsController {
 			$template->delete();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/template/folder/'.$iParentID);
 
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';
@@ -193,7 +193,7 @@ class TemplateController extends CmsController {
 			$template->delete();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$iParentID);
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/template/folder/'.$iParentID);
 
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';

@@ -24,7 +24,7 @@ class PageDataSet extends AbstractTableDataSet {
 	private function constructFolderLine(PageFolder $folder) {
 		
 		$folderid = $folder->getID();
-		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.url.www').'/page/folder/'.$folder->getID()));
+		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.cmsurl.www').'/page/folder/'.$folder->getID()));
 
 		$this->constructLine($folderid, $sTitle, array('editfolder', 'deletefolder'));
 
@@ -57,7 +57,7 @@ class PageDataSet extends AbstractTableDataSet {
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('page.button.'.$action),
-												Conf::get('general.url.www').'/page/'.$action.'/'.$pid,
+												Conf::get('general.cmsurl.www').'/page/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}
 

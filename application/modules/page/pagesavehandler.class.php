@@ -79,7 +79,7 @@ class PageSaveHandler implements FormHandler {
 			$this->data->commit();
 
 			// need to check fi there is a special redirect to another controller
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.$this->folder->getID());
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.$this->folder->getID());
 
 		} catch (PageRecordException $e) {
 			$oForm->getFormElement('template_id')->notMapped();

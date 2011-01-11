@@ -63,7 +63,7 @@ class MediaSaveHandler implements FormHandler {
 			$this->mediaItem->save();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/media/');
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/media/');
 
 		} catch (PageRecordException $e) {
 

@@ -30,6 +30,12 @@ class TextblockCmsModule implements CmsModuleController {
 	private $textArea;
 
 	/**
+	 *
+	 * @var Bool
+	 */
+	private $htmlEditor;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
@@ -40,11 +46,15 @@ class TextblockCmsModule implements CmsModuleController {
 
 		$this->oPageModule = $oMod;
 		$this->form = $form;
+		$this->htmlEditor = false;
 
 		// load the data
 		$this->load();
 	}
 
+	/**
+	 * Load the data for this module
+	 */
 	private function load() {
 
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
@@ -54,11 +64,23 @@ class TextblockCmsModule implements CmsModuleController {
 
 	}
 
+	/**
+	 * add form mapping
+	 * 
+	 * @param FormMapper $mapper
+	 */
 	public function addFormMapping(FormMapper $mapper) {
 
 		$this->mapper = $mapper;
 		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'DomainText');
 
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function enableHtmlEditor() {
+		$this->htmlEditor = true;
 	}
 
 	/**
@@ -70,6 +92,8 @@ class TextblockCmsModule implements CmsModuleController {
 		$oView = new View(Conf::get('general.dir.templates').'/text/textblock.php');
 		$oView->sIdentifier = $this->oPageModule->getIdentifier();
 		$oView->form = $this->form;
+		$oView->htmlEditor = $this->htmlEditor;
+		
 		return $oView;
 
 	}

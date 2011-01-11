@@ -14,7 +14,7 @@ class PageFolderEditForm extends Form {
 	public function __construct(Request $oReq, PageFolder $pagefolder) {
 		$this->pagefolder = $pagefolder;
 
-		parent::__construct($oReq, Conf::get('general.url.www').'/page/editfolder/'.$pagefolder->getID(), Request::POST, 'pagefolderform');
+		parent::__construct($oReq, Conf::get('general.cmsurl.www').'/page/editfolder/'.$pagefolder->getID(), Request::POST, 'pagefolderform');
 	}
 
 	/**

@@ -34,7 +34,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 	private function constructFolderLine(Folder $folder) {
 
 		$folderid = $folder->getID();
-		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.url.www').'/template/folder/'.$folder->getID()));
+		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.cmsurl.www').'/template/folder/'.$folder->getID()));
 
 		$this->constructLine($folderid, $sTitle, '', array('editfolder', 'deletefolder'));
 
@@ -69,7 +69,7 @@ class TemplateDataSet extends AbstractTableDataSet {
 			}
 
 			$actionstring .= Html::getAnchor(	Lang::get('template.button.'.$action),
-												Conf::get('general.url.www').'/template/'.$action.'/'.$pid,
+												Conf::get('general.cmsurl.www').'/template/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}
 

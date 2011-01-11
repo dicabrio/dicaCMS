@@ -71,7 +71,7 @@ class PageEditViewBuilder {
 	 */
 	private function buildBreadcrumb() {
 
-		$breadcrumbFac = new BreadcrumbFactory($this->folder, Conf::get('general.url.www').'/page');
+		$breadcrumbFac = new BreadcrumbFactory($this->folder, Conf::get('general.cmsurl.www').'/page');
 		$breadcrumb = $breadcrumbFac->build();
 
 		if ($this->page !== null) {
@@ -109,8 +109,12 @@ class PageEditViewBuilder {
 		foreach ($pageModules as $pageModule) {
 
 			$moduleController = $this->buildCmsModuleController($pageModule);
+			$moduleLabel = $pageModule->getType().'_'.$pageModule->getIdentifier();
+
+			$this->view->assign($moduleLabel, $moduleController->getEditor());
+
 			$this->pageModuleControllers[] = $moduleController;
-			$this->pageModuleControllerViews[] = $moduleController->getEditor();
+			$this->pageModuleControllerViews[] = $moduleLabel;
 
 		}
 

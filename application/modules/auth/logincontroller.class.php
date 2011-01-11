@@ -22,8 +22,8 @@ class LoginController extends CmsController {
 	public function __construct($method) {
 
 		parent::__construct($method, 'Login');
-// we should check for permissions
-		$this->form = new LoginForm(Conf::get('general.url.www') . '/login/accept');
+		// we should check for permissions
+		$this->form = new LoginForm(Conf::get('general.cmsurl.www').'/login/accept');
 		$this->formMapper = new LoginMapper();
 	}
 

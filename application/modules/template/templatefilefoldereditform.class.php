@@ -14,7 +14,7 @@ class TemplateFileFolderEditForm extends Form {
 	public function __construct(TemplateFileFolder $pagefolder) {
 
 		$this->templatefolder = $pagefolder;
-		parent::__construct(Conf::get('general.url.www').'/template/editfolder/'.$pagefolder->getID(), Request::POST, 'templatefolderform');
+		parent::__construct(Conf::get('general.cmsurl.www').'/template/editfolder/'.$pagefolder->getID(), Request::POST, 'templatefolderform');
 		
 	}
 
