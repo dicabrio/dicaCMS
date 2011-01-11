@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Genereertijd: 17 Dec 2010 om 17:53
+-- Genereertijd: 11 Jan 2011 om 11:19
 -- Serverversie: 5.1.38
 -- PHP-Versie: 5.3.3
 
@@ -335,18 +335,6 @@ CREATE TABLE IF NOT EXISTS `user_usergroup` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `xmlfeed`
---
-
-CREATE TABLE IF NOT EXISTS `xmlfeed` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pagemodule_id` int(10) unsigned NOT NULL,
-  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `xml` text COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 INSERT INTO `module` (`id`, `name`, `template`, `active`, `url`) VALUES
