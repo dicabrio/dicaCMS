@@ -4,7 +4,7 @@ class StaticblockController extends CmsController {
 
 	public function __construct($sMethod) {
 // we should check for permissions
-		parent::__construct('staticblock/'.$sMethod, Lang::get('static.title'));
+		parent::__construct('staticblock/'.$sMethod, Lang::get('staticblock.title'));
 	}
 
 	/**
