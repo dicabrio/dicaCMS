@@ -1,6 +1,6 @@
 <?php
 
-class StaticblockCmsModule implements CmsModuleController {
+class SearchformCmsModule implements CmsModuleController {
 
 	/**
 	 * @var PageModule
@@ -8,9 +8,9 @@ class StaticblockCmsModule implements CmsModuleController {
 	private $oPageModule;
 
 	/**
-	 * @var StaticBlock
+	 * @var TemplateFile
 	 */
-	private $oStaticBlock;
+	private $templateFile;
 
 	/**
 	 * @var Form
@@ -50,24 +50,34 @@ class StaticblockCmsModule implements CmsModuleController {
 	 */
 	private function load() {
 
-		$this->oStaticBlock = Relation::getSingle('pagemodule', 'staticblock', $this->oPageModule);
+		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$this->pages = Page::findActive();
 
-		if ($this->oStaticBlock === null) {
-			$this->oStaticBlock = new StaticBlock();
-		}
+
+//
+//
+//
+//
+//
+//		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
+//
+//		if ($this->templateFile === null) {
+//			$this->templateFile = new TemplateFile();
+//		}
+//
+//		$module = current(Module::getForTemplates('searchresult'));
+//		$this->options = TemplateFile::findByModule($module);
 
 	}
 
 	private function defineForm() {
 
-		$blocks = StaticBlock::find();
-
 		$this->selectElement = new Select($this->oPageModule->getIdentifier());
-		$this->selectElement->setValue($this->oStaticBlock->getID());
+		$this->selectElement->setValue((int)$this->oTextContent->getContent());
 		$this->selectElement->addOption(0, Lang::get('general.choose'));
 
-		foreach ($blocks as $block) {
-			$this->selectElement->addOption($block->getID(), $block->getIdentifier());
+		foreach ($this->pages as $page) {
+			$this->selectElement->addOption($page->getID(), $page->getName());
 		}
 
 		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
@@ -76,7 +86,7 @@ class StaticblockCmsModule implements CmsModuleController {
 
 	public function addFormMapping(FormMapper $mapper) {
 
-		$mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "Staticblock");
+		$mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "Page");
 		$this->mapper = $mapper;
 
 	}
@@ -87,7 +97,7 @@ class StaticblockCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$view = new View(Conf::get('general.dir.templates').'/staticblock/staticblockchooser.php');
+		$view = new View(Conf::get('general.dir.templates').'/search/searchresultstemplatechooser.php');
 		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->oPageModule->getIdentifier());
 
@@ -103,15 +113,11 @@ class StaticblockCmsModule implements CmsModuleController {
 	public function handleData() {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
-		$staticBlock = $this->mapper->getModel($sModIdentifier);
+		$searchLandingPage = $this->mapper->getModel($sModIdentifier);
 
-		try {
-			Relation::remove('pagemodule', 'staticblock', $this->oPageModule);
-			Relation::add('pagemodule', 'staticblock', $this->oPageModule, $staticBlock);
-
-		} catch (PDOException $e) {
-			// trying to add a duplicate
-		}
+		$this->oTextContent->setContent($searchLandingPage->getID());
+		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->save();
 
 		return false;
 
