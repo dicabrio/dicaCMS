@@ -41,10 +41,12 @@ class LoginHandler implements FormHandler {
 				$oSession->set('front-end-redirect', null);
 
 				if (empty($redirect)) {
-					$redirect = 'dropbox.html';
+					// this should be moved to the cms
+					// in a global setting of somesort
+					$redirect = Conf::get('general.url.www').'/dashboard';
 				}
 
-				$this->req->redirect(Conf::get('general.cmsurl.www').'/'.$redirect);
+				$this->req->redirect($redirect);
 			}
 
 			$this->mapper->addMappingError('login', 'errorusernameorpass');

@@ -57,7 +57,7 @@ class LoginPageModule implements PageModuleController {
 		$this->loginMapper = new LoginMapper();
 		$handler = new LoginHandler($this->loginMapper, $this->request);
 
-		$this->loginForm = new LoginForm(Conf::get('general.cmsurl.www').'/'.$this->page->getName().'.html');
+		$this->loginForm = new LoginForm(Conf::get('general.url.www').'/'.$this->page->getName());
 		$this->loginForm->addListener('login', $handler);
 		$this->loginForm->listen($this->request);
 		
@@ -77,7 +77,7 @@ class LoginPageModule implements PageModuleController {
 			return Lang::get('login.notabletologin');
 		}
 		
-		$view = new View($this->templateFile->getFilename());
+		$view = new View(Conf::get('upload.dir.templates') . '/' . $this->templateFile->getFilename());
 		$view->assign('pagename', $this->page->getName());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));

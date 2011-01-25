@@ -92,7 +92,7 @@ class ViewPageController {
 			$user->watch($area);
 		} catch (UserException $e) {
 			$this->session->set('flash', 'access-denied');
-			$this->session->set('front-end-redirect', $oPage->getName().'.html');
+			$this->session->set('front-end-redirect', Conf::get('general.url.www').'/'.$oPage->getName());
 			$this->redirect('/'.$area->getUrl());
 		}
 	}
