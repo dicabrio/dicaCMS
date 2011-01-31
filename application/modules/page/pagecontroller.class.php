@@ -37,6 +37,7 @@ class PageController extends CmsController {
 		$session = $this->getSession();
 		$session->set(self::C_CURRENT_FOLDER, $iParentID);
 		$session->set('pagesavedredirect', null);
+		$session->set('page', null);
 
 		$folder = new PageFolder($iParentID);
 		$stuff = $folder->getChildren();
@@ -123,7 +124,6 @@ class PageController extends CmsController {
 			}
 		}
 
-		$session->set('page', null);
 		$session->set(self::C_CURRENT_FOLDER, $page->getParent()->getID());
 
 		$templates = TemplateFile::findByModule(current(Module::getForTemplates('page')));
@@ -210,7 +210,7 @@ class PageController extends CmsController {
 			
 			$this->_redirect('page/folder/'.$folder->getID());
 
-			$this->_redirect('page/folder/'.$folder->getID());
+//			$this->_redirect('page/folder/'.$folder->getID());
 
 		} catch (PageRecordException $e) {
 

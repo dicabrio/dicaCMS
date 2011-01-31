@@ -29,14 +29,35 @@ class DomainText implements DomainEntity {
 		$this->sValue = $sValue;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getValue() {
 		return $this->sValue;
 	}
 
+	/**
+	 *
+	 * @param string $value
+	 */
+	protected function setValue($value) {
+		$this->sValue = $value;
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
 	public function __toString() {
 		return $this->sValue."";
 	}
 
+	/**
+	 *
+	 * @param mixed $oObject
+	 * @return bool
+	 */
 	public function equals($oObject) {
 		if (!is_object($oObject)) {
 			return false;
