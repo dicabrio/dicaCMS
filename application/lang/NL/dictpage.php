@@ -55,5 +55,6 @@ $lang = array(
 	'inhoud_2-file-dimensions-too-big' => 'Het te uploaden bestand is te groot',
 	'inhoud_2-uploaded-file-too-big' => 'Het te uploaden bestand is te groot',
 	'pagename-empty' => 'Pagina-url mag niet leeg zijn',
+	'title-nothing-set' => 'Pagina-titel mag niet leeg zijn',
 
 );

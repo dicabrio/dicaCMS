@@ -21,8 +21,25 @@ class Paragraph extends DomainText {
 		// check if it has paragraph wrapt around it
 
 		$text = trim($this->getValue());
-		if (!preg_match('/^<p(.+)\/p>$/', $text)) {
-			$this->setValue('<p>'.$text.'</p>');
-		}
+		$text = strip_tags($text, '<p><a><img><br><strong><em><ul><li><ol>');
+
+		$emptyParagraphPattern = "/<p\b[^>]*>(\S+)?<\/p>(<br \/>)?/";
+		$text = preg_replace($emptyParagraphPattern, '', $text);
+
+		$stripper = new StripAttributes();
+		$stripper->allow = array('id', 'class');
+		$stripper->exceptions = array('img' => array('src', 'alt', 'title', 'width', 'height'), 'a' => array('href', 'title'));
+		$text = $stripper->strip($text);
+
+		$this->setValue($text);
+
 	}
+}
+
+function removeGarbageTags($matches) {
+	return '<p>'.$matches[1].'</p>';
+}
+
+function removeGarbageBreaks($matches) {
+	return '';
 }

@@ -210,8 +210,6 @@ class PageController extends CmsController {
 			
 			$this->_redirect('page/folder/'.$folder->getID());
 
-//			$this->_redirect('page/folder/'.$folder->getID());
-
 		} catch (PageRecordException $e) {
 
 			$data->rollBack();

@@ -480,6 +480,22 @@ abstract class DataRecord {
 		return self::findBySql($sTableName, $sql, $aBindings, $sDbConnectionName);
 	}
 
+
+	protected static function countBySql($query, $bind=array(), $sDbConnectionName = null) {
+
+		$oDatabaseHandler = self::getConnection($sDbConnectionName);
+
+		$oStatement = $oDatabaseHandler->prepare($query);
+		$oStatement->execute($bind);
+
+		if (!$oStatement) {
+			$aErrorInfo = $oStatement->errorInfo();
+			throw new RecordException($aErrorInfo[2]);
+		}
+
+		return $oStatement->fetchColumn();
+	}
+
 	/**
 	 * @return string
 	 */

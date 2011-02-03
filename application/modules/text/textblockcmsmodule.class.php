@@ -109,7 +109,7 @@ class TextblockCmsModule implements CmsModuleController {
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$text = $this->mapper->getModel($sModIdentifier);
 
-		if ($this->htmlEditor) {
+		if ($this->htmlEditor === true) {
 			$text->cleanUpHTML();
 		}
 

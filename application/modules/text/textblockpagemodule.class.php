@@ -19,6 +19,12 @@ class TextblockPageModule implements PageModuleController {
 
 	/**
 	 *
+	 * @var boolean
+	 */
+	private $isHtmlContent = false;
+
+	/**
+	 *
 	 * @param PageModule $oMod
 	 * @param Page $oPage
 	 * @param Request $request
@@ -46,6 +52,10 @@ class TextblockPageModule implements PageModuleController {
 			return '';
 		}
 
+		if ($this->isHtmlContent) {
+			return $this->oTextContent->getContent();
+		}
+		
 		return nl2br($this->oTextContent->getContent());
 	}
 
@@ -56,5 +66,11 @@ class TextblockPageModule implements PageModuleController {
 	public function getIdentifier() {
 
 		return $this->oPageModule->getIdentifier();
+	}
+
+	protected function isHTMLContent() {
+
+		$this->isHtmlContent = true;
+
 	}
 }

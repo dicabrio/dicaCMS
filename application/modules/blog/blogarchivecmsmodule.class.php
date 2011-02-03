@@ -25,15 +25,11 @@ class BlogarchiveCmsModule implements CmsModuleController {
 
 	/**
 	 *
-	 * @var TextArea
+	 * @var Input
 	 */
-	private $textArea;
+	private $amountElement;
 
-	/**
-	 *
-	 * @var Bool
-	 */
-	private $htmlEditor;
+	private $amount;
 
 	/**
 	 * construct the text line module
@@ -50,6 +46,7 @@ class BlogarchiveCmsModule implements CmsModuleController {
 
 		// load the data
 		$this->load();
+		$this->defineForm();
 	}
 
 	/**
@@ -57,6 +54,34 @@ class BlogarchiveCmsModule implements CmsModuleController {
 	 */
 	private function load() {
 
+		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$values = explode(',', $this->oTextContent->getContent());
+
+		if (!isset($values[1])) {
+			$this->amount = 10;
+			$this->templateFile = $this->templateFile = new TemplateFile();
+		} else {
+			$this->amount = $values[0];
+			$this->templateFile = $this->templateFile = new TemplateFile($values[1]);
+		}
+
+		$module = current(Module::getForTemplates('blog'));
+		$this->options = TemplateFile::findByModule($module);
+	}
+
+	private function defineForm() {
+
+		$this->amountElement = new Input('text', $this->oPageModule->getIdentifier().'_amount', $this->amount);
+
+		$this->selectElement = new Select($this->oPageModule->getIdentifier());
+		$this->selectElement->setValue($this->templateFile->getID());
+		$this->selectElement->addOption(0, Lang::get('general.choose'));
+
+		foreach ($this->options as $templateOption) {
+			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
+		}
+		$this->form->addFormElement($this->amountElement->getName(), $this->amountElement);
+		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
 	}
 
 	/**
@@ -67,6 +92,7 @@ class BlogarchiveCmsModule implements CmsModuleController {
 	public function addFormMapping(FormMapper $mapper) {
 
 		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "TemplateFile");
 
 	}
 
@@ -76,7 +102,11 @@ class BlogarchiveCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		return '';
+		$view = new View(Conf::get('general.dir.templates').'/blog/blogcmsmodule.php');
+		$view->assign('form', $this->form);
+		$view->assign('identifier', $this->oPageModule->getIdentifier());
+
+		return $view;
 		
 	}
 
@@ -87,7 +117,13 @@ class BlogarchiveCmsModule implements CmsModuleController {
 	 */
 	public function handleData() {
 
-		// empty
+		$sModIdentifier = $this->oPageModule->getIdentifier();
+		$templateFile = $this->mapper->getModel($sModIdentifier);
+		$amount = $this->mapper->getModel($sModIdentifier.'_amount');
+
+		$this->oTextContent->setContent($amount.','.$templateFile->getID());
+		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->save();
 
 	}
 
