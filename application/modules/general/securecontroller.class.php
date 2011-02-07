@@ -5,7 +5,6 @@ class SecureController implements Controller {
 	protected $arguments;
 
 	/**
-	 *
 	 * @var Session
 	 */
 	private $session;

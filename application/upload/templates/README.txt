@@ -1,1 +1,0 @@
-This directory needs write permissions

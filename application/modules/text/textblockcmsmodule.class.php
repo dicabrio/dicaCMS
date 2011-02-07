@@ -72,7 +72,8 @@ class TextblockCmsModule implements CmsModuleController {
 	public function addFormMapping(FormMapper $mapper) {
 
 		$this->mapper = $mapper;
-		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'DomainText');
+		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'Paragraph');
+//		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'DomainText');
 
 	}
 
@@ -107,6 +108,10 @@ class TextblockCmsModule implements CmsModuleController {
 
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$text = $this->mapper->getModel($sModIdentifier);
+
+		if ($this->htmlEditor === true) {
+			$text->cleanUpHTML();
+		}
 
 		if ($this->oTextContent === null) {
 			$this->oTextContent = new PageText();

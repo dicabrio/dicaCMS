@@ -275,8 +275,16 @@ ul#actions li a {
 	position: relative;
 }
 
+.pagemodule .modulecontent table td:first-child {
+	width: 200px;
+}
+
 .modulecontent input[type=text] {
 	width: 400px;
+}
+
+.modulecontent input.small_input {
+	width: 30px;
 }
 
 input#about_insertimage_width, input#about_insertimage_height {
