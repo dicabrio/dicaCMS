@@ -1,6 +1,3 @@
-<h2>Sport &amp; Spel bestanden:</h2>
-<a href="#">Bestand uploaden</a>
-<hr />
 <?php if (count($mediaItems) > 0) : ?>
 
 <?php foreach ($mediaItems as $media) : ?>
@@ -15,9 +12,6 @@
 		- <a href="#">Edit</a>
 		<?php endif; ?>
 	</p>
-	<!--<ul>
-		<li>Linked tags (@todo)</li>
-	</ul>-->
 </article>
 <?php endforeach; ?>
 
@@ -25,14 +19,3 @@
 	Geen uploads gevonden
 <?php endif; ?>
 
-<hr />
-
-<p>Geselecteerde Tag: <?php echo $selectedTag; ?></p>
-<h2>Tags:</h2>
-<?php if (is_array($tags) && count($tags) > 0) : ?>
-<ul>
-	<?php foreach ($tags as $tag) : ?>
-	<li><a href="<?php echo $wwwurl; ?>/<?php echo $pageurl; ?>.html?tag=<?php echo $tag->getName(); ?>"><?php echo $tag->getName(); ?></a></li>
-	<?php endforeach; ?>
-</ul>
-<?php endif; ?>

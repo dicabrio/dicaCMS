@@ -1,1 +1,0 @@
-Remove the '.example' from the default folder for the configs to take effect

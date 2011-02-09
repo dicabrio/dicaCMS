@@ -1,6 +1,6 @@
 <?php
 
-class MediatagsoverviewPageModule implements PageModuleController {
+class MediabytagPageModule implements PageModuleController {
 
 	/**
 	 * @var PageModule
@@ -48,7 +48,6 @@ class MediatagsoverviewPageModule implements PageModuleController {
 		$user = $auth->getUser();
 
 		$this->selectedTag = Tag::findByName($this->request->get('tag'));
-		$this->tags = Tag::findAll();
 
 		if ($this->selectedTag instanceof Tag) {
 			$mediaItems = $this->selectedTag->getMedia();
@@ -82,8 +81,8 @@ class MediatagsoverviewPageModule implements PageModuleController {
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('pageurl', $this->page->getName());
 		$view->assign('mediaItems', $this->mediaItems);
-		$view->assign('tags', $this->tags);
 		$view->assign('selectedTag', $this->selectedTag);
+		
 		return $view;
 	}
 
@@ -91,7 +90,7 @@ class MediatagsoverviewPageModule implements PageModuleController {
 	 * @return string
 	 */
 	public function getIdentifier() {
-		
+		return $this->pageModule->getIdentifier();
 	}
 
 }
