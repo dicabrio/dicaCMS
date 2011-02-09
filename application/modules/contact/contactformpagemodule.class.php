@@ -111,7 +111,7 @@ class ContactformPageModule implements PageModuleController {
 				$bericht = new TextArea('bericht'),
 		);
 
-		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName().'.html');
+		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName());
 		foreach ($elements as $element) {
 			$form->addFormElement($element->getName(), $element);
 		}

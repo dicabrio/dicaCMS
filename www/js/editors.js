@@ -1,8 +1,5 @@
 $(function () {
 
-	TabSystem.init();
-	
-	
 	var editorsEnabled = false;
 	
 	TabSystem.addListener('content', function () {
@@ -14,7 +11,7 @@ $(function () {
 
 		var editors = [];
 
-		$('.moduletextblock').each(function () {
+		$('.yui-skin-sam .moduletextblock').each(function () {
 
 			var myEditor = new YAHOO.widget.Editor($(this).attr('id'), {
 				height: '200px',
@@ -63,11 +60,4 @@ $(function () {
 		});
 
 	});
-
-	var urlHash = window.location.hash;
-	if (urlHash) {
-		$('#tabmenu li a.'+urlHash.substr(1)).click();
-	} else {
-		$('#tabmenu li.active a').click();
-	}
 });

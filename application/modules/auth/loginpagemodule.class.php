@@ -57,7 +57,7 @@ class LoginPageModule implements PageModuleController {
 		$this->loginMapper = new LoginMapper();
 		$handler = new LoginHandler($this->loginMapper, $this->request);
 
-		$this->loginForm = new LoginForm(Conf::get('general.url.www').'/'.$this->page->getName().'.html');
+		$this->loginForm = new LoginForm(Conf::get('general.url.www').'/'.$this->page->getName());
 		$this->loginForm->addListener('login', $handler);
 		$this->loginForm->listen($this->request);
 		

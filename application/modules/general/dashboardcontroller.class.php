@@ -8,7 +8,7 @@ class DashboardController extends CmsController {
 	}
 
 	public function _index() {
-		$oDashBoard = new View(Conf::get('general.dir.templates').'/dashboard/dashboard.php');
+		$oDashBoard = new View(Conf::get('general.dir.templates').'/cmsdashboard/dashboard.php');
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $oDashBoard);

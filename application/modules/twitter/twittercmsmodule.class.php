@@ -13,6 +13,18 @@ class TwitterCmsModule implements CmsModuleController {
 	private $templateFile;
 
 	/**
+	 *
+	 * @var Setting
+	 */
+	private $twitterAccountSetting;
+
+	/**
+	 *
+	 * @var Setting
+	 */
+	private $twitterAmountSetting;
+
+	/**
 	 * @var Form
 	 */
 	private $form;
@@ -27,6 +39,18 @@ class TwitterCmsModule implements CmsModuleController {
 	 * @var Select
 	 */
 	private $selectElement;
+
+	/**
+	 *
+	 * @var Input
+	 */
+	private $twitterAccountName;
+
+	/**
+	 *
+	 * @var Input
+	 */
+	private $twitterAmount;
 
 	/**
 	 *
@@ -56,6 +80,8 @@ class TwitterCmsModule implements CmsModuleController {
 
 	private function load() {
 
+		$this->twitterAccountSetting = Setting::getByName('twitteraccount');
+		$this->twitterAmountSetting = Setting::getByName('twitteramount');
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->oPageModule);
 		if ($this->templateFile == null) {
 			$this->templateFile = new TemplateFile();
@@ -68,13 +94,20 @@ class TwitterCmsModule implements CmsModuleController {
 
 	private function defineForm() {
 
-		$this->selectElement = new Select($this->oPageModule->getIdentifier());
+		$identifier = $this->oPageModule->getIdentifier();
+
+		$this->twitterAccountName = new Input('text', $identifier.'_account', $this->twitterAccountSetting->getValue());
+		$this->twitterAmount = new Input('text', $identifier.'_amount', $this->twitterAmountSetting->getValue());
+
+		$this->selectElement = new Select($identifier);
 		$this->selectElement->setValue($this->templateFile->getID());
 		$this->selectElement->addOption(0, Lang::get('general.choose'));
 
 		foreach ($this->options as $templateOption) {
 			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
+		$this->form->addFormElement($this->twitterAccountName->getName(), $this->twitterAccountName);
+		$this->form->addFormElement($this->twitterAmount->getName(), $this->twitterAmount);
 		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
 
 	}
@@ -82,6 +115,8 @@ class TwitterCmsModule implements CmsModuleController {
 	public function addFormMapping(FormMapper $mapper) {
 
 		$this->mapper = $mapper;
+		$this->mapper->addFormElementToDomainEntityMapping($this->twitterAccountName->getName(), "RequiredTextLine");
+		$this->mapper->addFormElementToDomainEntityMapping($this->twitterAmount->getName(), "RequiredNumber");
 		$this->mapper->addFormElementToDomainEntityMapping($this->selectElement->getName(), "TemplateFile");
 
 	}
@@ -107,6 +142,13 @@ class TwitterCmsModule implements CmsModuleController {
 		$sModIdentifier = $this->oPageModule->getIdentifier();
 		$templateFile = $this->mapper->getModel($sModIdentifier);
 
+		
+		$this->twitterAccountSetting->setValue($this->mapper->getModel($sModIdentifier.'_account'));
+		$this->twitterAccountSetting->save();
+
+		$this->twitterAmountSetting->setValue($this->mapper->getModel($sModIdentifier.'_amount'));
+		$this->twitterAmountSetting->save();
+		
 		try {
 			Relation::add('pagemodule', 'templatefile', $this->oPageModule, $templateFile);
 		} catch (PDOException $e) {

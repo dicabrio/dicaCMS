@@ -1,20 +1,19 @@
 <?php
+
 /**
  * Description of BlogController
  *
  * @author robertcabri
  */
 class BlogController extends CmsController {
-	
 	//put your code here
 	const C_CURRENT_FOLDER = 'currentPageFolder';
 
 	public function __construct($method) {
 		// we should check for permissions
-		parent::__construct('blog/'.$method, Lang::get('blog.title'));
+		parent::__construct('blog/' . $method, Lang::get('blog.title'));
 
 		$this->getSession()->set('pagesavedredirect', 'blog');
-
 	}
 
 	public function _index() {
@@ -22,14 +21,14 @@ class BlogController extends CmsController {
 		$blogItems = Blog::findAll();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/blog/editblog', Lang::get('blog.button.newblog')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www') . '/blog/editblog', Lang::get('blog.button.newblog')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($blogItems);
 
 		$oTable = new Table($oPageDataSet);
 
-		$blogOverview = new View(Conf::get('general.dir.templates').'/page/pageoverview.php');
+		$blogOverview = new View(Conf::get('general.dir.templates') . '/page/pageoverview.php');
 		$blogOverview->assign('aErrors', array());
 		$blogOverview->assign('sSucces', false);
 		$blogOverview->assign('actions', $actions);
@@ -70,8 +69,7 @@ class BlogController extends CmsController {
 
 		$this->getSession()->set('page', $blog);
 
-		$this->_redirect('page/editpage/'.$blogID);
-
+		$this->_redirect('page/editpage/' . $blogID);
 	}
 
 	public function deletepage() {
@@ -81,27 +79,27 @@ class BlogController extends CmsController {
 		$data->beginTransaction();
 
 		try {
-			
+
 			$page = new Page(intval(Util::getUrlSegment(2)));
 			$page->delete();
 
 			$data->commit();
 
-			$session = Session::getInstance();
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.intval($session->get(self::C_CURRENT_FOLDER)));
-
+			$this->_redirect('blog');
 		} catch (RecordException $e) {
-			$aErrors[] = 'page.somthingwrong';
+
+			$this->session;
+			$aErrors[] = 'blog.somthingwrong';
 			$aErrors[] = $e->getMessage();
 		}
 
+
 		$data->rollBack();
 		return $this->_index($aErrors);
-
 	}
-
 
 	public function _default() {
 		return __CLASS__;
 	}
+
 }

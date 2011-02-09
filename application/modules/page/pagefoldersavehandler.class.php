@@ -48,7 +48,7 @@ class PageFolderSaveHandler implements FormHandler {
 			$this->pagefolder->save();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/page/folder/'.$this->parentfolder->getID());
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.$this->parentfolder->getID());
 		} catch (PageRecordException $e) {
 			$oForm->getFormElement('template_id')->notMapped();
 			$this->formmapper->addMappingError('page', $e->getMessage());

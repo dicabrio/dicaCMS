@@ -51,9 +51,10 @@ $lang = array(
 		'newpage' => 'Pagina aanmaken',
 	),
 
-	'pagenameexample' => '(contact.html zonder .html)',
+	'pagenameexample' => 'Examples: contact, blog_of_some_sort, project-basecamp',
 	'inhoud_2-file-dimensions-too-big' => 'Het te uploaden bestand is te groot',
 	'inhoud_2-uploaded-file-too-big' => 'Het te uploaden bestand is te groot',
 	'pagename-empty' => 'Pagina-url mag niet leeg zijn',
+	'title-nothing-set' => 'Pagina-titel mag niet leeg zijn',
 
 );

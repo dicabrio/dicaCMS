@@ -40,6 +40,7 @@ class ViewPageController {
 		$oView->assign('imagesurl', Conf::get('general.url.images'));
 		$oView->assign('jsurl', Conf::get('general.url.js'));
 		$oView->assign('cssurl', Conf::get('general.url.css'));
+		$oView->assign('uploadurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
 		$oView->assign('pagename', $oPage->getName());
 
@@ -91,7 +92,7 @@ class ViewPageController {
 			$user->watch($area);
 		} catch (UserException $e) {
 			$this->session->set('flash', 'access-denied');
-			$this->session->set('front-end-redirect', $oPage->getName().'.html');
+			$this->session->set('front-end-redirect', Conf::get('general.url.www').'/'.$oPage->getName());
 			$this->redirect('/'.$area->getUrl());
 		}
 	}

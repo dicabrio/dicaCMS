@@ -40,9 +40,9 @@ class CmsController extends SecureController {
 		$this->oMainMenu = new Menu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
-//		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
+//		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
@@ -52,7 +52,7 @@ class CmsController extends SecureController {
 		$this->oSubMenu = new Menu('modulesNav');
 		foreach ($moduleMenu as $module) {
 			$menuItem = new MenuItem(
-					Conf::get('general.url.www').$module->getUrl(),
+					Conf::get('general.cmsurl.www').$module->getUrl(),
 					Lang::get($module->getName().'.menuname'),
 					$module->getName(),
 					($sActive == $module->getName()));
@@ -64,6 +64,7 @@ class CmsController extends SecureController {
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);
 
 		$this->oBaseView->addScript(Conf::get('general.url.js').'/jquery.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/jquery-ui.min.js');
 		$this->oBaseView->addScript(Conf::get('general.url.js').'/general.js');
 
 		$this->oDatabase = DataFactory::getInstance('default');

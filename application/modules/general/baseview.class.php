@@ -26,7 +26,11 @@ class BaseView extends View {
 		if (!is_string($sScript)) {
 			throw new CmsException('It is not allowed to add a script url of another type then string. Type is: '.getType($sScript));
 		}
-		$this->aScripts[] = $sScript;
+
+		if (!in_array($sScript, $this->aScripts)) {
+			$this->aScripts[] = $sScript;
+		}
+
 	}
 
 	/**
@@ -36,8 +40,11 @@ class BaseView extends View {
 		if (!is_string($sLink)) {
 			throw new CmsException('It is not allowed to add a style url of another type then string. Type is: '.getType($sLink));
 		}
+
+		if (!in_array($sLink, $this->aStyles)) {
+			$this->aStyles[] = $sLink;
+		}
 		
-		$this->aStyles[] = $sLink;
 	}
 
 	/**

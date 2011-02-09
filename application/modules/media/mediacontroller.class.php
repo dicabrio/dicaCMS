@@ -15,7 +15,7 @@ class MediaController extends CmsController {
 		$media = Media::find();
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/media/editmedia', Lang::get('media.button.newitem')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/media/editmedia', Lang::get('media.button.newitem')));
 
 		$tableDataSet = new MediaDataSet();
 		$tableDataSet->setValues($media);
@@ -86,7 +86,7 @@ class MediaController extends CmsController {
 
 			$data->commit();
 
-			Util::gotoPage(Conf::get('general.url.www').'/media');
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/media');
 
 		} catch (RecordException $e) {
 			$data->rollBack();

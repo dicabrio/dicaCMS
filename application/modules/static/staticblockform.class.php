@@ -16,7 +16,7 @@ class StaticBlockForm extends Form {
 	public function __construct(Request $req, StaticBlock $block) {
 
 		$this->block = $block;
-		parent::__construct(Conf::get('general.url.www').'/staticblock/editblock/'.$block->getID(), Request::POST, 'blockform');
+		parent::__construct(Conf::get('general.cmsurl.www').'/staticblock/editblock/'.$block->getID(), Request::POST, 'blockform');
 
 	}
 

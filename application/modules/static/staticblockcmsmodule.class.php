@@ -64,6 +64,7 @@ class StaticblockCmsModule implements CmsModuleController {
 
 		$this->selectElement = new Select($this->oPageModule->getIdentifier());
 		$this->selectElement->setValue($this->oStaticBlock->getID());
+		$this->selectElement->addOption(0, Lang::get('general.choose'));
 
 		foreach ($blocks as $block) {
 			$this->selectElement->addOption($block->getID(), $block->getIdentifier());

@@ -18,7 +18,7 @@ class PageEditForm extends Form {
 		if ($page->getID() == 0) {
 			$redirect = 'saveeditpage';
 		}
-		parent::__construct(Conf::get('general.url.www').'/page/'.$redirect.'/'.$page->getID(), Request::POST, 'pageform');
+		parent::__construct(Conf::get('general.cmsurl.www').'/page/'.$redirect.'/'.$page->getID(), Request::POST, 'pageform');
 	}
 
 	/**

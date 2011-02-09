@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LoginController
  *
@@ -10,7 +11,6 @@ class LoginController extends CmsController {
 	 * @var Form
 	 */
 	private $form;
-
 	/**
 	 * @var FormMapper
 	 */
@@ -23,9 +23,8 @@ class LoginController extends CmsController {
 
 		parent::__construct($method, 'Login');
 		// we should check for permissions
-		$this->form = new LoginForm(Conf::get('general.url.www').'/login/accept');
+		$this->form = new LoginForm(Conf::get('general.cmsurl.www').'/login/accept');
 		$this->formMapper = new LoginMapper();
-
 	}
 
 	/**
@@ -35,12 +34,11 @@ class LoginController extends CmsController {
 	 */
 	public function _index() {
 
-		$oView = new View(Conf::get('general.dir.templates').'/login/login.php');
+		$oView = new View(Conf::get('general.dir.templates') . '/login/login.php');
 		$oView->assign('form', $this->form);
 		$oView->assign('errors', $this->formMapper->getMappingErrors());
 
 		return $oView->getContents();
-
 	}
 
 	/**
@@ -71,14 +69,12 @@ class LoginController extends CmsController {
 			$this->formMapper->addMappingError('login', 'errorusernameorpass');
 			$this->form->getFormElement('username')->notMapped();
 			$this->form->getFormElement('password')->notMapped();
-			
 		} catch (FormMapperException $e) {
 			// this is normal. Keep this empty. We can do stuff here, but we don't need to for logging in
 			// perhaps log the attempts 
 		}
 
 		return $this->_index();
-
 	}
 
 	/**
@@ -89,4 +85,5 @@ class LoginController extends CmsController {
 		Session::getInstance()->destroy();
 		$this->_redirect('login');
 	}
+
 }

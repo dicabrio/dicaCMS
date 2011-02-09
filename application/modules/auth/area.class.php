@@ -23,22 +23,23 @@ class Area extends DataRecord {
 	 */
 	protected function defineColumns() {
 		parent::addColumn('id', DataTypes::INT, false, true);
-		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
-		parent::addColumn('url', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('pagename', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('redirecturl', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('type', DataTypes::VARCHAR, 255, true);
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getName() {
-		return $this->getAttr('name');
+		return $this->getAttr('pagename');
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getUrl() {
-		return $this->getAttr('url');
+		return $this->getAttr('redirecturl');
 	}
 
 	/**
@@ -109,7 +110,7 @@ class Area extends DataRecord {
 	 * @return Area 
 	 */
 	public static function findByPage(Page $page) {
-		$criteria = new Criteria('name = :name', array('name' => $page->getName().'.html'));
+		$criteria = new Criteria('pagename = :name', array('name' => $page->getName()));
 		$areas = parent::findAll(__CLASS__, parent::ALL, $criteria);
 		if (count($areas) > 0) {
 			return reset($areas);

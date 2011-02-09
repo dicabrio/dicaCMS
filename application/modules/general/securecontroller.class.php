@@ -5,7 +5,6 @@ class SecureController implements Controller {
 	protected $arguments;
 
 	/**
-	 *
 	 * @var Session
 	 */
 	private $session;
@@ -73,6 +72,6 @@ class SecureController implements Controller {
 	 * @param string $page
 	 */
 	public function _redirect($page) {
-		Util::gotoPage(Conf::get('general.url.www').'/'.$page);
+		Util::gotoPage(Conf::get('general.cmsurl.www').'/'.$page);
 	}
 }

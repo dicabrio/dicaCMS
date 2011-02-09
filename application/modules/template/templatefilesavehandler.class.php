@@ -53,7 +53,7 @@ class TemplateFileSaveHandler implements FormHandler {
 			$this->template->save();
 
 			$data->commit();
-			Util::gotoPage(Conf::get('general.url.www').'/template/folder/'.$this->parentfolder->getID());
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/template/folder/'.$this->parentfolder->getID());
 
 		} catch (RecordException $e) {
 

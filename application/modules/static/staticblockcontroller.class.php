@@ -4,7 +4,7 @@ class StaticblockController extends CmsController {
 
 	public function __construct($sMethod) {
 // we should check for permissions
-		parent::__construct('staticblock/'.$sMethod, Lang::get('static.title'));
+		parent::__construct('staticblock/'.$sMethod, Lang::get('staticblock.title'));
 	}
 
 	/**
@@ -15,7 +15,7 @@ class StaticblockController extends CmsController {
 	public function _index($aErrors = array()) {
 
 		$actions = new Menu('actions');
-		$actions->addItem(new MenuItem(Conf::get('general.url.www').'/staticblock/editblock', Lang::get('staticblock.button.newblock')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/staticblock/editblock', Lang::get('staticblock.button.newblock')));
 
 		$blocks = StaticBlock::find();
 
@@ -79,7 +79,7 @@ class StaticblockController extends CmsController {
 
 			$data->commit();
 
-			Util::gotoPage(Conf::get('general.url.www').'/staticblock');
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/staticblock');
 
 		} catch (RecordException $e) {
 			
