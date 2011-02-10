@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * 
+ * 
+ * Modifications to user table:
+ * 
+ *	ALTER TABLE  `user` ADD  `activationkey` VARCHAR( 255 ) NOT NULL;
+ *	ALTER TABLE  `user` ADD  `name` VARCHAR( 255 ) NOT NULL;
+ * 
+ */
 class User extends DataRecord {
 
 	/**
@@ -27,6 +35,8 @@ class User extends DataRecord {
 		parent::addColumn('username', DataTypes::VARCHAR, 30, true);
 		parent::addColumn('password', DataTypes::CHAR, 32, true);
 		parent::addColumn('active', DataTypes::INT, 1, true);
+		parent::addColumn('name', DataTypes::VARCHAR, 255, true);
+		parent::addColumn('activationkey', DataTypes::VARCHAR, 255, true);
 	}
 
 	/**
@@ -85,6 +95,22 @@ class User extends DataRecord {
 	}
 
 	/**
+	 *
+	 * @param string $name
+	 */
+	public function setName($name) {
+		$this->setAttr('name', $name);
+	}
+
+	/**
+	 *
+	 * @param string $activationkey
+	 */
+	public function setActivationkey($activationkey) {
+		$this->setAttr('activationkey',$activationkey);
+	}
+
+	/**
 	 * Set the image active or not
 	 *
 	 * @param bool $bActive
@@ -107,6 +133,18 @@ class User extends DataRecord {
 		$this->setAttr('password', md5($sPassword->getValue()));
 	}
 
+	public function save() {
+
+		parent::save();
+		// we need the ID of the user first
+		if (is_array($this->userGroups)) {
+			foreach ($this->userGroups as $userGroup) {
+				Relation::remove('user', 'usergroup', $this);
+				Relation::add('user', 'usergroup', $this, $userGroup);
+			}
+		}
+	}
+
 	/**
 	 *
 	 * @param Area $area 
@@ -120,7 +158,8 @@ class User extends DataRecord {
 	}
 	
 	private function inAllowedUserGroup($userGroupsOfArea) {
-		if (count(array_intersect_key($this->getUserGroups(), $userGroupsOfArea)) == 0) {
+
+		if (count($this->getUserGroups()) == 0 || count(array_intersect_key($this->getUserGroups(), $userGroupsOfArea)) == 0) {
 			//check if you have a similar usergroup
 			throw new UserException('no-rights');
 		}
@@ -142,6 +181,20 @@ class User extends DataRecord {
 		$aReturnVals = parent::findAll(__CLASS__, parent::ALL, $oCrit);
 		if (count($aReturnVals) > 0) {
 			return reset($aReturnVals);
+		}
+
+		return null;
+	}
+
+	/**
+	 *
+	 * @param string18 $activationKey
+	 * @return User
+	 */
+	public static function findByActivationKey($activationKey) {
+		$users = parent::findAll(__CLASS__, parent::ALL, new Criteria('activationkey = :actkey', array('actkey' => $activationKey)));
+		if (is_array($users) && count($users) > 0) {
+			return reset($users);
 		}
 
 		return null;

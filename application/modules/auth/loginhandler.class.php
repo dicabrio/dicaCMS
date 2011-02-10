@@ -20,9 +20,10 @@ class LoginHandler implements FormHandler {
 	 *
 	 * @param FormMapper $mapper
 	 */
-	public function __construct(FormMapper $mapper, Request $req) {
+	public function __construct(FormMapper $mapper, Request $req, $page = null) {
 		$this->mapper = $mapper;
 		$this->req = $req;
+		$this->page = $page;
 	}
 
 	/**
@@ -43,7 +44,10 @@ class LoginHandler implements FormHandler {
 				if (empty($redirect)) {
 					// this should be moved to the cms
 					// in a global setting of somesort
-					$redirect = Conf::get('general.url.www').'/dashboard';
+					$redirect = $this->page;
+					if (empty($this->page)) {
+						$redirect = Conf::get('general.url.www').'/dashboard';
+					}
 				}
 
 				$this->req->redirect($redirect);

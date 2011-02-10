@@ -1,0 +1,3 @@
+-- Alterations --
+ALTER TABLE  `user` ADD  `activationkey` VARCHAR( 255 ) NOT NULL;
+ALTER TABLE  `user` ADD  `name` VARCHAR( 255 ) NOT NULL;

@@ -66,6 +66,11 @@ class UserGroup extends DataRecord {
 
 	}
 
+	/**
+	 *
+	 * @param Area $area
+	 * @return array
+	 */
 	public static function findByArea(Area $area) {
 
 		$userGroups = Relation::getOther('area', 'usergroup', $area);
@@ -76,6 +81,20 @@ class UserGroup extends DataRecord {
 
 		return $newOrderedGroups;
 
+	}
+
+	/**
+	 *
+	 * @param string $name
+	 * @return UserGroup
+	 */
+	public static function findByName($name) {
+		$groups = parent::findAll(__CLASS__, parent::ALL, new Criteria('title = :title', array('title' => $name)), null, 1);
+		if (is_array($groups) && count($groups) > 0) {
+			return reset($groups);
+		}
+
+		return null;
 	}
 
 }
