@@ -80,7 +80,7 @@ class ContactformHandler implements FormHandler {
 
 			$page = new Page($this->thnxpageid);
 
-			Util::gotoPage(Conf::get('general.cmsurl.www').'/'.$page->getName().'.html');
+			Util::gotoPage(Conf::get('general.url.www').'/'.$page->getName());
 
 		} catch (FormMapperException $e) {
 
