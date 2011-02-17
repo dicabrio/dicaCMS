@@ -119,20 +119,20 @@
 				<td>
 					<select name="propertytype">
 						<option value="" >Maak een keuze...</option>
-						<option value="Tussenwoning" >Tussenwoning</option>
-						<option value="Hoekwoning" >Hoekwoning</option>
-						<option value="Twee onder een kap" >Twee onder &eacute;&eacute;n kap</option>
-						<option value="Vrijstaande woning" >Vrijstaande woning</option>
-						<option value="Geschakelde woning" >Geschakelde woning</option>
-						<option value="Eengezinswoning" >Eengezinswoning</option>
-						<option value="Appartement" >Appartement</option>
-						<option value="Woning" >Woning</option>
-						<option value="Penthouse" >Penthouse</option>
-						<option value="Villa" >Villa</option>
-						<option value="Woonboerderij" >Woonboerderij</option>
-						<option value="Bungalow" >Bungalow</option>
-						<option value="Herenhuis" >Herenhuis</option>
-						<option value="Landhuis" >Landhuis</option>
+						<option value="Tussenwoning">Tussenwoning</option>
+						<option value="Hoekwoning">Hoekwoning</option>
+						<option value="Twee onder een kap">Twee onder &eacute;&eacute;n kap</option>
+						<option value="Vrijstaande woning">Vrijstaande woning</option>
+						<option value="Geschakelde woning">Geschakelde woning</option>
+						<option value="Eengezinswoning">Eengezinswoning</option>
+						<option value="Appartement">Appartement</option>
+						<option value="Woning">Woning</option>
+						<option value="Penthouse">Penthouse</option>
+						<option value="Villa">Villa</option>
+						<option value="Woonboerderij">Woonboerderij</option>
+						<option value="Bungalow">Bungalow</option>
+						<option value="Herenhuis">Herenhuis</option>
+						<option value="Landhuis">Landhuis</option>
 					</select>
 				</td>
 			</tr>
