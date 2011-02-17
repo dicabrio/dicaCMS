@@ -9,11 +9,10 @@ class FormElementImpl implements FormElement {
 	private $mapping;
 
 	public function __construct($nodename, $name, $value=null) {
-
 		$this->node = $nodename;
-		$this->attributes['name'] = $name;
-		$this->attributes['value'] = $value;
-		
+		$this->addAttribute('name', $name);
+		$this->addAttribute('value', $value);
+
 	}
 
 	/**
@@ -45,7 +44,7 @@ class FormElementImpl implements FormElement {
 
 	}
 
-	private function getAttribute($name) {
+	protected function getAttribute($name) {
 
 		if (isset($this->attributes[$name])) {
 			return $this->attributes[$name];
@@ -61,7 +60,7 @@ class FormElementImpl implements FormElement {
 	public function getType() {
 
 		return $this->getAttribute('type');
-		
+
 	}
 
 	/**
@@ -85,6 +84,16 @@ class FormElementImpl implements FormElement {
 	}
 
 	/**
+	 *
+	 * @return string
+	 */
+	public function  getIdentifier() {
+
+		return $this->getAttribute('name');
+
+	}
+
+	/**
 	 * @param string $value
 	 */
 	public function setValue($value) {
@@ -99,7 +108,7 @@ class FormElementImpl implements FormElement {
 	public function notMapped() {
 
 		$this->addAttribute('style', 'border: 1px solid red;');
-		
+
 	}
 
 	/**
@@ -124,7 +133,7 @@ class FormElementImpl implements FormElement {
 	public function isSelected() {
 
 		return true;
-		
+
 	}
 
 }

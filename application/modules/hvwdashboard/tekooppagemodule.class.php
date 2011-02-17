@@ -39,7 +39,7 @@ class TekoopPageModule implements PageModuleController {
 	 * load the needed information
 	 */
 	private function load() {
-
+		$this->form = new AddHouseForm(Conf::get('general.url.www').'/'.$this->page->getName(), Request::POST, 'huistoevoegen');
 	}
 
 	/**
@@ -53,15 +53,15 @@ class TekoopPageModule implements PageModuleController {
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('jsurl', Conf::get('general.url.js'));
 		$view->assign('cssurl', Conf::get('general.url.css'));
-//		$oView->form = $this->form;
-		$view->identifier = $this->pageModule->getIdentifier();
-		$view->pagename = $this->page->getName();
+		$view->assign('form', $this->form);
+		$view->assign('identifier', $this->pageModule->getIdentifier());
+		$view->assign('pagename', $this->page->getName());
 
 //		$this->checkActivePage($view);
 //		$view->dashboardpage = $this->getDashboardPage();
 
 		$auth = Authentication::getInstance();
-		$view->user = $auth->getUser();
+		$view->assign('user', $auth->getUser());
 
 		return $view;
 

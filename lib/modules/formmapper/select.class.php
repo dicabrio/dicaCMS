@@ -58,6 +58,10 @@ class Select implements FormElement {
 		return $this->sName;
 	}
 
+	public function getIdentifier() {
+		return $this->sName;
+	}
+
 	/**
 	 * @return string
 	 */

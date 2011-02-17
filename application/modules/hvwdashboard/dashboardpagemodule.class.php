@@ -21,6 +21,12 @@ class DashboardPageModule implements PageModuleController {
 	private $request;
 
 	/**
+	 *
+	 * @var Form
+	 */
+	private $form;
+
+	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
@@ -39,7 +45,7 @@ class DashboardPageModule implements PageModuleController {
 	 * load the needed information
 	 */
 	private function load() {
-
+		
 	}
 
 	/**
@@ -53,13 +59,12 @@ class DashboardPageModule implements PageModuleController {
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('jsurl', Conf::get('general.url.js'));
 		$view->assign('cssurl', Conf::get('general.url.css'));
-//		$oView->form = $this->form;
-		$view->identifier = $this->pageModule->getIdentifier();
-		$view->pagename = $this->page->getName();
+		$view->assign('identifier', $this->pageModule->getIdentifier());
+		$view->assign('pagename', $this->page->getName());
 
 		$this->checkActivePage($view);
 
-		$view->dashboardpage = $this->getDashboardPage();
+		$view->assign('dashboardpage', $this->getDashboardPage());
 
 		$auth = Authentication::getInstance();
 		$view->user = $auth->getUser();
