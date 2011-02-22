@@ -141,6 +141,7 @@ class PageController extends CmsController {
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $view);
+		$oBaseView->addScript(Conf::get('general.url.js').'/page.js');
 		return $oBaseView->getContents();
 	}
 

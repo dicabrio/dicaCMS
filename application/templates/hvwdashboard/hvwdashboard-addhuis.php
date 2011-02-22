@@ -1,7 +1,6 @@
 <?php echo $form->begin(); ?>
 	<ul id="tabmenu">
 		<li class="active"><a href="#adresgegevens" class="adresgegevens">Adres</a></li>
-		<!--<li><a href="#contactgegevens" class="contactgegevens">Contact</a></li>-->
 		<li><a href="#kenmerken" class="kenmerken">Kenmerken</a></li>
 		<li><a href="#omschrijving" class="omschrijving">Omschrijving</a></li>
 		<li><a href="#waardering" class="waardering">Waardering en prijs</a></li>
@@ -13,6 +12,9 @@
 			<legend>Adresgegevens huis</legend>
 
 			<div class="middle">
+
+				<div id="map" style="width: 300px; height: 170px; float: right; border: 1px solid #ccc;"></div>
+
 				<p>
 					Controleer of je huis al op hartvoorwonen staat.<br />
 					Vul hieronder de postcode en huisnummer (toevoeging) combinatie in van het huis dat je te koop/te huur wilt zetten.
@@ -28,6 +30,7 @@
 						<td><input type="text" name="huisnummer" id="huisnummer" value="" /><input type="text" name="toevoeging" id="toevoeging" value="" /></td>
 					</tr>
 				</table>
+
 			</div>
 			<div class="actions">
 				<table class="formtable">
@@ -81,20 +84,6 @@
 				</table>
 				<p>Als je de inhoud van je huis niet weet, neem dan het woonoppervlak en vermenigvuldig dit met 2.5</p>
 				<table class="formtable">
-					<tr>
-						<th>Gestoffeerd:</th>
-						<td>
-							<?php echo $form->getFormElement('gestoffeerd_1'); ?>&nbsp;Ja&nbsp;&nbsp;
-							<?php echo $form->getFormElement('gestoffeerd_0'); ?>&nbsp;Nee
-						</td>
-					</tr>
-					<tr>
-						<th>Gemeubileerd:</th>
-						<td>
-							<?php echo $form->getFormElement('gemeubileerd_1'); ?>&nbsp;Ja&nbsp;&nbsp;
-							<?php echo $form->getFormElement('gemeubileerd_0'); ?>&nbsp;Nee
-						</td>
-					</tr>
 					<tr>
 						<th>Aantal kamers:</th>
 						<td>

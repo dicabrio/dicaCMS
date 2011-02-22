@@ -127,7 +127,7 @@
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getFormElement('save'); ?>
+			<?php echo $form->getFormElement('action'); ?>
 
 			<?php if ($pagesavedredirect !== null) : ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>

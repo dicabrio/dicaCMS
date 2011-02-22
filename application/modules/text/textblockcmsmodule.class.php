@@ -60,7 +60,7 @@ class TextblockCmsModule implements CmsModuleController {
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
 		$this->textArea = new TextArea($this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
-		$this->form->addFormElement($this->textArea->getName(), $this->textArea);
+		$this->form->addFormElement($this->textArea);
 
 	}
 
