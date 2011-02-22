@@ -1,4 +1,4 @@
-<form action="#">
+<?php echo $form->begin(); ?>
 	<ul id="tabmenu">
 		<li class="active"><a href="#adresgegevens" class="adresgegevens">Adres</a></li>
 		<!--<li><a href="#contactgegevens" class="contactgegevens">Contact</a></li>-->
@@ -29,46 +29,6 @@
 					</tr>
 				</table>
 			</div>
-
-			<!--			<div>
-							<p>
-    		Bevestig dat jij de eigenaar bent van dit huis:
-				</p>
-							<p>
-			Na bevestiging kan je informatie over het huis toevoegen, de woningwaarde verbeteren en je woning
-			te koop of te huur aanbieden.
-				</p>
-				<div>
-					<b>Let op!</b> Dit huis staat al te koop of te huur op JAAP.NL. Door zelf een aanbieding van dit huis te maken
-    					overschrijf je de gegevens van de makelaar. Overleg eerst met je makelaar voordat je verder gaat.
-					<br /><br />
-
-				</div>
-
-			</div>
-
-			<div>
-							<p>Vul hieronder de postcode en huisnummer (toevoeging) combinatie in van het huis dat je te koop/te huur wilt zetten.</p>
-							<table class="zoek_mijn_huis_form">
-								<tr>
-									<td>Postcode</td>
-									<td>Huisnummer</td>
-									<td>Toevoeging</td>
-					</tr>
-								<tr>
-									<td>
-										<input type="text" name="zipcode" />
-						</td>
-									<td>
-										<input type="text" name="houseNumber" />
-						</td>
-									<td>
-										<input type="text" name="houseNumberAddition" />
-						</td>
-					</tr>
-				</table>
-			</div>
-			-->
 			<div class="actions">
 				<table class="formtable">
 					<tr>
@@ -80,45 +40,6 @@
 			</div>
 		</fieldset>
 	</div>
-	<!--<div class="tab" id="contactgegevenstab">
-		<fieldset>
-			<legend>Contactgegevens eigenaar</legend>
-			<div class="middle">
-				<p>Vul hieronder uw gegevens in zodat ge&iuml;nteresseerden contact met u kunnen opnemen.</p>
-				<table class="formtable">
-					<tr>
-						<th><label for="voornaam">Voornaam:</label></th>
-						<td><input type="text" name="voornaam" id="voornaam" value="" /></td>
-					</tr>
-					<tr>
-						<th><label for="tussenvoegsel">Tussenvoegsel:</label></th>
-						<td><input type="text" name="tussenvoegsel" id="tussenvoegsel" value="" /></td>
-					</tr>
-					<tr>
-						<th><label for="achternaam">Achternaam:</label></th>
-						<td><input type="text" name="achternaam" id="achternaam" value="" /></td>
-					</tr>
-					<tr>
-						<th><label for="email">Emailadres:</label></th>
-						<td><input type="text" name="email" id="email" value="" /></td>
-					</tr>
-					<tr>
-						<th><label for="telefoon">Telefoonnummer:</label></th>
-						<td><input type="text" name="telefoon" id="telefoon" value="" /></td>
-					</tr>
-				</table>
-			</div>
-			<div class="actions">
-				<table class="formtable">
-					<tr>
-						<th><a href="#adresgegevens" class="linkbutton">vorige stap</a></th>
-						<td><a href="#kenmerken" class="button">volgende stap</a></td>
-					</tr>
-				</table>
-				<div class="clear"></div>
-			</div>
-		</fieldset>
-	</div>-->
 	<div class="tab" id="kenmerkentab">
 		<fieldset>
 			<legend>Kenmerken</legend>
@@ -130,23 +51,7 @@
 					<tr>
 						<th><label>Woningtype:</label></th>
 						<td>
-							<select name="propertytype">
-								<option value="" >Maak een keuze...</option>
-								<option value="Tussenwoning">Tussenwoning</option>
-								<option value="Hoekwoning">Hoekwoning</option>
-								<option value="Twee onder een kap">Twee onder &eacute;&eacute;n kap</option>
-								<option value="Vrijstaande woning">Vrijstaande woning</option>
-								<option value="Geschakelde woning">Geschakelde woning</option>
-								<option value="Eengezinswoning">Eengezinswoning</option>
-								<option value="Appartement">Appartement</option>
-								<option value="Woning">Woning</option>
-								<option value="Penthouse">Penthouse</option>
-								<option value="Villa">Villa</option>
-								<option value="Woonboerderij">Woonboerderij</option>
-								<option value="Bungalow">Bungalow</option>
-								<option value="Herenhuis">Herenhuis</option>
-								<option value="Landhuis">Landhuis</option>
-							</select>
+							<?php echo $form->getFormElement('woningtype'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -173,62 +78,61 @@
 							<?php echo $form->getFormElement('inhoud'); ?> m&sup3;<br />
 						</td>
 					</tr>
-					<tr>
-						<th>&nbsp;</th>
-						<td>Als je de inhoud van je huis niet weet, neem dan het woonoppervlak en vermenigvuldig dit met 2.5<br /><br /></td>
-					</tr>
+				</table>
+				<p>Als je de inhoud van je huis niet weet, neem dan het woonoppervlak en vermenigvuldig dit met 2.5</p>
+				<table class="formtable">
 					<tr>
 						<th>Gestoffeerd:</th>
 						<td>
-							<?php echo $form->getFormElement('gestoffeerd_0'); ?>&nbsp;Ja&nbsp;&nbsp;
-							<?php echo $form->getFormElement('gestoffeerd_1')->addAttribute('checked', 'checked'); ?>&nbsp;Nee
+							<?php echo $form->getFormElement('gestoffeerd_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('gestoffeerd_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>Gemeubileerd:</th>
 						<td>
-							<?php echo $form->getFormElement('gemeubileerd_0'); ?>&nbsp;Ja&nbsp;&nbsp;
-							<?php echo $form->getFormElement('gemeubileerd_1')->addAttribute('checked', 'checked'); ?>&nbsp;Nee
+							<?php echo $form->getFormElement('gemeubileerd_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('gemeubileerd_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>Aantal kamers:</th>
 						<td>
-							<input type="text" name="numberOfRooms" value=""/>
+							<?php echo $form->getFormElement('aantalkamers'); ?>
 						</td>
 					</tr>
 					<tr>
 						<th>Aantal dakkapellen:</th>
 						<td>
-							<input type="text" name="numberOfDormers" value=""/>
+							<?php echo $form->getFormElement('aantaldakkapellen'); ?>
 						</td>
 					</tr>
 					<tr>
 						<th>Garage:</th>
 						<td>
-							<input type="radio" name="garage" value="true"  />&nbsp;Ja&nbsp;&nbsp;
-							<input type="radio" name="garage" value="false" checked />&nbsp;Nee
+							<?php echo $form->getFormElement('garage_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('garage_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>Zwembad:</th>
 						<td>
-							<input type="radio" name="swimmingPool" value="true"  />&nbsp;Ja&nbsp;&nbsp;
-							<input type="radio" name="swimmingPool" value="false" checked />&nbsp;Nee
+							<?php echo $form->getFormElement('zwembad_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('zwembad_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>Balkon:</th>
 						<td>
-							<input type="radio"name="balcony" value="true"  />&nbsp;Ja&nbsp;&nbsp;
-							<input type="radio"name="balcony" value="false" checked />&nbsp;Nee
+							<?php echo $form->getFormElement('balkon_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('balkon_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>Lift:</th>
 						<td>
-							<input type="radio" name="elevator" value="true"  />&nbsp;Ja&nbsp;&nbsp;
-							<input type="radio" name="elevator" value="false" checked />&nbsp;Nee
+							<?php echo $form->getFormElement('lift_1'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('lift_0'); ?>&nbsp;Nee
 						</td>
 					</tr>
 				</table>
@@ -239,124 +143,94 @@
 					<tr>
 						<th><label>Type keuken:</label></th>
 						<td>
-							<select name="kitchen">
-								<option value="" >Maak een keuze...</option>
-								<option value="Luxurious" >Luxe</option>
-								<option value="Modern" >Moderne</option>
-								<option value="New" >Nieuwe</option>
-								<option value="Standard" >Standaard</option>
-								<option value="OutDated" >Verouderde</option>
-								<option value="None" >Geen</option>
-							</select>
+							<?php echo $form->getFormElement('keukentype'); ?>
 						</td>
 					</tr>
 					<tr>
 						<th><label>Hoofdverwarming:</label></th>
 						<td>
-							<input type="checkbox" name="stadsverwarming" value="1"  />&nbsp;<label>Stadsverwarming</label><br />
-							<input type="checkbox" name="centralHeating" value="1"  />&nbsp;<label>Centrale-verwarming</label><br />
-							<input type="checkbox" name="centralHeatingHighYield" value="1"  />&nbsp;<label>CV hoogrendement</label><br />
-							<input type="checkbox" name="gasHeater" value="1"  />&nbsp;<label>Gaskachel</label>
+							<?php echo $form->getFormElement('stadsverwarming'); ?>&nbsp;<label>Stadsverwarming</label><br />
+							<?php echo $form->getFormElement('centraleverwarming'); ?>&nbsp;<label>Centrale-verwarming</label><br />
+							<?php echo $form->getFormElement('cvhoogrendement'); ?>&nbsp;<label>CV hoogrendement</label><br />
+							<?php echo $form->getFormElement('gaskachel'); ?>&nbsp;<label>Gaskachel</label>
 						</td>
 					</tr>
 					<tr>
 						<th>Bijverwarming:</th>
 						<td>
-							<input type="checkbox" name="hetelucht" value="1"  />&nbsp;<label>Hete lucht</label><br />
-							<input type="checkbox" name="openhaard" value="1"  />&nbsp;<label>Open haard</label><br />
-							<input type="checkbox" name="vloerverwarming" value="1"  />&nbsp;<label>Vloerverwarming</label><br />
+							<?php echo $form->getFormElement('hetelucht'); ?>&nbsp;<label>Hete lucht</label><br />
+							<?php echo $form->getFormElement('openhaard'); ?>&nbsp;<label>Open haard</label><br />
+							<?php echo $form->getFormElement('vloerverwarming'); ?>&nbsp;<label>Vloerverwarming</label><br />
 						</td>
 					</tr>
 					<tr>
 						<th>Sanitair:</th>
 						<td>
-							<input type="checkbox" name="tweedebadkamer" value="1"  />&nbsp;<label>2e badkamer</label><br />
-							<input type="checkbox" name="tweedetoilet" value="1"  />&nbsp;<label>2e toilet</label><br />
-							<input type="checkbox" name="bad" value="1"  />&nbsp;<label>Bad</label><br />
-							<input type="checkbox" name="sauna" value="1"  />&nbsp;<label>Sauna</label>
+							<?php echo $form->getFormElement('tweedebadkamer'); ?>&nbsp;<label>2e badkamer</label><br />
+							<?php echo $form->getFormElement('tweedetoilet'); ?>&nbsp;<label>2e toilet</label><br />
+							<?php echo $form->getFormElement('bad'); ?>&nbsp;<label>Bad</label><br />
+							<?php echo $form->getFormElement('sauna'); ?>&nbsp;<label>Sauna</label>
 						</td>
 					</tr>
 					<tr>
 						<th>Isolatie:</th>
 						<td>
-							<input type="checkbox" name="dakisolatie" value="1" />&nbsp;<label>Dak</label><br />
-							<input type="checkbox" name="dubbelglas" value="1"  />&nbsp;<label>Dubbel glas</label><br />
-							<input type="checkbox" name="muurisolatie" value="1"  />&nbsp;<label>Muren</label>
+							<?php echo $form->getFormElement('dakisolatie'); ?>&nbsp;<label>Dak</label><br />
+							<?php echo $form->getFormElement('dubbelglas'); ?>&nbsp;<label>Dubbel glas</label><br />
+							<?php echo $form->getFormElement('muurisolatie'); ?>&nbsp;<label>Muren</label>
 						</td>
 					</tr>
 					<tr>
-						<th>Staat van onderhoud binnen:</th>
+						<th><label for="onderhoudsstaatbinnen">Staat van onderhoud binnen:</label></th>
 						<td>
-							<select name="maintenanceStateIndoors">
-								<option value="" >Maak een keuze...</option>
-								<option value="Bad" >Slecht</option>
-								<option value="Mediocre" >Matig</option>
-								<option value="Reasonable" >Redelijk</option>
-								<option value="Good" >Goed</option>
-								<option value="Excellent" >Uitstekend</option>
-							</select>
+							<?php echo $form->getFormElement('onderhoudsstaatbinnen'); ?>
 						</td>
 					</tr>
 				</table>
-
 				<p>Vul hieronder de kenmerken van de buitenkant van je huis in.</p>
 				<table class="formtable">
 					<tr>
 						<th>Tuin:</th>
 						<td>
-							<input type="radio" name="garden" value="1"  />&nbsp;Ja&nbsp;&nbsp;
-							<input type="radio" name="garden" value="0" checked />&nbsp;Nee
+							<?php echo $form->getFormElement('tuin_0'); ?>&nbsp;Ja&nbsp;&nbsp;
+							<?php echo $form->getFormElement('tuin_1')->addAttribute('checked', 'checked'); ?>&nbsp;Nee
 						</td>
 					</tr>
 					<tr>
 						<th>&nbsp;</th>
 						<td>
-							<input type="checkbox" name="gardenFront" value="1"  />&nbsp;<label>Voorkant</label><br />
-							<input type="checkbox" name="gardenBack" value="1"  />&nbsp;<label>Achterkant</label><br />
-							<input type="checkbox" name="gardenSide" value="1"  />&nbsp;<label>Zijkant</label><br />
+							<?php echo $form->getFormElement('voorkanttuin'); ?>&nbsp;<label>Voorkant</label><br />
+							<?php echo $form->getFormElement('achterkanttuin'); ?>&nbsp;<label>Achterkant</label><br />
+							<?php echo $form->getFormElement('zijkanttuin'); ?>&nbsp;<label>zijkant</label><br />
 						</td>
 					</tr>
 					<tr>
 						<th>Uitzicht op:</th>
 						<td>
-							<input type="checkbox" name="viewOrchard" value="true"  />&nbsp;<label>Boomgaard</label><br />
-							<input type="checkbox" name="viewForest" value="true"  />&nbsp;<label>Bos</label><br />
-							<input type="checkbox" name="viewDike" value="true"  />&nbsp;<label>Dijk</label><br />
-							<input type="checkbox" name="viewTownCanal" value="true"  />&nbsp;<label>Gracht</label><br />
-							<input type="checkbox" name="viewGreennesSupplies" value="true"  />&nbsp;<label>Groenvoorzieningen</label><br />
-							<input type="checkbox" name="viewPort" value="true"  />&nbsp;<label>Haven</label><br />
-							<input type="checkbox" name="viewMetro" value="true"  />&nbsp;<label>Metrolijn</label><br />
-							<input type="checkbox" name="viewPublicGarden" value="true"  />&nbsp;<label>Park</label><br />
-							<input type="checkbox" name="viewWater" value="true"  />&nbsp;<label>Water</label><br />
-							<input type="checkbox" name="viewMeadow" value="true"  />&nbsp;<label>Weiland</label><br />
-							<input type="checkbox" name="viewCommercial" value="true"  />&nbsp;<label>Winkels</label><br />
-							<input type="checkbox" name="viewResidential" value="true"  />&nbsp;<label>Woningen</label><br />
+							<?php echo $form->getFormElement('boomgaard'); ?>&nbsp;<label>Boomgaard</label><br />
+							<?php echo $form->getFormElement('bos'); ?>&nbsp;<label>Bos</label><br />
+							<?php echo $form->getFormElement('dijk'); ?>&nbsp;<label>Dijk</label><br />
+							<?php echo $form->getFormElement('gracht'); ?>&nbsp;<label>Gracht</label><br />
+							<?php echo $form->getFormElement('groenvoorzieningen'); ?>&nbsp;<label>Groenvoorzieningen</label><br />
+							<?php echo $form->getFormElement('haven'); ?>&nbsp;<label>Haven</label><br />
+							<?php echo $form->getFormElement('metrolijn'); ?>&nbsp;<label>Metrolijn</label><br />
+							<?php echo $form->getFormElement('park'); ?>&nbsp;<label>Park</label><br />
+							<?php echo $form->getFormElement('water'); ?>&nbsp;<label>Water</label><br />
+							<?php echo $form->getFormElement('weiland'); ?>&nbsp;<label>Weiland</label><br />
+							<?php echo $form->getFormElement('winkels'); ?>&nbsp;<label>Winkels</label><br />
+							<?php echo $form->getFormElement('woningen'); ?>&nbsp;<label>Woningen</label><br />
 						</td>
 					</tr>
 					<tr>
-						<td class="name">Staat van onderhoud buiten:</td>
-						<td class="value">
-							<select name="maintenanceStateOutdoors" class="shaded">
-								<option value="" >Maak een keuze...</option>
-								<option value="Bad" >Slecht</option>
-								<option value="Mediocre" >Matig</option>
-								<option value="Reasonable" >Redelijk</option>
-								<option value="Good" >Goed</option>
-								<option value="Excellent" >Uitstekend</option>
-							</select>
+						<td><label for="onderhoudsstaatbuiten">Staat van onderhoud buiten:</label></td>
+						<td>
+							<?php echo $form->getFormElement('onderhoudsstaatbuiten'); ?>
 						</td>
 					</tr>
 					<tr>
-						<td class="name">Staat van onderhoud schilderwerk:</td>
-						<td class="value">
-							<select name="maintenanceStatePaintwork" class="shaded">
-								<option value="" >Maak een keuze...</option>
-								<option value="Bad" >Slecht</option>
-								<option value="Mediocre" >Matig</option>
-								<option value="Reasonable" >Redelijk</option>
-								<option value="Good" >Goed</option>
-								<option value="Excellent" >Uitstekend</option>
-							</select>
+						<td><label for="onderhoudsstaatschilderwerk">Staat van onderhoud schilderwerk:</label></td>
+						<td>
+							<?php echo $form->getFormElement('onderhoudsstaatschilderwerk'); ?>
 						</td>
 					</tr>
 				</table>
@@ -394,8 +268,8 @@
 					<tr>
 						<th><label>Omschrijving:</label></th>
 						<td>
-							<textarea name="description" cols="50" rows="10"></textarea>
-							<span id="charCounter">0</span> <b>/ 5000</b>
+							<?php echo $form->getFormElement('omschrijving')->addAttribute('cols', 50)->addAttribute('rows', 10); ?>
+							<span id="omschrijvingteller">0</span> <b>/ 5000</b>
 						</td>
 					</tr>
 				</table>
@@ -422,8 +296,8 @@
 				</p>
 				<table class="formtable">
 					<tr>
-						<th><label>Vraagprijs:</label> &euro;</th>
-						<td><input type="text" name="price" id="price_text"  /></td>
+						<th><label for="vraagprijs">Vraagprijs:</label> &euro;</th>
+						<td><?php echo $form->getFormElement('vraagprijs'); ?></td>
 					</tr>
 				</table>
 			</div>
@@ -500,11 +374,14 @@
 				<table class="formtable">
 					<tr>
 						<th><a href="#omschrijving" class="linkbutton">vorige stap</a></th>
-						<td><input type="submit" name="submit" value="akkoord met de voorwaarden + woning publiceren" class="button" /></td>
+						<td>
+							<input type="submit" name="submit" value="preview" class="button" />
+							<input type="submit" name="submit" value="akkoord met de voorwaarden + woning publiceren" class="button" />
+						</td>
 					</tr>
 				</table>
 				<div class="clear"></div>
 			</div>
 		</fieldset>
 	</div>
-</form>
+<?php echo $form->end(); ?>

@@ -40,6 +40,7 @@ class TekoopPageModule implements PageModuleController {
 	 */
 	private function load() {
 		$this->form = new AddHouseForm(Conf::get('general.url.www').'/'.$this->page->getName(), Request::POST, 'huistoevoegen');
+		$this->form->listen($this->request);
 	}
 
 	/**

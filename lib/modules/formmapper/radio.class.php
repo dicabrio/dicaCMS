@@ -9,10 +9,14 @@ class Radio extends FormElementImpl {
 	 * @param string $sType
 	 * @param string $name
 	 */
-	public function __construct($name, $value=null) {
+	public function __construct($name, $value = null, $checked = false) {
 
 		parent::__construct('input', $name, $value);
 		$this->addAttribute('type', 'radio');
+
+		if ($checked == true) {
+			$this->addAttribute('checked', 'checked');
+		}
 	}
 
 	/**

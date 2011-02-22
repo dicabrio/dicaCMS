@@ -21,7 +21,6 @@ class TextArea implements FormElement {
 	 * @var array
 	 */
 	private $attributes = array();
-	private $mapping;
 
 	/**
 	 * @param string $sType
@@ -100,6 +99,10 @@ class TextArea implements FormElement {
 	 */
 	public function getType() {
 		return 'textarea';
+	}
+
+	public function  getIdentifier() {
+		return $this->sName;
 	}
 
 }
