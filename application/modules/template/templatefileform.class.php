@@ -23,10 +23,10 @@ class TemplateFileForm extends Form {
 	protected function defineFormElements() {
 
 		$tplid = new Input('hidden', 'template_id', $this->tpl->getID());
-		$this->addFormElement($tplid->getName(), $tplid);
+		$this->addFormElement($tplid);
 
 		$tplname = new Input('text', 'title', $this->tpl->getTitle());
-		$this->addFormElement($tplname->getName(), $tplname);
+		$this->addFormElement($tplname);
 
 		// Modules
 		$modules = Module::getForTemplates();
@@ -35,13 +35,13 @@ class TemplateFileForm extends Form {
 		foreach ($modules as $module) {
 			$tplModule->addOption($module->getID(), $module->getName());
 		}
-		$this->addFormElement('module_id', $tplModule);
+		$this->addFormElement($tplModule);
 
 		$tpldescription = new TextArea('description', $this->tpl->getDescription());
-		$this->addFormElement($tpldescription->getName(), $tpldescription);
+		$this->addFormElement($tpldescription);
 
 		$tplsource = new TextArea('source', $this->tpl->getSource());
-		$this->addFormElement($tplsource->getName(), $tplsource);
+		$this->addFormElement($tplsource);
 
 	}
 

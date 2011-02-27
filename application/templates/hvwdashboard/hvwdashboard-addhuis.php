@@ -22,12 +22,8 @@
 
 				<table class="formtable">
 					<tr>
-						<th><label for="postcode">Postcode</label></th>
-						<td><input type="text" name="postcode" id="postcode" value="" /></td>
-					</tr>
-					<tr>
-						<th><label for="huisnummer">Huisnummer</label> + <label for="toevoeging">toevoeging</label></th>
-						<td><input type="text" name="huisnummer" id="huisnummer" value="" /><input type="text" name="toevoeging" id="toevoeging" value="" /></td>
+						<th><label for="adres">Straat + huisnummer + plaats</label></th>
+						<td><input type="text" name="adres" id="adres" value="" />&nbsp;</td>
 					</tr>
 				</table>
 
