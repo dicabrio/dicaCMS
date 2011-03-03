@@ -25,7 +25,7 @@
 	<div class="pagemodule">
 		<div class="modulelabel">Actions:</div>
 		<div class="modulecontent">
-			<?php echo $form->getFormElement('save')->addAttribute('class', 'button'); ?>
+			<?php echo $form->getFormElement('action')->addAttribute('class', 'button'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/tag'; ?>" class="button">Cancel</a>
 		</div>
 	</div>

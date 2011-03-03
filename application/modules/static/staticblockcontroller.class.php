@@ -48,7 +48,7 @@ class StaticblockController extends CmsController {
 		$form = new StaticBlockForm($req, $block);
 
 		$formmapper = new StaticBlockMapper($form);
-		$form->addSubmitButton('save', $button, new StaticBlockHandler($block, $formmapper));
+		$form->addSubmitButton($button, new StaticBlockHandler($block, $formmapper));
 		$form->listen($req);
 
 		$editview = new View(Conf::get('general.dir.templates').'/staticblock/editblock.php');

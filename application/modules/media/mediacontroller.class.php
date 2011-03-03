@@ -44,7 +44,7 @@ class MediaController extends CmsController {
 		$saveHandler = new MediaSaveHandler($mediaMapper, $mediaItem);
 
 		$form = new MediaForm($mediaItem);
-		$form->addSubmitButton('save', $saveButton, $saveHandler);
+		$form->addSubmitButton($saveButton, $saveHandler);
 
 		$form->listen($req);
 

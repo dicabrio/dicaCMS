@@ -25,15 +25,15 @@ class TemplateFileFolderEditForm extends Form {
 
 		$elPageID = new Input('hidden', 'folder_id');
 		$elPageID->setValue($this->templatefolder->getID());
-		parent::addFormElement($elPageID->getName(), $elPageID);
+		parent::addFormElement($elPageID);
 
 		$elPagename = new Input('text', 'name');
 		$elPagename->setValue($this->templatefolder->getName());
-		parent::addFormElement($elPagename->getName(), $elPagename);
+		parent::addFormElement($elPagename);
 
 		$elDescription = new TextArea('description');
 		$elDescription->setValue($this->templatefolder->getDescription());
-		parent::addFormElement($elDescription->getName(), $elDescription);
+		parent::addFormElement($elDescription);
 		
 	}
 }

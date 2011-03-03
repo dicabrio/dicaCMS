@@ -152,6 +152,7 @@ class User extends DataRecord {
 	public function watch(Area $area) {
 
 		$userGroupsOfArea = $area->getUserGroups();
+//		test($userGroupsOfArea); exit;
 		if (count($userGroupsOfArea) > 0) {
 			$this->inAllowedUserGroup($userGroupsOfArea);
 		}

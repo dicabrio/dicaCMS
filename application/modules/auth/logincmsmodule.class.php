@@ -75,7 +75,7 @@ class LoginCmsModule implements CmsModuleController {
 		foreach ($this->options as $templateOption) {
 			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
-		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+		$this->form->addFormElement($this->selectElement);
 
 	}
 

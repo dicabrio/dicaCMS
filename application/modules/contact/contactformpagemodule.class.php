@@ -113,9 +113,9 @@ class ContactformPageModule implements PageModuleController {
 
 		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName());
 		foreach ($elements as $element) {
-			$form->addFormElement($element->getName(), $element);
+			$form->addFormElement($element);
 		}
-		$form->addSubmitButton($button->getName(), $button, $formHandler);
+		$form->addSubmitButton($button, $formHandler);
 		$form->listen($this->request);
 
 		$this->aErrors = $mapper->getMappingErrors();

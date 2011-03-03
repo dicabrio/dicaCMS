@@ -73,10 +73,12 @@ class Form {
 		if ($this->isSubmitted()) {
 			$formElementName = $formElement->getName();
 
-			if ($formElement->getType() == 'file') {
+			$formElementType = $formElement->getType();
+			if ($formElementType == 'file') {
 				return $this->request->files($formElementName);
 			} else {
-				return $this->request->request($formElementName);
+				$requestValue = $this->request->request($formElementName);
+				return $requestValue;
 			}
 		}
 	}
@@ -165,7 +167,7 @@ class Form {
 	public function addListener($buttonIdentifier, FormHandler $handler) {
 
 		$formElement = $this->getFormElement($buttonIdentifier);
-		$this->addSubmitButton($buttonIdentifier, $formElement, $handler);
+		$this->addSubmitButton($formElement, $handler);
 	}
 
 	/**
@@ -173,9 +175,9 @@ class Form {
 	 * @param FormElement $oElement
 	 * @param FormHandler $oHandler
 	 */
-	public function addSubmitButton($sButtonIdentifier, FormElement $oElement, FormHandler $oHandler) {
+	public function addSubmitButton(FormElement $oElement, FormHandler $oHandler) {
 
-		$this->aSubmitButtonsAndHandlers[$sButtonIdentifier] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
+		$this->aSubmitButtonsAndHandlers[$oElement->getIdentifier()] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
 	}
 
 	/**

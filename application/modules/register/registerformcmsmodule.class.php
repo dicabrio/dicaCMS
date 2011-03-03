@@ -86,14 +86,14 @@ class RegisterformCmsModule implements CmsModuleController {
 			$select->addOption($page->getID(), $page->getName());
 		}
 		$select->setValue($this->page);
-		$this->form->addFormElement($select->getName(), $select);
+		$this->form->addFormElement($select);
 
 		// define the mapping
 
 		// Email field
 		$this->emailField = new Input('text', $this->oPageModule->getIdentifier(), $this->email);
 		$this->emailField->addAttribute('maxlength', self::MAX_LENGTH);
-		$this->form->addFormElement($this->emailField->getName(), $this->emailField);
+		$this->form->addFormElement($this->emailField);
 
 		// define the mapping
 

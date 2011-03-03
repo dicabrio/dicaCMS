@@ -66,7 +66,7 @@ class LoginPageModule implements PageModuleController {
 		$handler = new LoginHandler($this->loginMapper, $this->request, Conf::get('general.url.www').'/'.$this->page->getName());
 
 		$this->loginForm = new LoginForm(Conf::get('general.url.www').'/'.$this->page->getName());
-		$this->loginForm->addListener('login', $handler);
+		$this->loginForm->addListener('action', $handler);
 		$this->loginForm->listen($this->request);
 		
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->pageModule);
@@ -97,7 +97,7 @@ class LoginPageModule implements PageModuleController {
 		$view->assign('formbegin', $this->loginForm->begin());
 		$view->assign('username', $this->loginForm->getFormElement('username'));
 		$view->assign('password', $this->loginForm->getFormElement('password'));
-		$view->assign('button', $this->loginForm->getFormElement('login'));
+		$view->assign('button', $this->loginForm->getFormElement('action'));
 		$view->assign('formend', $this->loginForm->end());
 
 		$session->set('flash', null);
