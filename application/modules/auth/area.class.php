@@ -63,7 +63,7 @@ class Area extends DataRecord {
 
 		$this->getUserGroups();
 		$this->userGroups[$group->getID()] = $group;
-		
+
 	}
 
 	/**
@@ -82,14 +82,21 @@ class Area extends DataRecord {
 	 * @param email $name
 	 */
 	public function setName($name) {
-		$this->setAttr('name', $name);
+		$this->setAttr('pagename', $name);
 	}
 
 	/**
 	 * @param string $url
 	 */
 	public function setUrl($url) {
-		$this->setAttr('url', $url);
+		$this->setAttr('redirecturl', $url);
+	}
+
+	/**
+	 * @param string $type
+	 */
+	public function setType($type) {
+		$this->setAttr('type', $type);
 	}
 
 	public function save() {
@@ -97,9 +104,9 @@ class Area extends DataRecord {
 		// to get an ID
 		parent::save();
 
-		Relation::remove('area', 'user_group', $this);
+		Relation::remove('area', 'usergroup', $this);
 		foreach ($this->userGroups as $group) {
-			Relation::add('area', 'user_group', $this, $group);
+			Relation::add('area', 'usergroup', $this, $group);
 		}
 
 	}
@@ -107,10 +114,21 @@ class Area extends DataRecord {
 	/**
 	 * Find the area for the give page
 	 * @param Page $page
-	 * @return Area 
+	 * @return Area
 	 */
 	public static function findByPage(Page $page) {
-		$criteria = new Criteria('pagename = :name', array('name' => $page->getName()));
+		return self::findByName($page->getName());
+	}
+
+	public static function findByName($pagename, $type = null) {
+		$bind = array('name' => $pagename);
+		$query = "pagename = :name";
+		if ($type !== null) {
+			$bind['type'] = $type;
+			$query .= " AND type = :type ";
+		}
+
+		$criteria = new Criteria($query, $bind);
 		$areas = parent::findAll(__CLASS__, parent::ALL, $criteria);
 		if (count($areas) > 0) {
 			return reset($areas);
