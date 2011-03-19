@@ -2,6 +2,7 @@
 
 class PageModule extends DataRecord {
 
+	private $replacestring = null;
 	/**
 	 * constructor
 	 *
@@ -24,6 +25,14 @@ class PageModule extends DataRecord {
 		parent::addColumn('identifier', DataTypes::VARCHAR, 255, true);
 		parent::addColumn('type', DataTypes::VARCHAR, 255, true);
 
+	}
+
+	public function setReplaceString($replaceString) {
+		$this->replacestring = $replaceString;
+	}
+
+	public function getReplaceString() {
+		return $this->replacestring;
 	}
 
 	/**
