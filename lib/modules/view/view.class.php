@@ -16,12 +16,6 @@
 class View {
 
 	/**
-	 * @todo remove this directory. This is global state we don't want that :(
-	 * 
-	 * @var string
-	 */
-	private static $m_sTemplateDirectory = false;
-	/**
 	 *
 	 * @var string
 	 */
@@ -31,6 +25,18 @@ class View {
 	 * @var array
 	 */
 	private $m_aTemplateData = array();
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $replaceStrings = array();
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $replaceData = array();
 	/**
 	 *
 	 * @var string
@@ -112,6 +118,28 @@ class View {
 		$this->m_aTemplateData[$psVariable] = $pmValue;
 	}
 
+	public function replace($variable, $value) {
+
+		$pattern = '[['.$variable.']]';
+		test($pattern);
+		$arrayPosition = array_search($pattern, $this->replaceStrings);
+
+		if ($arrayPosition === FALSE)
+		{
+			$this->replaceStrings[] = $pattern;
+			$this->replaceData[] = "".$value;
+		}
+		else
+		{
+			$this->replaceStrings[$arrayPosition] = $pattern;
+			$this->replaceData[$arrayPosition] = "".$value;
+		}
+
+
+		$this->replaceStrings[] = $variable;
+		$this->replaceData[] = $value;
+	}
+
 	public function assignGlobal($psVariable, $psValue) {
 
 		$this->m_aGlobalData[$psVariable] = $psValue;
@@ -162,10 +190,15 @@ class View {
 		extract($this->m_aGlobalData, EXTR_SKIP);
 		extract($this->m_aTemplateData, EXTR_SKIP);
 
-		$sTemplateFilename = self::$m_sTemplateDirectory . '/' . $this->m_sTemplateFile;
+//		$sTemplateFilename = self::$m_sTemplateDirectory . '/' . $this->m_sTemplateFile;
+		$sTemplateFilename = $this->m_sTemplateFile;
 		include $sTemplateFilename;
 
-		return ob_get_clean();
+		$output = ob_get_clean();
+//test($this->replaceStrings);
+//exit;
+		return str_replace($this->replaceStrings, $this->replaceData, $output);
+//		return $output;
 	}
 
 	public function __set($sVarname, $sValue) {

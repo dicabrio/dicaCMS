@@ -1,23 +1,20 @@
 <?php
 
 class ViewPageProtocol implements ServiceProtocol {
-
+	/**
+	 * @var string
+	 */
+	const ACTION_INDEX = "_index";
 
 	/**
 	 * @var string
 	 */
-	const ACTION_INDEX 		= "_index";
-
-	/**
-	 * @var string
-	 */
-	const ACTION_404		= "_default";
+	const ACTION_404 = "_default";
 
 	/**
 	 * @var array
 	 */
 	private $arguments;
-
 	/**
 	 * @var string
 	 */
@@ -29,17 +26,11 @@ class ViewPageProtocol implements ServiceProtocol {
 	 */
 	public function execute() {
 
-		try {
-			
-			$oPageViewer = new ViewPageController();
-			$sPagename = Util::getUrlSegment(0);
 
-			
-			$this->result = $oPageViewer->show($sPagename);
-			
-		} catch (Exception $e) {
-			throw new ProtocolException($e->getMessage());
-		}
+		$oPageViewer = new ViewPageController();
+		$sPagename = Util::getUrlSegment(0);
+
+		$this->result = $oPageViewer->show($sPagename);
 	}
 
 	public function decode($newData) {
@@ -60,12 +51,11 @@ class ViewPageProtocol implements ServiceProtocol {
 	public function validate() {
 
 		try {
-			
+
 			Util::validClass('ViewPageController');
-			
 		} catch (ClassException $e) {
-			
-			throw new ProtocolException("Controller cannot be found");
+
+			throw new ProtocolException("ViewPageController cannot be found");
 		}
 	}
 
