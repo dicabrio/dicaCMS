@@ -14,10 +14,10 @@ class PageEditForm extends Form {
 	public function __construct(Page $page) {
 		$this->page = $page;
 
-		$redirect = 'savepage';
-		if ($page->getID() == 0) {
-			$redirect = 'saveeditpage';
-		}
+		$redirect = 'editpage';
+//		if ($page->getID() == 0) {
+//			$redirect = 'saveeditpage';
+//		}
 		parent::__construct(Conf::get('general.cmsurl.www').'/page/'.$redirect.'/'.$page->getID(), Request::POST, 'pageform');
 	}
 
@@ -30,6 +30,16 @@ class PageEditForm extends Form {
 		$elPageID->setValue($this->page->getID());
 
 		parent::addFormElement($elPageID);
+
+
+		$elPageType = new Select('type');
+		$elPageType->addOption('basis', 'Page');
+		$elPageType->addOption('blog', 'Case');
+		$elPageType->addOption('partner', 'Partner');
+		$elPageType->addOption('sales', 'Sales');
+		$elPageType->setValue($this->page->getType());
+
+		parent::addFormElement($elPageType);
 
 		$elPagename = new Input('text', 'pagename');
 		$elPagename->setValue($this->page->getName());
@@ -70,11 +80,6 @@ class PageEditForm extends Form {
 		$elActive->setValue($this->page->isActive());
 
 		parent::addFormElement($elActive);
-
-		$button = new ActionButton(Lang::get('general.button.save'));
-		$button->addAttribute('class', 'save button');
-
-		parent::addFormElement($button);
 
 	}
 

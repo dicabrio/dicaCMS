@@ -34,12 +34,9 @@ class PageSaveHandler implements FormHandler {
 	 * @param Page $page
 	 * @param PageFolder $folder
 	 */
-	public function __construct(FormMapper $formmapper, Page $page, $cmsModules, PageFolder $folder) {
+	public function __construct(FormMapper $formmapper, Page $page) {
 		$this->formmapper = $formmapper;
 		$this->page = $page;
-		$this->cmsModules = $cmsModules;
-		$this->folder = $folder;
-		
 		$this->data =  DataFactory::getInstance();
 	}
 
@@ -51,43 +48,45 @@ class PageSaveHandler implements FormHandler {
 				$this->formmapper->getModel('expiretime'),
 				$this->formmapper->getModel('title'),
 				$this->formmapper->getModel('keywords'),
-				$this->formmapper->getModel('description'));
+				$this->formmapper->getModel('description'),
+				$this->formmapper->getModel('type'));
 
 		$this->page->setActive($this->formmapper->getModel('active'));
-		$this->folder->addChild($this->page);
-
 	}
 
 	/**
-	 * @param Form $oForm
+	 * @param Form $form
 	 */
-	public function handleForm(Form $oForm) {
+	public function handleForm(Form $form) {
 		try {
 
-			$this->formmapper->constructModelsFromForm($oForm);
-			
 			$this->data->beginTransaction();
+
+			$pageEditView = new PageEditViewBuilder($this->page);
+			$pageEditView->buildFormForModules($form);
+			$pageEditView->addFormMapping($this->formmapper);
+
+			$this->formmapper->constructModelsFromForm($form);
+
 			$this->updatePage();
-			
-			foreach ($this->cmsModules as $oModule) {
-				if ($oModule instanceof CmsModuleController) {
-					$oModule->handleData();
-				}
+
+
+			foreach ($pageEditView->getPageModuleControllers() as $oModuleController) {
+				$oModuleController->handleData();
 			}
 
 			$this->page->save();
 			$this->data->commit();
 
 			// need to check fi there is a special redirect to another controller
-			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.$this->folder->getID());
+			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.$this->page->getParent()->getID());
 
 		} catch (PageRecordException $e) {
-			$oForm->getFormElement('template_id')->notMapped();
+			$form->getFormElement('template_id')->notMapped();
 			$this->formmapper->addMappingError('page', $e->getMessage());
 
 		} catch (FormMapperException $e) {
 			$this->data->rollBack();
-//			$this->getSession()->set('error', $this->formmapper->getMappingErrors());
 		}
 	}
 

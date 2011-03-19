@@ -35,6 +35,7 @@ $lang = array(
 		'actions' => 'Acties',
 		'nomodules' => 'Er zijn geen modules beschikbaar voor deze pagina',
 		'nousergroups' => 'Er zijn geen gebruikersgroepen beschikbaar',
+		'pagetype' => 'Pagina type',
 	),
 
 	'tab' => array(

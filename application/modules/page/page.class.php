@@ -67,7 +67,14 @@ class Page extends DataRecord implements DomainEntity {
 	 * @param String $keywords
 	 * @param String $description
 	 */
-	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $title="", $keywords="", $description="") {
+	public function update($pagename,
+			TemplateFile $template,
+			Date $publishtime=null,
+			Date $expiretime=null,
+			$title="",
+			$keywords="",
+			$description="",
+			$type="basic") {
 
 		if ($publishtime == '') {
 			$publishtime = new Date("now");
@@ -82,6 +89,12 @@ class Page extends DataRecord implements DomainEntity {
 		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
+	}
+
+	public function getType() {
+
+		return $this->getAttr('type');
+
 	}
 
 	/**
