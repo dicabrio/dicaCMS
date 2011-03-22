@@ -15,7 +15,7 @@ class ViewParser {
 
 	const MOD_NEW_PATTERN = '/\[\[((.+):([a-zA-Z_]+)\s?(.*)?)\]\]/';
 
-	const MOD_PARAM_PATTERN = '/([a-zA-Z_-]+)=\"([a-zA-Z0-9\s]+)\"/';
+	const MOD_PARAM_PATTERN = '/([a-zA-Z_-]+)=\"([a-zA-Z0-9\s_-]+)\"/';
 
 	const MOD_VAR_BUILDER = '%s_%s';
 

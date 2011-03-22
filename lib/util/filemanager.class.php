@@ -66,10 +66,10 @@ class FileManager {
 	public function getFullPath() {
 
 		if (empty($this->path)) {
-			return realpath($this->filename);
+			return $this->filename;
 		}
 
-		return realpath($this->path . self::SEP . $this->filename);
+		return $this->path . self::SEP . $this->filename;
 
 	}
 
