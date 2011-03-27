@@ -28,7 +28,7 @@ class Paragraph extends DomainText {
 
 		$stripper = new StripAttributes();
 		$stripper->allow = array('id', 'class');
-		$stripper->exceptions = array('img' => array('src', 'alt', 'title', 'width', 'height'), 'a' => array('href', 'title'));
+		$stripper->exceptions = array('img' => array('src', 'alt', 'title', 'width', 'height'), 'a' => array('href', 'title', 'target'));
 		$text = $stripper->strip($text);
 
 		$this->setValue($text);
