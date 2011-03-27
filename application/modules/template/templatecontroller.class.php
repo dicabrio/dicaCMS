@@ -36,7 +36,7 @@ class TemplateController extends CmsController {
 
 		$actions = new Menu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/edittemplate', Lang::get('template.button.newfile')));
-		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/editfolder', Lang::get('template.button.newfolder')));
+//		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/editfolder', Lang::get('template.button.newfolder')));
 
 		$breadcrumbFac = new BreadcrumbFactory($parentFolder, Conf::get('general.cmsurl.www').'/template');
 		$breadcrumb = $breadcrumbFac->build();

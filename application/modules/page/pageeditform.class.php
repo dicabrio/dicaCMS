@@ -31,12 +31,15 @@ class PageEditForm extends Form {
 
 		parent::addFormElement($elPageID);
 
-
 		$elPageType = new Select('type');
-		$elPageType->addOption('basis', 'Page');
-		$elPageType->addOption('blog', 'Case');
-		$elPageType->addOption('partner', 'Partner');
-		$elPageType->addOption('sales', 'Sales');
+		$pageTypes = PageType::findAll();
+		foreach ($pageTypes as $pageType) {
+
+			$elPageType->addOption($pageType->getName(), $pageType->getLabel());
+		}
+//		$elPageType->addOption('blog', 'Case');
+//		$elPageType->addOption('partner', 'Partner');
+//		$elPageType->addOption('sales', 'Sales');
 		$elPageType->setValue($this->page->getType());
 
 		parent::addFormElement($elPageType);

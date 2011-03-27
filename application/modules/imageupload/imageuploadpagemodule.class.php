@@ -72,10 +72,10 @@ class ImageuploadPageModule implements PageModuleController {
 	}
 
 	protected function getView($viewfile) {
-		
+
 		$file = $this->mediaItem->getFile();
 		$image = new Image($file);
-		$path = Conf::get('general.cmsurl.www').Conf::get('upload.url.general').'/'.$file->getFilename();
+		$path = Conf::get('general.url.www').Conf::get('upload.url.general').'/'.$file->getFilename();
 
 		$view = new View(Conf::get('general.dir.templates').'/imageupload/'.$viewfile);
 		$view->imageurl = $path;

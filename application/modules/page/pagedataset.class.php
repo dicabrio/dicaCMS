@@ -11,9 +11,11 @@ class PageDataSet extends AbstractTableDataSet {
 		
 		$this->iRecordCount = 0;
 		
-		$this->addColumn(0, Html::getCheckbox('selectall', 'all'));
+//		$this->addColumn(0, Html::getCheckbox('selectall', 'all'));
+		$this->addColumn(0, '#');
 		$this->addColumn(1, 'title');
-		$this->addColumn(2, 'actions');
+		$this->addColumn(2, 'type');
+		$this->addColumn(3, 'actions');
 		
 	}
 
@@ -26,7 +28,7 @@ class PageDataSet extends AbstractTableDataSet {
 		$folderid = $folder->getID();
 		$sTitle = $this->constuctTitle('icon-folder.png', Html::getAnchor($folder->getName(), Conf::get('general.cmsurl.www').'/page/folder/'.$folder->getID()));
 
-		$this->constructLine($folderid, $sTitle, array('editfolder', 'deletefolder'));
+		$this->constructLine($folderid, $sTitle, 'Folder', array('editfolder', 'deletefolder'));
 
 	}
 
@@ -34,7 +36,7 @@ class PageDataSet extends AbstractTableDataSet {
 		$pageid = $page->getID();
 		$sTitle = $this->constuctTitle('icon-file.png', $page->getName());
 
-		$this->constructLine($pageid, $sTitle, array('editpage', 'deletepage'));
+		$this->constructLine($pageid, $sTitle, $page->getType(), array('editpage', 'deletepage'));
 	}
 
 	/**
@@ -43,9 +45,10 @@ class PageDataSet extends AbstractTableDataSet {
 	 * @param string $title
 	 * @param array $actions
 	 */
-	private function constructLine($pid, $title, $actions) {
+	private function constructLine($pid, $title, $type, $actions) {
 
-		$this->setValueAt(Html::getCheckbox('select[]', $pid), $this->iRecordCount, 0);
+//		$this->setValueAt(Html::getCheckbox('select[]', $pid), $this->iRecordCount, 0);
+		$this->setValueAt($pid, $this->iRecordCount, 0);
 		$this->setValueAt($title, $this->iRecordCount, 1);
 
 		$actionstring = "";
@@ -60,8 +63,8 @@ class PageDataSet extends AbstractTableDataSet {
 												Conf::get('general.cmsurl.www').'/page/'.$action.'/'.$pid,
 												$attributes).'&nbsp;';
 		}
-
-		$this->setValueAt($actionstring, $this->iRecordCount, 2);
+		$this->setValueAt($type, $this->iRecordCount, 2);
+		$this->setValueAt($actionstring, $this->iRecordCount, 3);
 	}
 
 	/**

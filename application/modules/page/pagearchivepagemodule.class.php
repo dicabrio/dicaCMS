@@ -1,6 +1,6 @@
 <?php
 
-class BlogarchivePageModule implements PageModuleController {
+class PagearchivePageModule implements PageModuleController {
 
 	/**
 	 * @var PageModule
@@ -15,6 +15,16 @@ class BlogarchivePageModule implements PageModuleController {
 	 */
 	private $request;
 
+	private $type;
+
+	private $amount;
+
+	private $template;
+
+	private $custompagemodule;
+
+	private $order;
+
 	/**
 	 *
 	 * @param PageModule $module
@@ -27,9 +37,22 @@ class BlogarchivePageModule implements PageModuleController {
 		$this->pageModule = $module;
 		$this->page = $page;
 		$this->request = $request;
+
+		$this->type = 'all';
+		$this->amount = '-1';
+		$this->template = 'pagearchive';
+		$this->custompagemodule = 'subject,summary';
+		$this->order = 'ASC';
 	}
 
-	private function buildBlogArray(Page $blog) {
+	private function getParam($name) {
+		$value = $this->pageModule->getParameter($name);
+		if ($value !== null) {
+			$this->{$name} = $value;
+		}
+	}
+
+	private function buildPageArray(Page $blog) {
 
 		$pageModule = $blog->getModule('subject');
 		$pageTextSubject = PageText::getByPageModule($pageModule);
@@ -37,7 +60,11 @@ class BlogarchivePageModule implements PageModuleController {
 		$pageModule = $blog->getModule('summary');
 		$pageTextSummary = PageText::getByPageModule($pageModule);
 
-		return array('title' => $blog->getTitle(), 'subject' => $pageTextSubject->getContent(), 'name' => $blog->getName(), 'summary' => $pageTextSummary->getContent());
+		return array(
+			'title' => $blog->getTitle(),
+			'name' => $blog->getName(),
+			'subject' => $pageTextSubject->getContent(),
+			'summary' => $pageTextSummary->getContent());
 
 	}
 
@@ -48,39 +75,41 @@ class BlogarchivePageModule implements PageModuleController {
 	 */
 	public function getContents() {
 
-		$oTextContent = PageText::getByPageModule($this->pageModule);
-		$formshizzle = explode(',', $oTextContent->getContent());
+		$this->getParam('type');
+		$this->getParam('amount');
+		$this->getParam('template');
+		$this->getParam('order');
+		$this->getParam('custompagemodule');
 
-		$amountPerPage = intval($formshizzle[0]);
-
-		if ($formshizzle[0] == '-1') {
+		if ($this->amount == '-1') {
 			// get all articles
-			$activeBlogs = Blog::findActive();
+			$activeBlogs = Page::findActive(-1, null, $this->type);
+//			test($activeBlogs);
 			$amountOfActiveBlogs = count($activeBlogs);
+//			test(count($amountOfActiveBlogs));
 			
 		} else {
 			$amountToStart = 0;
 			$page = intval($this->request->get('page'));
 
 			if ($page > 1) {
-				$amountToStart = ($page * $amountPerPage) - $amountPerPage;
+				$amountToStart = ($page * $this->amount) - $this->amount;
 			} else {
 				$page = 1;
 			}
 
-			$activeBlogs = Blog::findActive($amountPerPage, $amountToStart);
-			$amountOfActiveBlogs = Blog::countAllActive();
+			$activeBlogs = Page::findActive($this->amount, $amountToStart, $this->type);
+			$amountOfActiveBlogs = count(Page::findActive(-1, null, $this->type));
 		}
-		
 
 		$blogArticlesForTemplate = array();
-		foreach ($activeBlogs as $blog) {
-			$blogArticlesForTemplate[] = $this->buildBlogArray($blog);
+		foreach ($activeBlogs as $page) {
+			$blogArticlesForTemplate[] = $this->buildPageArray($page);
 		}
 
 		try {
 
-			$tplFile = new TemplateFile($formshizzle[1]);
+			$tplFile = TemplateFile::findByTitle($this->template);
 			$view = new View(Conf::get('upload.dir.templates').'/'.$tplFile->getFilename());
 			$view->assign('wwwurl', Conf::get('general.url.www'));
 			$view->assign('pagename', $this->page->getName());
@@ -88,7 +117,6 @@ class BlogarchivePageModule implements PageModuleController {
 			
 			return $view;
 		} catch (Exception $e) {
-
 			return '';
 		}
 	}
@@ -97,7 +125,6 @@ class BlogarchivePageModule implements PageModuleController {
 	 * @return string
 	 */
 	public function getIdentifier() {
-
 		return '';
 	}
 

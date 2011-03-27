@@ -56,7 +56,8 @@ class TextblockPageModule implements PageModuleController {
 			return $this->oTextContent->getContent();
 		}
 		
-		return nl2br($this->oTextContent->getContent());
+//		return nl2br($this->oTextContent->getContent());
+		return ($this->oTextContent->getContent());
 	}
 
 	/**

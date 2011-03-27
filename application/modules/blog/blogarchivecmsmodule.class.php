@@ -59,10 +59,10 @@ class BlogarchiveCmsModule implements CmsModuleController {
 
 		if (!isset($values[1])) {
 			$this->amount = 10;
-			$this->templateFile = $this->templateFile = new TemplateFile();
+			$this->templateFile = new TemplateFile();
 		} else {
 			$this->amount = $values[0];
-			$this->templateFile = $this->templateFile = new TemplateFile($values[1]);
+			$this->templateFile = new TemplateFile($values[1]);
 		}
 
 		$module = current(Module::getForTemplates('blog'));
@@ -80,8 +80,8 @@ class BlogarchiveCmsModule implements CmsModuleController {
 		foreach ($this->options as $templateOption) {
 			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
-		$this->form->addFormElement($this->amountElement->getName(), $this->amountElement);
-		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+		$this->form->addFormElement($this->amountElement);
+		$this->form->addFormElement($this->selectElement);
 	}
 
 	/**

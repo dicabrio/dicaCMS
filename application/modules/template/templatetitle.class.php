@@ -8,7 +8,7 @@ class TemplateTitle extends DomainText {
 			throw new InvalidArgumentException('nothing-set', 1);
 		}
 
-		if (!preg_match("/^[a-zA-Z0-9]+$/", $value)) {
+		if (!preg_match("/^[a-zA-Z0-9_]+$/", $value)) {
 			throw new InvalidArgumentException('contains-spaces', 1);
 		}
 		

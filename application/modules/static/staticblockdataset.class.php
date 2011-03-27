@@ -14,9 +14,10 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 		
 		$this->iRecordCount = 0;
 		
-		$this->addColumn(0, Html::getCheckbox('selectall', 'all'));
-		$this->addColumn(1, 'identifier');
-		$this->addColumn(2, 'actions');
+		$this->addColumn(0, '');
+		$this->addColumn(1, 'name');
+		$this->addColumn(2, 'identifier');
+		$this->addColumn(3, 'actions');
 		
 	}
 
@@ -38,8 +39,8 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 	private function constructBlockLine(StaticBlock $block) {
 		
 		$pageid = $block->getID();
-		$sTitle = $this->constuctTitle('icon-file.png', $block->getIdentifier());
-		$this->constructLine($pageid, $sTitle, array('editblock', 'deleteblock'));
+		$sTitle = $this->constuctTitle('icon-file.png', $block->getName());
+		$this->constructLine($pageid, $sTitle, $block->getIdentifier(), array('editblock', 'deleteblock'));
 
 	}
 
@@ -49,10 +50,11 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 	 * @param string $title
 	 * @param array $actions
 	 */
-	private function constructLine($pid, $title, $actions) {
+	private function constructLine($pid, $title, $id, $actions) {
 
-		$this->setValueAt(Html::getCheckbox('select[]', $pid), $this->iRecordCount, 0);
+		$this->setValueAt('', $this->iRecordCount, 0);
 		$this->setValueAt($title, $this->iRecordCount, 1);
+		$this->setValueAt($id, $this->iRecordCount, 2);
 
 		$actionstring = "";
 		foreach ($actions as $action) {
@@ -67,7 +69,7 @@ class StaticBlockDataSet extends AbstractTableDataSet {
 												$attributes).'&nbsp;';
 		}
 
-		$this->setValueAt($actionstring, $this->iRecordCount, 2);
+		$this->setValueAt($actionstring, $this->iRecordCount, 3);
 		
 	}
 

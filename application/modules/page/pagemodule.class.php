@@ -3,6 +3,8 @@
 class PageModule extends DataRecord {
 
 	private $replacestring = null;
+
+	private $parameters = array();
 	/**
 	 * constructor
 	 *
@@ -33,6 +35,18 @@ class PageModule extends DataRecord {
 
 	public function getReplaceString() {
 		return $this->replacestring;
+	}
+
+	public function setParameter($name, $value) {
+		$this->parameters[$name] = $value;
+	}
+
+	public function getParameter($name) {
+		if (isset($this->parameters[$name])) {
+			return $this->parameters[$name];
+		}
+
+		return null;
 	}
 
 	/**
