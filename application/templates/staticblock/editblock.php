@@ -35,7 +35,7 @@
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('general.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
+			<?php echo $form->getSubmitButton('action')->addAttribute('class', 'button'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/staticblock'; ?>" class="button">Cancel</a>
 		</div>
 	</div>

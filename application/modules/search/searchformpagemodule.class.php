@@ -58,8 +58,8 @@ class SearchformPageModule implements PageModuleController {
 		$button->addAttribute('id', 'zoekbtn');
 
 		$this->form = new Form(Conf::get('general.url.www').'/'.$this->redirectpage->getName(), Request::GET, 'zoekformulier');
-		$this->form->addFormElement($zoekfield->getName(), $zoekfield);
-		$this->form->addFormElement($button->getName(), $button);
+		$this->form->addFormElement($zoekfield);
+		$this->form->addFormElement($button);
 	}
 
 	/**

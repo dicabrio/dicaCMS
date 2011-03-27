@@ -80,7 +80,7 @@ class SearchformCmsModule implements CmsModuleController {
 			$this->selectElement->addOption($page->getID(), $page->getName());
 		}
 
-		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+		$this->form->addFormElement($this->selectElement);
 
 	}
 

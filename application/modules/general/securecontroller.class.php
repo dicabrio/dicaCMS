@@ -13,18 +13,46 @@ class SecureController implements Controller {
 	 *
 	 * @param string $sMethod
 	 */
-	public function __construct($sMethod) {
+	public function __construct($method) {
 		// we should check for permissions
 		$this->session = Session::getInstance();
-		$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
+		$oAuth = Authentication::getInstance();
+		$user = $oAuth->getUser();
 
-		if (!$oAuth->isLoggedIn() && !($this instanceof LoginController)) {
+		if ($this instanceof LoginController) {
+			return;
+		}
 
-			$sMethod = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $sMethod);
-			// set a redirect
-			$this->session->set('redirect', $sMethod);
+		$method = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $method);
+		$area = Area::findByName($method, 'CMS');
 
-			$this->_redirect('login');
+		if ($area->getID() == 0) {
+			$this->createArea($area, $method);
+		}
+
+		try {
+			$user->watch($area);
+		} catch (Exception $e) {
+			$this->session->set('redirect', $method);
+			$this->_redirect($area->getUrl());
+		}
+
+	}
+
+	private function createArea(Area $area, $method) {
+
+		$data = DataFactory::getInstance();
+		$data->beginTransaction();
+		try {
+			$defaultGroup = UserGroup::findByName('admin');
+			$area->setName($method);
+			$area->setUrl('login');
+			$area->setType('CMS');
+			$area->addUserGroup($defaultGroup);
+			$area->save();
+			$data->commit();
+		} catch (PDOException $e) {
+			$data->rollBack();
 		}
 	}
 

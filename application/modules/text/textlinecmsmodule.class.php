@@ -50,7 +50,7 @@ class TextlineCmsModule implements CmsModuleController {
 		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
 		$this->contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
-		$this->form->addFormElement($this->contentFormElement->getName(), $this->contentFormElement);
+		$this->form->addFormElement($this->contentFormElement);
 		
 
 	}

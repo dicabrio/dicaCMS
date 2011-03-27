@@ -57,7 +57,7 @@
 	<div class="pagemodule">
 		<div class="modulelabel">Actions:</div>
 		<div class="modulecontent">
-			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
+			<?php echo $form->getSubmitButton('action')->addAttribute('class', 'button'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/media'; ?>" class="button">Cancel</a>
 		</div>
 	</div>

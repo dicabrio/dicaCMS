@@ -54,11 +54,19 @@ class LoginPageModule implements PageModuleController {
 	 */
 	private function load() {
 
+		$logout = $this->request->get('logout');
+		if ($logout == 1) {
+			$session = Session::getInstance();
+			$session->destroy();
+
+			Util::gotoPage(Conf::get('general.url.www').'/'.$this->page->getName());
+		}
+
 		$this->loginMapper = new LoginMapper();
-		$handler = new LoginHandler($this->loginMapper, $this->request);
+		$handler = new LoginHandler($this->loginMapper, $this->request, Conf::get('general.url.www').'/'.$this->page->getName());
 
 		$this->loginForm = new LoginForm(Conf::get('general.url.www').'/'.$this->page->getName());
-		$this->loginForm->addListener('login', $handler);
+		$this->loginForm->addListener('action', $handler);
 		$this->loginForm->listen($this->request);
 		
 		$this->templateFile = Relation::getSingle('pagemodule', 'templatefile', $this->pageModule);
@@ -75,9 +83,9 @@ class LoginPageModule implements PageModuleController {
 
 		if ($this->templateFile === null) {
 			return Lang::get('login.notabletologin');
-		}
+		} 
 		
-		$view = new View(Conf::get('upload.dir.templates') . '/' . $this->templateFile->getFilename());
+		$view = new View(Conf::get('upload.dir.templates').'/'.$this->templateFile->getFilename());
 		$view->assign('pagename', $this->page->getName());
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
@@ -89,7 +97,7 @@ class LoginPageModule implements PageModuleController {
 		$view->assign('formbegin', $this->loginForm->begin());
 		$view->assign('username', $this->loginForm->getFormElement('username'));
 		$view->assign('password', $this->loginForm->getFormElement('password'));
-		$view->assign('button', $this->loginForm->getFormElement('login'));
+		$view->assign('button', $this->loginForm->getFormElement('action'));
 		$view->assign('formend', $this->loginForm->end());
 
 		$session->set('flash', null);

@@ -71,16 +71,16 @@ class ImageuploadCmsModule implements CmsModuleController {
 		// define upload field
 		$this->fileInput = new Input('file', $this->oPageModule->getIdentifier());
 		$this->fileInputName = $this->fileInput->getName();
-		$this->form->addFormElement($this->fileInputName, $this->fileInput);
+		$this->form->addFormElement($this->fileInput);
 
 		// define description (alt text) field
 		$this->titleInput = new Input("text", $this->oPageModule->getIdentifier() . "title", $this->mediaItem->getTitle());
 		$this->titleInputName = $this->titleInput->getName();
-		$this->form->addFormElement($this->titleInputName, $this->titleInput);
+		$this->form->addFormElement($this->titleInput);
 
 		$this->descriptionInput = new TextArea($this->oPageModule->getIdentifier() . "description", $this->mediaItem->getDescription());
 		$this->descriptionInputName = $this->descriptionInput->getName();
-		$this->form->addFormElement($this->descriptionInputName, $this->descriptionInput);
+		$this->form->addFormElement($this->descriptionInput);
 	}
 
 	public function addFormMapping(FormMapper $mapper) {

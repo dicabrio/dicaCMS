@@ -1,16 +1,11 @@
 <?php
 
-class ContactformPageModule implements PageModuleController {
+class RegisterformPageModule implements PageModuleController {
 
 	/**
 	 * @var PageModule
 	 */
 	private $oPageModule;
-
-	/**
-	 * @var PageText
-	 */
-	private $oTextContent;
 
 	/**
 	 * @var array
@@ -38,6 +33,12 @@ class ContactformPageModule implements PageModuleController {
 	 */
 	private $thnxpage;
 
+	private $activated;
+
+	private $allreadyactivated;
+
+	private $isregistered;
+
 	/**
 	 * construct the text line module
 	 *
@@ -59,7 +60,30 @@ class ContactformPageModule implements PageModuleController {
 	 */
 	private function load() {
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$registered = $this->request->get('registered');
+		if ($registered == 1) {
+			$this->isregistered = true;
+		}
+
+		$activationKey = $this->request->get('activate');
+		if (empty($activationKey)) {
+			return;
+		}
+
+		$user = User::findByActivationKey($activationKey);
+
+		if ($user == null) {
+			return;
+		}
+
+		if ($user->isActive()) {
+			$this->allreadyactivated = true;
+		} else {
+			$user->setActive(true);
+			$user->save();
+			$this->activated = true;
+		}
+
 
 	}
 
@@ -67,22 +91,6 @@ class ContactformPageModule implements PageModuleController {
 	 * @return View
 	 */
 	public function getContents() {
-
-		$formshizzle = explode(',', $this->oTextContent->getContent());
-
-		try {
-
-			// Check if the values are correct. If no email is set or not a valid page id
-			// show them no contact form
-			$this->email = new RequiredEmail($formshizzle[0]);
-			if ($formshizzle[1] == 0) {
-				throw new InvalidArgumentException('not valid', 1);
-			}
-			$this->thnxpage = $formshizzle[1];
-
-		} catch (Exception $e) {
-			return '';
-		}
 
 		return $this->buildView($this->buildForm());
 
@@ -102,13 +110,12 @@ class ContactformPageModule implements PageModuleController {
 
 		$request = Request::getInstance();
 		$mapper = new FormMapper();
-		$formHandler = new ContactformHandler($mapper, $this->page, $this->email, $this->thnxpage);
+		$formHandler = new RegisterformHandler($mapper, $this->page, $this->email, $this->thnxpage);
 
-		$button = new Input('submit', 'contactform-'.$this->page->getName(), Lang::get('general.formsubmit'));
-		$elements = array($name = new Input('text', 'naam'),
+		$button = new Input('submit', 'register-'.$this->page->getName(), Lang::get('general.formsubmit'));
+		$elements = array($name = new Input('text', 'name'),
 				$email = new Input('text', 'email'),
-				$telefoon = new Input('text', 'telefoon'),
-				$bericht = new TextArea('bericht'),
+				$telefoon = new Input('text', 'password'),
 		);
 
 		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName());
@@ -125,12 +132,24 @@ class ContactformPageModule implements PageModuleController {
 
 	private function buildView(Form $form) {
 
+		if ($this->isregistered) {
+			return '<p>Je bent geregistreerd. Je krijgt een email om je account te activeren. Daarna kun je inloggen en bestanden down- en uploaden</p>';
+		}
+
+		if ($this->allreadyactivated) {
+			return '<p>Je bent reeds geactiveerd</p>';
+		}
+
+		if ($this->activated) {
+			return '<p>Je bent geactiveerd. Je kunt nu inloggen</p>';
+		}
+
 		$errors = '';
 		if (count($this->aErrors) > 0) {
 			$errors = '<ul class="error">';
 
 			foreach ($this->aErrors as $error) {
-				$errors .= '<li>'.Lang::get('contact.'.$error).'</li>';
+				$errors .= '<li>'.Lang::get('register.'.$error).'</li>';
 			}
 
 			$errors .='</ul>';
@@ -141,23 +160,19 @@ class ContactformPageModule implements PageModuleController {
 						<table class="formtable">
 							<tr>
 								<th><label for="name">Naam:</label>*</th>
-								<td>'.$form->getFormElement('naam').'</td>
+								<td>'.$form->getFormElement('name').'</td>
 							</tr>
 							<tr>
-								<th><label for="email">E-mail:</label>*</th>
+								<th><label for="email">E-mail/gebruikersnaam:</label>*</th>
 								<td>'.$form->getFormElement('email').'</td>
 							</tr>
 							<tr>
-								<th><label for="phone">Telefoon:</label></th>
-								<td>'.$form->getFormElement('telefoon').'</td>
-							</tr>
-							<tr>
-								<th><label for="comment">Opmerking:</label>*</th>
-								<td>'.$form->getFormElement('bericht')->addAttribute('rows', 7)->addAttribute('cols', 45).'</td>
+								<th><label for="password">Wachtwoord:</label></th>
+								<td>'.$form->getFormElement('password').'</td>
 							</tr>
 							<tr>
 								<th>&nbsp;</th>
-								<td>'.$form->getSubmitButton('contactform-'.$this->page->getName()).'</td>
+								<td>'.$form->getSubmitButton('register-'.$this->page->getName()).'</td>
 							</tr>
 							<tr>
 								<th>&nbsp;</th>

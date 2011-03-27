@@ -1,6 +1,6 @@
 <?php
 
-class MediatagsoverviewCmsModule implements CmsModuleController {
+class TagsCmsModule implements CmsModuleController {
 
 	const MAX_LENGTH = 255;
 
@@ -45,7 +45,7 @@ class MediatagsoverviewCmsModule implements CmsModuleController {
 
 		// left intentionaly empty
 		$this->mapper = $mapper;
-		
+
 	}
 
 	/**

@@ -27,6 +27,13 @@
 
 <fieldset class="tab" id="pageinfotab">
 	<div class="pagemodule">
+		<div class="modulelabel"><?php echo Lang::get('page.label.pagetype'); ?>:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('type'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.pagename'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('page_id'); ?>
@@ -127,13 +134,8 @@
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getFormElement('save'); ?>
-
-			<?php if ($pagesavedredirect !== null) : ?>
-			<a href="<?php echo Conf::get('general.cmsurl.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
-			<?php else : ?>
+			<?php echo $form->getSubmitButton('action'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
-			<?php endif; ?>
 		</div>
 	</div>
 </fieldset>

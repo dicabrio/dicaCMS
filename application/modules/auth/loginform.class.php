@@ -21,13 +21,13 @@ class LoginForm extends Form {
 	protected function defineFormElements() {
 
 		$oUsername = new Input('text', 'username');
-		$this->addFormElement($oUsername->getName(), $oUsername);
+		$this->addFormElement($oUsername);
 
 		$oPassword = new Input('password', 'password');
-		$this->addFormElement($oPassword->getName(), $oPassword);
+		$this->addFormElement($oPassword);
 
 		$action = new ActionButton(Lang::get('login.button'));
-		$this->addFormElement('login', $action);
+		$this->addFormElement($action);
 		
 	}
 }

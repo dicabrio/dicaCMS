@@ -1,6 +1,6 @@
 <?php
 
-class DashboardPageModule implements PageModuleController {
+class TekoopPageModule implements PageModuleController {
 
 	/**
 	 * @var PageModule
@@ -21,12 +21,6 @@ class DashboardPageModule implements PageModuleController {
 	private $request;
 
 	/**
-	 *
-	 * @var Form
-	 */
-	private $form;
-
-	/**
 	 * construct the text line module
 	 *
 	 * @param string $sIdentifier
@@ -45,7 +39,8 @@ class DashboardPageModule implements PageModuleController {
 	 * load the needed information
 	 */
 	private function load() {
-		
+		$this->form = new AddHouseForm(Conf::get('general.url.www').'/'.$this->page->getName(), Request::POST, 'huistoevoegen');
+		$this->form->listen($this->request);
 	}
 
 	/**
@@ -53,90 +48,25 @@ class DashboardPageModule implements PageModuleController {
 	 */
 	public function getContents() {
 
-		$view = new View(Conf::get('general.dir.templates') . '/hvwdashboard/hvwdashboard-frontend.php');
+		$view = new View(Conf::get('general.dir.templates') . '/hvwdashboard/hvwdashboard-addhuis.php');
 
 		$view->assign('wwwurl', Conf::get('general.url.www'));
 		$view->assign('imagesurl', Conf::get('general.url.images'));
 		$view->assign('jsurl', Conf::get('general.url.js'));
 		$view->assign('cssurl', Conf::get('general.url.css'));
+		$view->assign('form', $this->form);
 		$view->assign('identifier', $this->pageModule->getIdentifier());
 		$view->assign('pagename', $this->page->getName());
 
-		$this->checkActivePage($view);
-
-		$view->assign('dashboardpage', $this->getDashboardPage());
+//		$this->checkActivePage($view);
+//		$view->dashboardpage = $this->getDashboardPage();
 
 		$auth = Authentication::getInstance();
-		$view->user = $auth->getUser();
+		$view->assign('user', $auth->getUser());
 
 		return $view;
 
 //		return $this->buildView($this->buildForm());
-	}
-
-	private function checkActivePage(View $view) {
-
-		$view->dashboardActive = '';
-		$view->verkoopActive = '';
-		$view->aankoopActive = '';
-		$view->berichtenActive = '';
-		$view->agendaActive = '';
-		$view->gegevensActive = '';
-
-		$pages = array(
-			'dashboard' => 'dashboardActive',
-			'verkoop' => 'verkoopActive',
-			'aankoop' => 'aankoopActive',
-			'gegevens' => 'gegevensActive',
-			'berichten' => 'berichtenActive',
-			'agenda' => 'agendaActive',
-		);
-
-		if ($this->request->get('p') != '') {
-			foreach ($pages as $page => $variable) {
-				if ($page == $this->request->get('p')) {
-					$view->assign($variable, ' class="active"');
-				}
-			}
-		} else {
-			$view->assign('dashboardActive', ' class="active"');
-		}
-	}
-
-	private function getDashboardPage() {
-
-		switch ($this->request->get('p')) {
-
-			case 'verkoop' :
-				$view = $this->getDashboardView('verkoop');
-				break;
-			case 'aankoop' :
-				$view = $this->getDashboardView('aankoop');
-				break;
-			case 'berichten' :
-				$view = $this->getDashboardView('berichten');
-				break;
-			case 'gegevens' :
-				$view = $this->getDashboardView('gegevens');
-				break;
-			case 'agenda':
-				$view = $this->getDashboardView('agenda');
-				break;
-			default:
-				$view = $this->getDashboardView('dashboard');
-				break;
-		}
-
-		return $view;
-	}
-
-	/**
-	 *
-	 * @param string $viewname
-	 * @return View
-	 */
-	private function getDashboardView($viewname) {
-		return new View(Conf::get('general.dir.templates') . '/hvwdashboard/hvwdashboard-' . $viewname . '.php');
 	}
 
 	/**

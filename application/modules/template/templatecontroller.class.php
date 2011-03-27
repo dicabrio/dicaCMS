@@ -80,7 +80,7 @@ class TemplateController extends CmsController {
 		$form = new TemplateFileForm($req, $template);
 		$formmapper = new TemplateFileMapper($form);
 
-		$form->addSubmitButton('save', $button, new TemplateFileSaveHandler($formmapper, $template, $folder));
+		$form->addSubmitButton($button, new TemplateFileSaveHandler($formmapper, $template, $folder));
 		$form->listen($req);
 
 		$oModuleView = new View(Conf::get('general.dir.templates').'/template/uploadtemplate.php');
@@ -133,7 +133,7 @@ class TemplateController extends CmsController {
 
 		$form = new TemplateFileFolderEditForm($currentFolder);
 		$formmapper = new TemplateFolderMapper($form);
-		$form->addSubmitButton('save', $button, new TemplateFolderSaveHandler($formmapper, $currentFolder, $parentFolder));
+		$form->addSubmitButton($button, new TemplateFolderSaveHandler($formmapper, $currentFolder, $parentFolder));
 		$form->listen($req);
 
 		$oModule = new View(Conf::get('general.dir.templates').'/template/edittemplatefilefolder.php');

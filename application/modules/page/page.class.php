@@ -67,7 +67,14 @@ class Page extends DataRecord implements DomainEntity {
 	 * @param String $keywords
 	 * @param String $description
 	 */
-	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $title="", $keywords="", $description="") {
+	public function update($pagename,
+			TemplateFile $template,
+			Date $publishtime=null,
+			Date $expiretime=null,
+			$title="",
+			$keywords="",
+			$description="",
+			$type="basic") {
 
 		if ($publishtime == '') {
 			$publishtime = new Date("now");
@@ -82,6 +89,12 @@ class Page extends DataRecord implements DomainEntity {
 		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
+	}
+
+	public function getType() {
+
+		return $this->getAttr('type');
+
 	}
 
 	/**
@@ -132,23 +145,27 @@ class Page extends DataRecord implements DomainEntity {
 
 			$moduleLabels = array();
 			foreach ($parsedModuleLabels as $moduleLabel) {
-				$this->aModules[$moduleLabel['id']] = $moduleLabel['module'];
+				$this->aModules[$moduleLabel['id']] = $moduleLabel;
 			}
 
 			$storedModules = PageModule::getByPage($this);
 
 			$tmpModuleArray = array();
-			foreach ($this->aModules as $identifier => $moduleType) {
+			foreach ($this->aModules as $identifier => $moduleInfo) {
 
-				if (isset($storedModules[$identifier]) && $moduleType == $storedModules[$identifier]->getType()) {
+				if (isset($storedModules[$identifier]) && $moduleInfo['module'] == $storedModules[$identifier]->getType()) {
 					$pageModule = $storedModules[$identifier];
 					unset($storedModules[$identifier]);
 				} else {
 					$pageModule = new PageModule();
-					$pageModule->setType($moduleType);
+					$pageModule->setType($moduleInfo['module']);
 					$pageModule->setIdentifier($identifier);
 					$pageModule->setPage($this);
 					$pageModule->save();
+				}
+
+				if (!empty($moduleInfo['replacestring'])) {
+					$pageModule->setReplaceString($moduleInfo['replacestring']);
 				}
 				
 				$tmpModuleArray[$identifier] = $pageModule;
@@ -163,6 +180,40 @@ class Page extends DataRecord implements DomainEntity {
 		}
 
 		return $this->aModules;
+	}
+
+	public function draw($templateLocation, Request $request) {
+
+
+		$modules = $this->getModules();
+		$view = new View($templateLocation.'/'.$this->oTemplate->getFilename());
+		// plain PHP variables
+		$view->assign('pagename', $this->getAttr('name'));
+		$view->assign('title', $this->getAttr('title'));
+		$view->assign('description', $this->getAttr('description'));
+		$view->assign('keywords', $this->getAttr('keywords'));
+
+		foreach ($modules as $module) {
+			$content = '';
+			$label = ViewParser::constructLabel($module->getType(), $module->getIdentifier());
+
+			$sModuleClass = $module->getType().'PageModule';
+			$oReflection = new ReflectionClass($sModuleClass);
+			$oModuleController = new $sModuleClass($module, $this, $request);
+
+			$content = $oModuleController->getContents();
+
+			// if the replacestring isn't set we just add the module content as 
+			// a plain PHP variable
+			$replaceString = $module->getReplaceString();
+			if (empty($replaceString)) {
+				$view->assign($label, $content);
+			} else {
+				$view->replace($replaceString, $content);
+			}
+		}
+
+		return $view;
 	}
 
 	/**

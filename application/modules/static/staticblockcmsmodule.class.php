@@ -70,7 +70,7 @@ class StaticblockCmsModule implements CmsModuleController {
 			$this->selectElement->addOption($block->getID(), $block->getIdentifier());
 		}
 
-		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+		$this->form->addFormElement($this->selectElement);
 
 	}
 

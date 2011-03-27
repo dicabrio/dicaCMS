@@ -138,7 +138,7 @@
 								<tr>
 									<td></td>
 									<td>
-										<?php echo $form->getFormElement('login'); ?>
+										<?php echo $form->getFormElement('action'); ?>
 
 									</td>
 								</tr>

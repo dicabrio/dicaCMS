@@ -24,18 +24,12 @@ class Paragraph extends DomainText {
 		$text = strip_tags($text, '<p><a><img><br><strong><em><ul><li><ol>');
 
 		$emptyParagraphPattern = "/<p\b[^>]*>(\S+)?<\/p>(<br \/>)?/";
-		$paragraphWithAttributesPattern = "/<p\b[^>]*>(.*?)<\/p>(<br \/>)?/";
-
 		$text = preg_replace($emptyParagraphPattern, '', $text);
 
 		$stripper = new StripAttributes();
 		$stripper->allow = array('id', 'class');
-		$stripper->exceptions = array('img' => array('src', 'alt', 'title', 'width', 'height'), 'a' => array('href', 'title'));
+		$stripper->exceptions = array('img' => array('src', 'alt', 'title', 'width', 'height'), 'a' => array('href', 'title', 'target'));
 		$text = $stripper->strip($text);
-
-
-//		$text = preg_replace_callback($paragraphWithAttributesPattern, 'removeGarbageTags', $text);
-//		$text = preg_replace_callback($breaksOutsideParagraphPattern, 'removeGarbageBreaks', $text);
 
 		$this->setValue($text);
 
