@@ -481,24 +481,19 @@ abstract class DataRecord {
 	}
 
 
-	/**
-	 *
-	 * @param string $query
-	 * @param array $bind
-	 * @return int
-	 */
-	protected static function countBySql($query, $bind=array(), $sConnectionName = null) {
+	protected static function countBySql($query, $bind=array(), $sDbConnectionName = null) {
 
-		$oDatabaseHandler = self::getConnection($sConnectionName);
-		$statement = $oDatabaseHandler->prepare($query);
-		$statement->execute($bind);
+		$oDatabaseHandler = self::getConnection($sDbConnectionName);
 
-		if (!$statement) {
-			$errorInfo = $statement->errorInfo();
-			throw new RecordException($errorInfo[2]);
+		$oStatement = $oDatabaseHandler->prepare($query);
+		$oStatement->execute($bind);
+
+		if (!$oStatement) {
+			$aErrorInfo = $oStatement->errorInfo();
+			throw new RecordException($aErrorInfo[2]);
 		}
 
-		return (int)$statement->fetchColumn();
+		return $oStatement->fetchColumn();
 	}
 
 	/**

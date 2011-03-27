@@ -67,6 +67,8 @@ class ContactformPageModule implements PageModuleController {
 	 * @return View
 	 */
 	public function getContents() {
+	
+		//return '';
 
 		$formshizzle = explode(',', $this->oTextContent->getContent());
 
