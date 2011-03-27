@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Static class will catch the requests and processes it
  * This is a service for ajax driven apps.
@@ -27,15 +28,13 @@ class ServiceFacade {
 			throw new ServiceFacadeException('Service Handler is not set');
 		}
 
-		try {
-			$prot = $this->protocol;
-			$prot->decode($reqData);
-			$prot->validate();
-			$prot->execute();
-			return $prot->encode();
-		} catch(ProtocolException $e) {
-			return $prot->error($e);
-		}
+		$prot = $this->protocol;
+		$prot->decode($reqData);
+		$prot->validate();
+		$prot->execute();
+		
+		return $prot->encode();
 	}
+
 }
 

@@ -73,10 +73,12 @@ class Form {
 		if ($this->isSubmitted()) {
 			$formElementName = $formElement->getName();
 
-			if ($formElement->getType() == 'file') {
+			$formElementType = $formElement->getType();
+			if ($formElementType == 'file') {
 				return $this->request->files($formElementName);
 			} else {
-				return $this->request->request($formElementName);
+				$requestValue = $this->request->request($formElementName);
+				return $requestValue;
 			}
 		}
 	}
@@ -84,12 +86,11 @@ class Form {
 	/**
 	 * this method is only allowed to be called in the defineFormElements method
 	 *
-	 * @param string $sIdentifier
 	 * @param FormElement $oFormElement
 	 */
-	public function addFormElement($sIdentifier, FormElement $oFormElement) {
+	public function addFormElement(FormElement $oFormElement, FormHandler $handler = null) {
 
-		$sFormElementName = $oFormElement->getName();
+		$sFormElementIdentifier = $oFormElement->getIdentifier();
 
 		if ($oFormElement->getType() == 'file') {
 			$this->sFormEnctype = ' enctype="multipart/form-data"';
@@ -99,8 +100,12 @@ class Form {
 			$oFormElement->setValue($this->getValueFromRequest($oFormElement));
 		}
 
-		$this->aFormElementsByIdentifier[$sIdentifier] = $oFormElement;
-		$this->aFormElementsByName[$sFormElementName][] = $oFormElement;
+		$this->aFormElementsByIdentifier[$sFormElementIdentifier] = $oFormElement;
+		$this->aFormElementsByName[$oFormElement->getName()][] = $oFormElement;
+
+		if ($handler !== null) {
+			$this->aSubmitButtonsAndHandlers[$sFormElementIdentifier] = array('FormElement' => $oFormElement, 'FormHandler' => $handler);
+		}
 	}
 
 	/**
@@ -162,7 +167,7 @@ class Form {
 	public function addListener($buttonIdentifier, FormHandler $handler) {
 
 		$formElement = $this->getFormElement($buttonIdentifier);
-		$this->addSubmitButton($buttonIdentifier, $formElement, $handler);
+		$this->addSubmitButton($formElement, $handler);
 	}
 
 	/**
@@ -170,9 +175,9 @@ class Form {
 	 * @param FormElement $oElement
 	 * @param FormHandler $oHandler
 	 */
-	public function addSubmitButton($sButtonIdentifier, FormElement $oElement, FormHandler $oHandler) {
+	public function addSubmitButton(FormElement $oElement, FormHandler $oHandler) {
 
-		$this->aSubmitButtonsAndHandlers[$sButtonIdentifier] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
+		$this->aSubmitButtonsAndHandlers[$oElement->getIdentifier()] = array('FormElement' => $oElement, 'FormHandler' => $oHandler);
 	}
 
 	/**
