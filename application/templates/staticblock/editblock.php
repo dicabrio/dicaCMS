@@ -16,7 +16,14 @@
 	<?php endif; ?>
 
 	<div class="pagemodule">
-		<div class="modulelabel">Identifier:</div>
+		<div class="modulelabel"><?php echo Lang::get('staticblock.name'); ?>:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('name'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+	<div class="pagemodule">
+		<div class="modulelabel"><?php echo Lang::get('staticblock.identifier'); ?>:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('block_id'); ?>
 			<?php echo $form->getFormElement('identifier'); ?>

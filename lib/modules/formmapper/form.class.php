@@ -254,7 +254,7 @@ class Form {
 	 * check if this form is submitted
 	 * @return Boolean
 	 */
-	private function isSubmitted() {
+	public function isSubmitted() {
 
 		if ($this->request instanceof Request) {
 			return ($this->request->method() == Request::POST);

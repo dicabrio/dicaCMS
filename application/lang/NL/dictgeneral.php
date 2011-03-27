@@ -5,9 +5,12 @@ $lang = array (
 		'edit' => 'wijzig',
 		'delete' => 'verwijder',
 		'save' => 'opslaan',
-		'cancel' => 'annuleer'
+		'cancel' => 'annuleer',
+		'search' => 'Zoek',
 	),
 
+	'got-website' => 'Bekijk de website',
+	'actions' => 'Acties',
 	'logout' => 'Uitloggen',
 	'dashboard' => 'Dashboard',
 	'settings' => 'Settings',

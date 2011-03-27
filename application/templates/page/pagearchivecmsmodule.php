@@ -7,7 +7,12 @@
 		
 		<table class="formtable">
 			<tr>
-				<td style="width: 120px"><?php echo Lang::get('blog.blogtemplate'); ?>:&nbsp;</td>
+				<td style="width: 120px"><?php echo Lang::get('page.type'); ?>:&nbsp;</td>
+				<td><?php echo $form->getFormElementByName($identifier.'_type'); ?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td style="width: 120px"><?php echo Lang::get('page.template'); ?>:&nbsp;</td>
 				<td><?php echo $form->getFormElementByName($identifier); ?></td>
 				<td></td>
 			</tr>
