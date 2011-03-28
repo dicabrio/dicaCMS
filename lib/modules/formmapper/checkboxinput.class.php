@@ -43,8 +43,18 @@ class CheckboxInput extends Input {
 			$this->checked = true;
 		} else if ($originalValue == $value) {
 			$this->checked = true;
+		} else {
+			$this->checked = false;
 		}
 
+	}
+
+	public function getValue() {
+		if ($this->checked == true) {
+			return parent::getValue();
+		}
+
+		return null;
 	}
 
 	public function __toString() {

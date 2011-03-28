@@ -11,5 +11,6 @@ class PageMapper extends FormMapper {
 		$this->addFormElementToDomainEntityMapping('expiretime', 'Date');
 		$this->addFormElementToDomainEntityMapping('title', 'RequiredTextLine');
 		$this->addFormElementToDomainEntityMapping('redirect', 'TextLine');
+		$this->addFormElementToDomainEntityMapping('active', 'TextLine');
 	}
 }

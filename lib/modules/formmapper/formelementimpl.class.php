@@ -6,8 +6,6 @@ class FormElementImpl implements FormElement {
 
 	private $node;
 
-	private $mapping;
-
 	public function __construct($nodename, $name, $value=null) {
 		$this->node = $nodename;
 		$this->addAttribute('name', $name);
