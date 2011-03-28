@@ -1,7 +1,7 @@
 <div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
 		<h2><?php echo ucfirst($identifier); ?></h2>
-		<p>Type: Cases<p>
+		<p>Type: <?php echo Lang::get('blog.title'); ?><p>
 	</div>
 	<div class="modulecontent">
 		

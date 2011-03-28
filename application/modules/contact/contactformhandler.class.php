@@ -60,6 +60,8 @@ class ContactformHandler implements FormHandler {
 
 			include_once('Swift/Events/Listener.php');
 			include_once('Swift/Connection/NativeMail.php');
+			include_once('Swift/Connection/SMTP.php');
+			include_once('Swift/Connection/Sendmail.php');
 			include_once('Swift/RecipientList.php');
 
 			$email = $this->formmapper->getModel('email');
@@ -69,7 +71,9 @@ class ContactformHandler implements FormHandler {
 			$message .= 'Phone: '.$this->formmapper->getModel('telefoon')."\n";
 			$message .= 'Message: '.$this->formmapper->getModel('bericht')."\n";
 
-			$oSwift = new Swift(new Swift_Connection_NativeMail());
+			$con = new Swift_Connection_SMTP('smtp.transip.nl');
+			$oSwift = new Swift($con);
+//			$oSwift = new Swift(new Swift_Connection_NativeMail());
 			$oRecipients = new Swift_RecipientList();
 			$oRecipients->addTo($this->email); //We can give a name along with the address
 
