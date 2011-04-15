@@ -73,7 +73,12 @@ class RequestControllerProtocol implements ServiceProtocol {
 		
 		$controller = $reflection->newInstance($oReflMethod->getName());
 		$controller->setArguments($this->arguments);
-		$this->result = $oReflMethod->invokeArgs($controller, array());
+		$aArguments = array();
+		if (isset($this->arguments['url'])) {
+			$aArguments = explode('/', str_replace($this->controller . '/' . $method . '/', '', $this->arguments['url']));
+		}
+		$this->result = $oReflMethod->invokeArgs($controller, $aArguments);
+//		$this->result = $oReflMethod->invokeArgs($controller, array());
 	}
 
 	public function decode($newData) {

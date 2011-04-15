@@ -6,8 +6,6 @@ class FormElementImpl implements FormElement {
 
 	private $node;
 
-	private $mapping;
-
 	public function __construct($nodename, $name, $value=null) {
 		$this->node = $nodename;
 		$this->addAttribute('name', $name);
@@ -25,6 +23,12 @@ class FormElementImpl implements FormElement {
 		$this->attributes[$name] = $value;
 		return $this;
 
+	}
+
+	public function removeAttribute($name) {
+		if (isset($this->attributes[$name])) {
+			unset($this->attributes[$name]);
+		}
 	}
 
 	/**
