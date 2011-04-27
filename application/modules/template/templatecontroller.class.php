@@ -26,7 +26,9 @@ class TemplateController extends CmsController {
 	 * @param int $iParentID
 	 * @return string
 	 */
-	public function _index($aErrors = array(), $iParentID = 0) {
+	public function _index() {
+		$aErrors = array();
+		$iParentID = 0;
 
 		$session = Session::getInstance();
 		$session->set(self::C_CURRENT_FOLDER, $iParentID);
@@ -34,7 +36,7 @@ class TemplateController extends CmsController {
 		$parentFolder = new TemplateFileFolder($iParentID);
 		$aItems = $parentFolder->getChildren();
 
-		$actions = new Menu('actions');
+		$actions = new ActionMenu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/edittemplate', Lang::get('template.button.newfile')));
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/template/editfolder', Lang::get('template.button.newfolder')));
 

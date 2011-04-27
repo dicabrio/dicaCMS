@@ -107,7 +107,7 @@ class TextblockCmsModule implements CmsModuleController {
 	public function getEditor() {
 
 		$view = new View(Conf::get('general.dir.templates').'/text/textblock.php');
-		$view->assign('sIdentifier', $this->pageModule->getIdentifier());
+		$view->assign('identifier', $this->pageModule->getIdentifier());
 		$view->assign('form', $this->form);
 		$view->assign('htmlEditor', $this->htmlEditor);
 		$view->assign('label', $this->label);

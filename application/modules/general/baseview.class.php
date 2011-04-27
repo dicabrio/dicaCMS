@@ -51,7 +51,7 @@ class BaseView extends View {
 	 * @param string $sKey
 	 * @param Menu $oMenu
 	 */
-	public function addMenu($sKey, Menu $oMenu) {
+	public function addMenu($sKey, ActionMenu $oMenu) {
 		$this->aMenus[$sKey] = $oMenu;
 	}
 

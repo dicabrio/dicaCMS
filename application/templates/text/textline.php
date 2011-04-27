@@ -1,10 +1,9 @@
-<div class="pagemodule <?php echo $sIdentifier; ?>">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
-		<h2><?php echo Lang::get('textline.title'); ?></h2>
-		<p>id: <?php echo $sIdentifier; ?> </p>
+		<h2><?php echo $label; ?></h2>
 	</div>
 	<div class="modulecontent">
-		<?php echo $form->getFormElement($sIdentifier)->addAttribute('maxlenght', $sMaxLength); ?>
+		<?php echo $form->getFormElement($identifier)->addAttribute('maxlenght', $maxlength); ?>
 	</div>
 	<div class="clear">&nbsp;</div>
 </div>

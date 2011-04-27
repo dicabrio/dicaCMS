@@ -36,7 +36,11 @@ class PageController extends CmsController {
 		return $this->_index(array(), $iItemID);
 	}
 
-	public function _index($aErrors = array(), $iParentID=0, $sSuccess = false) {
+	public function _index() {
+
+		$aErrors = array();
+		$iParentID = 0;
+		$sSuccess = '';
 
 		$session = $this->getSession();
 		$session->set(self::C_CURRENT_FOLDER, $iParentID);
@@ -44,7 +48,7 @@ class PageController extends CmsController {
 		$folder = new PageFolder($iParentID);
 		$stuff = $folder->getChildren();
 
-		$actions = new Menu('actions');
+		$actions = new ActionMenu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www') . '/page/editpage', Lang::get('page.button.newpage')));
 //		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
@@ -133,7 +137,7 @@ class PageController extends CmsController {
 		$button = new ActionButton(Lang::get('general.button.save'));
 		$button->addAttribute('class', 'save button');
 
-		$this->form->addSubmitButton($button, new PageSaveHandler($this->formMapper, $page));
+		$this->form->addSubmitButton($button, new PageSaveHandler($this->formMapper, $page, $pageEditView));
 		$this->form->listen($oReq);
 
 		$view = $pageEditView->getView();

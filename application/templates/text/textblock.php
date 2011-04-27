@@ -14,17 +14,16 @@ if (isset($htmlEditor) && $htmlEditor == true) {
 }
 
 ?>
-<div class="pagemodule <?php echo $sIdentifier; ?>">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
-		<h2><?php echo Lang::get('textblock.title'); ?></h2>
-		<p>id: <?php echo $sIdentifier; ?><p>
+		<h2><?php echo $label; ?></h2>
 	</div>
 	<?php if (isset($htmlEditor) && $htmlEditor == true) : ?>
 	<div class="modulecontent yui-skin-sam">
 	<?php else : ?>
 	<div class="modulecontent">
 	<?php endif; ?>
-	<?php echo $form->getFormElement($sIdentifier)->addAttribute('class', 'moduletextblock '.$sIdentifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
+	<?php echo $form->getFormElement($identifier)->addAttribute('class', 'moduletextblock '.$identifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
 	</div>
 	<div class="clear">&nbsp;</div>
 </div>

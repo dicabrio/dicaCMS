@@ -1,7 +1,7 @@
-<div class="pagemodule <?php echo $sIdentifier; ?>">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
 		<h2><?php echo Lang::get('imageupload.title'); ?></h2>
-		<p>id: <?php echo $sIdentifier; ?><p>
+		<p>id: <?php echo $identifier; ?><p>
 	</div>
 	<div class="modulecontent">
 		<?php if ($filename) : ?>
@@ -21,12 +21,12 @@
 				<br />
 				<br />
 			</p>
-			<?php echo $form->getFormElement($sIdentifier); ?><br /><br />
-			<label style="width: 100px; float: left;" for="<?php echo $sIdentifier."title"; ?>"><?php echo Lang::get('imageupload.alttext'); ?></label>
-			<?php echo $form->getFormElement($sIdentifier."title")->addAttribute('style', 'width: 230px; margin: 0 0 5px 0;'); ?>
+			<?php echo $form->getFormElement($identifier); ?><br /><br />
+			<label style="width: 100px; float: left;" for="<?php echo $identifier."title"; ?>"><?php echo Lang::get('imageupload.alttext'); ?></label>
+			<?php echo $form->getFormElement($identifier."title")->addAttribute('style', 'width: 230px; margin: 0 0 5px 0;'); ?>
 			<?php if (isset($extended) && $extended == true) : ?>
-			<label style="width: 100px; float: left;" for="<?php echo $sIdentifier."description"; ?>"><?php echo Lang::get('imageupload.description'); ?></label>
-			<?php echo $form->getFormElement($sIdentifier."description")->addAttribute('style', 'width: 230px;'); ?>
+			<label style="width: 100px; float: left;" for="<?php echo $identifier."description"; ?>"><?php echo Lang::get('imageupload.description'); ?></label>
+			<?php echo $form->getFormElement($identifier."description")->addAttribute('style', 'width: 230px;'); ?>
 			<?php endif; ?>
 		</div>
 

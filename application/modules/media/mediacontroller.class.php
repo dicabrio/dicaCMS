@@ -10,11 +10,14 @@ class MediaController extends CmsController {
 
 	}
 
-	public function _index($aErrors = array(), $iParentID=0) {
+	public function _index() {
+
+		$aErrors = array();
+		$iParentID = 0;
 
 		$media = Media::find();
 
-		$actions = new Menu('actions');
+		$actions = new ActionMenu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/media/editmedia', Lang::get('media.button.newitem')));
 
 		$tableDataSet = new MediaDataSet();

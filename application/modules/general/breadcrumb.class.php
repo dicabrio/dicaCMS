@@ -1,6 +1,6 @@
 <?php
 
-class BreadCrumb extends Menu {
+class BreadCrumb extends ActionMenu {
 
 	public function __construct() {
 		parent::__construct('breadcrumb');
