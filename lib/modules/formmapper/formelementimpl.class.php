@@ -41,6 +41,9 @@ class FormElementImpl implements FormElement {
 
 		$sAttributes = "";
 		foreach ($this->attributes as $name => $value) {
+			if ($name=="value") {
+				$value= htmlentities($value, ENT_COMPAT, 'UTF-8');
+			}
 			$sAttributes .= sprintf(' %s="%s"', $name, $value);
 		}
 

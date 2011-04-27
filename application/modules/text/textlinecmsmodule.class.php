@@ -29,6 +29,12 @@ class TextlineCmsModule implements CmsModuleController {
 	 * @var int
 	 */
 	private $maxlength;
+	
+	/**
+	 *
+	 * @var Input
+	 */
+	private $contentFormElement;
 
 	/**
 	 * construct the imageupload module
@@ -58,8 +64,8 @@ class TextlineCmsModule implements CmsModuleController {
 		$this->getParam('label');
 		
 		$this->textContent = PageText::getByPageModule($this->pageModule);
-		
-		$this->form->addFormElement(new Input('text', $this->pageModule->getIdentifier(), $this->textContent->getContent()));
+		$this->contentFormElement = new Input('text', $this->pageModule->getIdentifier(), $this->textContent->getContent());
+		$this->form->addFormElement($this->contentFormElement);
 		
 
 	}

@@ -1,38 +1,35 @@
 <?php
 
 class RequestControllerProtocol implements ServiceProtocol {
-
-/**
- * @var string
- */
+	/**
+	 * @var string
+	 */
 	const SUFFIX = "Controller";
 
 	/**
 	 * maybe this will get of some use lateron
 	 *
 	 */
-	const ACTION_DEFAULT 	= "_default";
+	const ACTION_DEFAULT = "_default";
 
 	/**
 	 * @var string
 	 */
-	const ACTION_INDEX 		= "_index";
+	const ACTION_INDEX = "_index";
 
 	/**
 	 * @var string
 	 */
-	const ACTION_404		= "_default";
+	const ACTION_404 = "_default";
 
 	/**
 	 * @var array
 	 */
 	private $arguments;
-
 	/**
 	 * @var Controller
 	 */
 	private $controller;
-
 	/**
 	 * @var string
 	 */
@@ -44,25 +41,24 @@ class RequestControllerProtocol implements ServiceProtocol {
 	 */
 	public function execute() {
 
-		$controllerClass = ucfirst($this->controller).self::SUFFIX;
+		$controllerClass = ucfirst($this->controller) . self::SUFFIX;
 		$reflection = new ReflectionClass($controllerClass);
 
 		$method = Util::getUrlSegment(1);
 
 		if (empty($method)) {
-		// no metod is called zo we provide the _index()
+			// no metod is called zo we provide the _index()
 			$method = self::ACTION_INDEX;
 		}
 
 		try {
 			$oReflMethod = $reflection->getMethod($method);
 			if ($oReflMethod->isPrivate() || $oReflMethod->isProtected()) {
-			// sorry this method is not accessable
 				throw new ReflectionException('Not allowed to access this method');
 			}
 		} catch (ReflectionException $e) {
-		// the method is not found so we go to the index
-		// or the default for now the index
+			// the method is not found so we go to the index
+			// or the default for now the index
 			$oReflMethod = $reflection->getMethod(self::ACTION_404);
 		}
 
@@ -70,7 +66,7 @@ class RequestControllerProtocol implements ServiceProtocol {
 		if (!($reflection->implementsInterface('Controller'))) {
 			throw new Exception('Not a valid Controller');
 		}
-		
+
 		$controller = $reflection->newInstance($oReflMethod->getName());
 		$controller->setArguments($this->arguments);
 		$aArguments = array();
@@ -78,7 +74,6 @@ class RequestControllerProtocol implements ServiceProtocol {
 			$aArguments = explode('/', str_replace($this->controller . '/' . $method . '/', '', $this->arguments['url']));
 		}
 		$this->result = $oReflMethod->invokeArgs($controller, $aArguments);
-//		$this->result = $oReflMethod->invokeArgs($controller, array());
 	}
 
 	public function decode($newData) {
@@ -95,14 +90,14 @@ class RequestControllerProtocol implements ServiceProtocol {
 	}
 
 	public function validate() {
-	// check if request data is ok
+		// check if request data is ok
 		$this->controller = Util::getUrlSegment(0);
 		if (empty($this->controller)) {
 			throw new ProtocolException('No controller defined');
 		}
 
 		try {
-			Util::validClass(ucfirst($this->controller).self::SUFFIX);
+			Util::validClass(ucfirst($this->controller) . self::SUFFIX);
 		} catch (ClassException $e) {
 			throw new ProtocolException("Controller cannot be found");
 		}
@@ -116,6 +111,6 @@ class RequestControllerProtocol implements ServiceProtocol {
 			return $message;
 		}
 	}
-}
 
+}
 

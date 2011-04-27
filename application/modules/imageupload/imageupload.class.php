@@ -4,34 +4,38 @@ class ImageUpload extends Upload {
 
 	private $image;
 
-	public function __construct($fileinfo) {
+	/**
+	 *
+	 * @param array $fileinfo
+	 * @param int $maxWidth
+	 * @param int $maxHeight
+	 * @param string $allowedMimeTypes (comma seperated values)
+	 * @return void
+	 */
+	public function __construct($fileinfo, $maxWidth=null, $maxHeight=null) {
 		parent::__construct($fileinfo);
 
-		// validate imageupload specifics
-		$maxSize = Conf::get('imageupload.allowedsize.filesize');
-		$maxWidth = Conf::get('imageupload.allowedsize.width');
-		$maxHeight = Conf::get('imageupload.allowedsize.height');
-
-		$allowedMimeTypes = Conf::get('imageupload.allowedmimetypes');
-
-		$this->validateFileType($allowedMimeTypes);
-		$this->validateFileSize($maxSize);
+		$this->validateFileType('jpeg|jpg|png|gif');
 
 		if (!$this->isUploaded()) {
 			return ;
 		}
-
+		
 		$this->image = new Image($this->getFile());
 
-		$this->validateDimensions($maxWidth, $maxHeight);
-
+		if ($maxWidth != null || $maxHeight != null) {
+			$this->validateDimensions($maxWidth, $maxHeight);
+		}
 	}
 
 	private function validateDimensions($maxWidth, $maxHeight) {
-
-		if ($this->image->getWidth() > $maxWidth || $this->image->getHeight() > $maxHeight) {
+		
+		if ($maxWidth != null && $this->image->getWidth() > $maxWidth) {
 			throw new UploadException('file-dimensions-too-big', 200);
 		}
-
+		
+		if ($maxHeight != null && $this->image->getHeight() > $maxHeight) {
+			throw new UploadException('file-dimensions-too-big', 200);
+		}
 	}
 }

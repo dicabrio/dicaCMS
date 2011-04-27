@@ -35,12 +35,21 @@ class ImageuploadCmsModule implements CmsModuleController {
 	 * @var FormElement
 	 */
 	private $descriptionInputName;
-	
 	/**
 	 *
 	 * @var string
 	 */
 	private $label;
+	/**
+	 *
+	 * @var int
+	 */
+	private $maxwidth;
+	/**
+	 *
+	 * @var int
+	 */
+	private $maxheight;
 
 	/**
 	 * construct the imageupload module
@@ -62,11 +71,16 @@ class ImageuploadCmsModule implements CmsModuleController {
 	}
 
 	private function load() {
-		
-		$this->label = 'Imageupload : '.$this->pageModule->getIdentifier();
+
+		$this->maxwidth = Conf::get('imageupload.allowedsize.width');
+		$this->maxheight = Conf::get('imageupload.allowedsize.height');
+
+		$this->label = 'Imageupload : ' . $this->pageModule->getIdentifier();
 		$this->defaultimage = Setting::getByName('defaultimage')->getValue();
-		
+
 		$this->getParam('label');
+		$this->getParam('maxwidth');
+		$this->getParam('maxheight');
 		$this->getParam('defaultimage');
 
 		$mediaItem = Relation::getSingle('pagemodule', 'media', $this->pageModule);
@@ -96,8 +110,10 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 	public function addFormMapping(FormMapper $mapper) {
 
+		//Conf::get('imageupload.allowedmimetypes');
+
 		$this->mapper = $mapper;
-		$this->mapper->addFormElementToDomainEntityMapping($this->fileInputName, "ImageUpload");
+		$this->mapper->addFormElementToDomainEntityMapping($this->fileInputName, "ImageUpload:" . $this->maxwidth . "," . $this->maxheight . "");
 		$this->mapper->addFormElementToDomainEntityMapping($this->titleInputName, "TextLine");
 		$this->mapper->addFormElementToDomainEntityMapping($this->descriptionInputName, "DomainText");
 	}
@@ -119,7 +135,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 				$alttext = $this->mediaItem->getTitle();
 				$filename = $this->mediaItem->getFile()->getFilename();
 			} catch (FileNotFoundException $e) {
-
+				
 			}
 		}
 
@@ -128,11 +144,6 @@ class ImageuploadCmsModule implements CmsModuleController {
 		$view->assign('defaultimage', $this->getDefaultImage());
 		$view->assign('identifier', $this->pageModule->getIdentifier());
 		$view->assign('label', $this->label);
-//		$view->alttext = $alttext;
-//		$view->defaultimage = $this->getDefaultImage();
-//		$view->sIdentifier = $this->pageModule->getIdentifier();
-//		$view->label = $this->label;
-
 
 		return $view;
 	}
@@ -155,17 +166,14 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 		if ($file !== null) {
 
-			$new = false;
-			if ($this->mediaItem->getID() == 0) {
-				$new = true;
-			}
+			Relation::remove('pagemodule', 'media', $this->pageModule);
 
-			$this->mediaItem->update($title, $description, $file);
-			$this->mediaItem->save();
+			$title = $file->getFilename();
+			$media = new Media();
+			$media->update(new TextLine($title), $description, $file);
+			$media->save();
 
-			if ($new) {
-				Relation::add('pagemodule', 'media', $this->pageModule, $this->mediaItem);
-			}
+			Relation::add('pagemodule', 'media', $this->pageModule, $this->mediaItem);
 		}
 	}
 
@@ -186,7 +194,7 @@ class ImageuploadCmsModule implements CmsModuleController {
 
 		return $this->defaultimage;
 	}
-	
+
 	private function getParam($name) {
 		$value = $this->pageModule->getParameter($name);
 		if ($value !== null) {
