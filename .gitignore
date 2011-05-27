@@ -1,3 +1,10 @@
 nbproject
 application/etc/*
 application/upload/templates/*
+
+www/images/*
+www/upload/*
+www/files/
+
+oldstuff
+
