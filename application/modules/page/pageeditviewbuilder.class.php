@@ -45,7 +45,7 @@ class PageEditViewBuilder {
 	 * @var array
 	 */
 	private $pageModuleControllerViews;
-
+	
 	/**
 	 * @param Folder $folder
 	 * @param Page $page
@@ -111,9 +111,9 @@ class PageEditViewBuilder {
 			$moduleController = $this->buildCmsModuleController($pageModule);
 			$moduleLabel = $pageModule->getType().'_'.$pageModule->getIdentifier();
 
-			$this->view->assign($moduleLabel, $moduleController->getEditor());
+//			$this->view->assign($moduleLabel, $moduleController->getEditor());
 
-			$this->pageModuleControllers[] = $moduleController;
+			$this->pageModuleControllers[$moduleLabel] = $moduleController;
 			$this->pageModuleControllerViews[] = $moduleLabel;
 
 		}
@@ -135,9 +135,6 @@ class PageEditViewBuilder {
 			$aErrors[] = 'template.removedtemplate';
 			$oModuleView->assign('iTemplateID', $req->post('template_id', 0));
 		}
-
-		$this->view->assign('form', $this->form);
-		$this->view->assign('aModules', $this->pageModuleControllerViews);
 
 	}
 
@@ -163,6 +160,20 @@ class PageEditViewBuilder {
 	 * @return View
 	 */
 	public function getView() {
+		
+		
+		$this->view->assign('form', $this->form);
+		
+		$pageModules = $this->page->getModules();
+		foreach ($pageModules as $pageModule) {
+			
+			$moduleLabel = $pageModule->getType().'_'.$pageModule->getIdentifier();
+			$moduleController = $this->pageModuleControllers[$moduleLabel];
+			
+			$this->view->assign($moduleLabel, $moduleController->getEditor());
+			
+		}
+		$this->view->assign('aModules', $this->pageModuleControllerViews);
 
 		return $this->view;
 		
