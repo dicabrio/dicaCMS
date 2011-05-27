@@ -40,10 +40,10 @@ class CmsController extends SecureController {
 		$this->oMainMenu = new ActionMenu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.cms').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/logout', Lang::get('general.website'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.cms').'/logout', Lang::get('general.logout'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www'), Lang::get('general.website'), '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
