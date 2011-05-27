@@ -25,6 +25,9 @@ class StaticBlockForm extends Form {
 		$blockid = new Input('hidden', 'block_id', $this->block->getID());
 		$this->addFormElement($blockid);
 
+		$blockidentifier = new Input('text', 'name', $this->block->getName());
+		$this->addFormElement($blockidentifier);
+		
 		$blockidentifier = new Input('text', 'identifier', $this->block->getIdentifier());
 		$this->addFormElement($blockidentifier);
 

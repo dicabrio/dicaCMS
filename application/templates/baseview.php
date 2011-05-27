@@ -10,6 +10,11 @@
 				<link rel="stylesheet" href="<?php echo $sStyle; ?>" media="screen" />
 			<?php endforeach; ?>
 		<?php endif; ?>
+		<?php if (isset($baseScripts)) : ?>
+			<?php foreach ($baseScripts as $sScript) : ?>
+				<script type="text/javascript" src="<?php echo $sScript; ?>"></script>
+			<?php endforeach; ?>
+		<?php endif; ?>
 		<?php if (isset($aScripts)) : ?>
 			<?php foreach ($aScripts as $sScript) : ?>
 				<script type="text/javascript" src="<?php echo $sScript; ?>"></script>

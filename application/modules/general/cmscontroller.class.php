@@ -64,9 +64,9 @@ class CmsController extends SecureController {
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);
 
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery.js');
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery-ui.min.js');
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/cms/general.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery.js', -1);
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery-ui.min.js', -1);
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/cms/general.js', -1);
 
 		$this->oDatabase = DataFactory::getInstance('default');
 	}

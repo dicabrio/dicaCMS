@@ -1,6 +1,6 @@
 <?php 
 
-	$this->addScript(Conf::get('general.url.js').'/tabbing.js');
+//	$this->addScript(Conf::get('general.url.js').'/cms/tabbing.js');
 
 ?>
 <?php if (isset($breadcrumb)) : ?>

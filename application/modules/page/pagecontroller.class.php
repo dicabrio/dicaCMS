@@ -128,7 +128,8 @@ class PageController extends CmsController {
 
 		$oBaseView = parent::getBaseView();
 		$oBaseView->assign('oModule', $view);
-		$oBaseView->addScript(Conf::get('general.url.js') . '/page.js');
+		$oBaseView->addScript(Conf::get('general.url.js') . '/cms/page.js', 1);
+		$oBaseView->addScript(Conf::get('general.url.js') . '/libs/tabbing.js', 1);
 		return $oBaseView->getContents();
 	}
 
