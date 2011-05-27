@@ -14,7 +14,7 @@ class StaticblockController extends CmsController {
 	 */
 	public function _index($aErrors = array()) {
 
-		$actions = new Menu('actions');
+		$actions = new ActionMenu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/staticblock/editblock', Lang::get('staticblock.button.newblock')));
 
 		$blocks = StaticBlock::find();

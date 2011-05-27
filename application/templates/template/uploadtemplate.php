@@ -1,7 +1,7 @@
 <?php
 
-	$this->addScript(Conf::get('general.url.js').'/edit_area/edit_area_full.js');
-	$this->addScript(Conf::get('general.url.js').'/codeeditor.js');
+	$this->addScript(Conf::get('general.url.js').'/libs/edit_area/edit_area_full.js');
+	$this->addScript(Conf::get('general.url.js').'/cms/codeeditor.js');
 
 ?>
 <?php if (isset($breadcrumb)) : ?>

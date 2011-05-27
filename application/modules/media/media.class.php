@@ -12,6 +12,11 @@ class Media extends DataRecord implements DomainEntity {
 	 * @var User
 	 */
 	private $owner;
+	
+	/**
+	 * @var MediaFolder
+	 */
+	private $folder;
 
 	/**
 	 * @param int $id
@@ -87,6 +92,24 @@ class Media extends DataRecord implements DomainEntity {
 		}
 
 	}
+	
+	public function setFolder(MediaFolder $folder) {
+		$this->folder = $folder;
+		$this->setAttr('folder_id', $folder->getID());
+	}
+	
+	/**
+	 *
+	 * @return MediaFolder
+	 */
+	public function getFolder() {
+		
+		if ($this->folder == null) {
+			$this->folder = new MediaFolder($this->getAttr('folder_id'));
+		}
+		
+		return $this->folder;
+	}
 
 	/**
 	 * @return boolean
@@ -97,6 +120,10 @@ class Media extends DataRecord implements DomainEntity {
 
 	}
 
+	/**
+	 *
+	 * @return FileManager
+	 */
 	public function getFile() {
 
 		if ($this->file === null) {
@@ -162,6 +189,16 @@ class Media extends DataRecord implements DomainEntity {
 
 		return parent::findAll(__CLASS__, parent::ALL);
 
+	}
+	
+	/**
+	 * Get every page that is placed in the given folder. When nothing is there this method will return an empty array
+	 *
+	 * @param PageFolder $folder
+	 * @return array
+	 */
+	public static function findInFolder(Folder $folder) {
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria(' folder_id = :parentid ', array('parentid' => $folder->getID())));
 	}
 
 }

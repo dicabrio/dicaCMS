@@ -1,7 +1,6 @@
-<div class="pagemodule">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
-		<h2>Contact</h2>
-		<p>id: <?php echo $identifier; ?></p>
+		<h2><?php echo $label; ?></h2>
 	</div>
 	<div class="modulecontent">
 		<table>

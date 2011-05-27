@@ -3,6 +3,8 @@
 class PageModule extends DataRecord {
 
 	private $replacestring = null;
+
+	private $parameters = array();
 	/**
 	 * constructor
 	 *
@@ -11,7 +13,7 @@ class PageModule extends DataRecord {
 	public function __construct($id=null) {
 
 		parent::__construct(__CLASS__, $id);
-		
+
 	}
 
 	/**
@@ -35,6 +37,18 @@ class PageModule extends DataRecord {
 		return $this->replacestring;
 	}
 
+	public function setParameter($name, $value) {
+		$this->parameters[$name] = $value;
+	}
+
+	public function getParameter($name) {
+		if (isset($this->parameters[$name])) {
+			return $this->parameters[$name];
+		}
+
+		return null;
+	}
+
 	/**
 	 * get the module identifier
 	 *
@@ -43,7 +57,7 @@ class PageModule extends DataRecord {
 	public function getIdentifier() {
 
 		return $this->getAttr('identifier');
-		
+
 	}
 
 	/**

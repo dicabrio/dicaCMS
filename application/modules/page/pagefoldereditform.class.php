@@ -11,10 +11,10 @@ class PageFolderEditForm extends Form {
 	 * @param Request $oReq
 	 * @param array $aElements
 	 */
-	public function __construct(Request $oReq, PageFolder $pagefolder) {
+	public function __construct(PageFolder $pagefolder) {
 		$this->pagefolder = $pagefolder;
 
-		parent::__construct($oReq, Conf::get('general.cmsurl.www').'/page/editfolder/'.$pagefolder->getID(), Request::POST, 'pagefolderform');
+		parent::__construct(Conf::get('general.url.cms').'/page/editfolder/'.$pagefolder->getID(), Request::POST, 'pagefolderform');
 	}
 
 	/**
@@ -24,15 +24,15 @@ class PageFolderEditForm extends Form {
 
 		$elPageID = new Input('hidden', 'folder_id');
 		$elPageID->setValue($this->pagefolder->getID());
-		parent::addFormElement($elPageID->getName(), $elPageID);
+		parent::addFormElement($elPageID);
 
 		$elPagename = new Input('text', 'name');
 		$elPagename->setValue($this->pagefolder->getName());
-		parent::addFormElement($elPagename->getName(), $elPagename);
+		parent::addFormElement($elPagename);
 
 		$elDescription = new TextArea('description');
 		$elDescription->setValue($this->pagefolder->getDescription());
-		parent::addFormElement($elDescription->getName(), $elDescription);
+		parent::addFormElement($elDescription);
 		
 	}
 }

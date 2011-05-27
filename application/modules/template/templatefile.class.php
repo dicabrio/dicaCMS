@@ -138,7 +138,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	/**
 	 * find template files within a given folder
-	 * 
+	 *
 	 * @param TemplateFileFolder $folder
 	 * @return array
 	 */
@@ -157,6 +157,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 		$crit = new Criteria('module_id = :moduleid', array('moduleid' => $module->getID()));
 		return parent::findAll(__CLASS__, parent::ALL, $crit);
 
+	}
+
+	public static function findByTitle($title) {
+		$crit = new Criteria('title = :title', array('title' => $title));
+		$result = parent::findAll(__CLASS__, parent::ALL, $crit);
+
+		if (count($result) > 0) {
+			return reset($result);
+		}
+
+		return new TemplateFile();
 	}
 
 	public function __toString() {

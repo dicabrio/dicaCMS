@@ -39,6 +39,11 @@ class Form {
 	 * @var array
 	 */
 	private $aFormElementsByName = array();
+	
+	/**
+	 * @var FormElement
+	 */
+	private $pressedButton;
 
 	/**
 	 * @param string $sAction
@@ -149,10 +154,17 @@ class Form {
 			return current($aElements);
 		}
 
-		foreach ($aElements as $oFormElement) {
-			if ($oFormElement->isSelected()) {
-				return $oFormElement;
+		// is it a redio button or a checkbox.. they have other behaviour
+		$firstElementCheck = reset($aElements);
+		if ($firstElementCheck->getType() == 'radio') {
+			foreach ($aElements as $oFormElement) {
+				if ($oFormElement->isSelected()) {
+					return $oFormElement;
+				}
 			}
+		} else {
+			// it's a checkbox
+			return $aElements;
 		}
 	}
 
@@ -209,9 +221,14 @@ class Form {
 			$oHandler = $aSingleSubmitButtonAndHandler['FormHandler'];
 			$sValueFromRequest = $this->getValueFromRequest($oButton);
 			if ($sValueFromRequest == $oButton->getValue()) {
+				$this->pressedButton = $oButton;
 				$oHandler->handleForm($this);
 			}
 		}
+	}
+	
+	public function getPressedButton() {
+		return $this->pressedButton;
 	}
 
 	/**

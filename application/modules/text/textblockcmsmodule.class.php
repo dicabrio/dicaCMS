@@ -121,8 +121,8 @@ class TextblockCmsModule implements CmsModuleController {
 	 */
 	public function handleData() {
 
-		$modIdentifier = $this->pageModule->getIdentifier();
-		$text = $this->mapper->getModel($modIdentifier);
+		$sModIdentifier = $this->pageModule->getIdentifier();
+		$text = $this->mapper->getModel($sModIdentifier);
 		
 		if ($this->htmlEditor === true) {
 			$text->cleanUpHTML();

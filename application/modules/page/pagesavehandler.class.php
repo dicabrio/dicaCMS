@@ -14,30 +14,27 @@ class PageSaveHandler implements FormHandler {
 	private $page;
 
 	/**
-	 * @var PageFolder
-	 */
-	private $folder;
-
-	/**
-	 * @var array
-	 */
-	private $cmsModules;
-
-	/**
 	 *
 	 * @var DataFactory
 	 */
 	private $data;
+	
+	/**
+	 *
+	 * @var PageEditViewBuilder
+	 */
+	private $viewBuilder;
 
 	/**
 	 * @param FormMapper $formmapper
 	 * @param Page $page
 	 * @param PageFolder $folder
 	 */
-	public function __construct(FormMapper $formmapper, Page $page) {
+	public function __construct(FormMapper $formmapper, Page $page, PageEditViewBuilder $viewBuilder) {
 		$this->formmapper = $formmapper;
 		$this->page = $page;
 		$this->data =  DataFactory::getInstance();
+		$this->viewBuilder = $viewBuilder;
 	}
 
 	private function updatePage() {
@@ -61,23 +58,25 @@ class PageSaveHandler implements FormHandler {
 		try {
 
 			$this->data->beginTransaction();
-
-			$pageEditView = new PageEditViewBuilder($this->page);
-			$pageEditView->buildFormForModules($form);
-			$pageEditView->addFormMapping($this->formmapper);
-
+			$this->viewBuilder->addFormMapping($this->formmapper);
+			
 			$this->formmapper->constructModelsFromForm($form);
-
 			$this->updatePage();
 
 
-			foreach ($pageEditView->getPageModuleControllers() as $oModuleController) {
+			foreach ($this->viewBuilder->getPageModuleControllers() as $oModuleController) {
 				$oModuleController->handleData();
 			}
 
 			$this->page->save();
 			$this->data->commit();
-
+			
+			$pressedButton = $form->getPressedButton();
+			
+			if ($pressedButton->getName() == 'action_reload') {
+				Util::gotoPage(Conf::get('general.cmsurl.www').'/page/editpage/'.$this->page->getID());
+			}
+			
 			// need to check fi there is a special redirect to another controller
 			Util::gotoPage(Conf::get('general.cmsurl.www').'/page/folder/'.$this->page->getParent()->getID());
 

@@ -20,37 +20,48 @@ class PageController extends CmsController {
 	 * @var Session
 	 */
 	private $session;
+	
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	public function __construct($sMethod) {
 		// we should check for permissions
 		parent::__construct('page/' . $sMethod, Lang::get('page.title'));
 
 		$this->session = $this->getSession();
+		$this->request = Request::getInstance();
 	}
 
 	/**
+	 *
+	 * @param int $id
 	 * @return string
 	 */
-	public function folder($sId='') {
-		$iItemID = intval(Util::getUrlSegment(2));
-		return $this->_index(array(), $iItemID);
+	public function folder($id = 0) {
+		return $this->_index($id);
 	}
 
-	public function _index() {
+	/**
+	 *
+	 * @param int $folderID
+	 * @return string
+	 */
+	public function _index($folderID = 0) {
 
 		$aErrors = array();
-		$iParentID = 0;
 		$sSuccess = '';
 
 		$session = $this->getSession();
-		$session->set(self::C_CURRENT_FOLDER, $iParentID);
+		$session->set(self::C_CURRENT_FOLDER, $folderID);
 
-		$folder = new PageFolder($iParentID);
+		$folder = new PageFolder($folderID);
 		$stuff = $folder->getChildren();
 
 		$actions = new ActionMenu('actions');
 		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www') . '/page/editpage', Lang::get('page.button.newpage')));
-//		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/editfolder', Lang::get('page.button.newfolder')));
+		$actions->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/page/editfolder', Lang::get('page.button.newfolder')));
 
 		$oPageDataSet = new PageDataSet();
 		$oPageDataSet->setValues($stuff);
@@ -71,41 +82,6 @@ class PageController extends CmsController {
 		$oBaseView->addScript('page.js');
 
 		return $oBaseView->getContents();
-	}
-
-	/**
-	 * @param Page $oPage
-	 * @param Folder $pagefolder
-	 * @return Menu
-	 */
-	private function buildBreadcrumb(Folder $pagefolder, Page $oPage=null) {
-
-		$breadcrumbFac = new BreadcrumbFactory($pagefolder, Conf::get('general.cmsurl.www') . '/page');
-		$breadcrumb = $breadcrumbFac->build();
-
-		if ($oPage !== null) {
-
-			$breadcrumbname = Lang::get('page.breadcrumb.editpage', $oPage->getName());
-			if ($oPage->getID() == 0) {
-				$breadcrumbname = Lang::get('page.breadcrumb.newpage');
-			}
-
-			$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
-		}
-
-		return $breadcrumb;
-	}
-
-	private function getEditPageForm($page, $templates, $userGroups) {
-		if ($this->form === null) {
-			$this->form = new PageEditForm($page);
-			$this->form->addTemplates($templates);
-			$this->form->addUserGroups($userGroups);
-		}
-
-		if ($this->formMapper === null) {
-			$this->formMapper = new PageMapper();
-		}
 	}
 
 	/**
@@ -133,11 +109,16 @@ class PageController extends CmsController {
 
 		$pageEditView = new PageEditViewBuilder($page);
 		$pageEditView->buildFormForModules($this->form);
+		
+		$saveReloadButton = new Input('submit', 'action_reload', Lang::get('general.button.save_reload'));
+		$saveReloadButton->addAttribute('class', 'saven button');
 
 		$button = new ActionButton(Lang::get('general.button.save'));
 		$button->addAttribute('class', 'save button');
 
-		$this->form->addSubmitButton($button, new PageSaveHandler($this->formMapper, $page, $pageEditView));
+		$saveHandler = new PageSaveHandler($this->formMapper, $page, $pageEditView);
+		$this->form->addSubmitButton($button, $saveHandler);
+		$this->form->addSubmitButton($saveReloadButton, $saveHandler);
 		$this->form->listen($oReq);
 
 		$view = $pageEditView->getView();
@@ -152,26 +133,24 @@ class PageController extends CmsController {
 	}
 
 	public function editfolder() {
-		$req = Request::getInstance();
-		$session = Session::getInstance();
-
-		$parentPageFolder = new PageFolder($session->get(self::C_CURRENT_FOLDER));
+		
+		$parentPageFolder = new PageFolder($this->session->get(self::C_CURRENT_FOLDER));
 		$currentPageFolder = new PageFolder(Util::getUrlSegment(2));
 
 		$button = new ActionButton('Save');
 
-		$form = new PageFolderEditForm($req, $currentPageFolder);
+		$form = new PageFolderEditForm($currentPageFolder);
 		$formmapper = new PageFolderMapper($form);
-		$form->addSubmitButton('save', $button, new PageFolderSaveHandler($formmapper, $currentPageFolder, $parentPageFolder));
-		$form->listen();
+		$form->addSubmitButton($button, new PageFolderSaveHandler($formmapper, $currentPageFolder, $parentPageFolder));
+		$form->listen($this->request);
 
-		$breadcrumb = new Menu('breadcrumb');
+		$breadcrumb = new ActionMenu('breadcrumb');
 		$breadcrumb->addItem(new MenuItem(false, Lang::get('breadcrumb.here')));
 		$folderName = $parentPageFolder->getName();
 		if ($folderName == '') {
 			$folderName = Lang::get('breadcrumb.root');
 		}
-		$breadcrumb->addItem(new MenuItem(Conf::get('general.cmsurl.www') . '/page/folder/' . $parentPageFolder->getID(), $folderName));
+		$breadcrumb->addItem(new MenuItem(Conf::get('general.url.cms') . '/page/folder/' . $parentPageFolder->getID(), $folderName));
 
 		$breadcrumbname = Lang::get('page.breadcrumb.editpagefolder', $currentPageFolder->getName());
 		if ($currentPageFolder->getID() == 0) {
@@ -204,17 +183,20 @@ class PageController extends CmsController {
 
 			$data->commit();
 
-			$session = Session::getInstance();
-			Util::gotoPage(Conf::get('general.cmsurl.www') . '/page/folder/' . intval($session->get(self::C_CURRENT_FOLDER)));
 		} catch (RecordException $e) {
-			$aErrors[] = 'page.somthingwrong';
-			$aErrors[] = $e->getMessage();
+			$data->rollBack();
+//			$aErrors[] = 'page.somthingwrong';
+//			$aErrors[] = $e->getMessage();
 		}
 
-		$data->rollBack();
-		return $this->_index($aErrors);
+		Util::gotoPage(Conf::get('general.url.cms') . '/page/folder/' . intval($this->session->get(self::C_CURRENT_FOLDER)));
+//		return $this->_index($aErrors);
 	}
 
+	/**
+	 * 
+	 * @return string
+	 */
 	public function deletefolder() {
 
 		$aErrors = array();
@@ -228,19 +210,58 @@ class PageController extends CmsController {
 
 			$data->commit();
 
-			$session = Session::getInstance();
-
-			Util::gotoPage(Conf::get('general.cmsurl.www') . '/page/folder/' . intval($this->session->get(self::C_CURRENT_FOLDER)));
 		} catch (RecordException $e) {
 			$aErrors[] = 'database.recordnotexists';
+			$data->rollBack();
 		}
 
-		$data->rollBack();
-		return $this->_index($aErrors);
+		Util::gotoPage(Conf::get('general.url.cms') . '/page/folder/' . intval($this->session->get(self::C_CURRENT_FOLDER)));
+		//return $this->_index($aErrors);
 	}
 
 	public function _default() {
 		return 'PageController';
+	}
+	
+	/**
+	 * @param Page $oPage
+	 * @param Folder $pagefolder
+	 * @return Menu
+	 */
+	private function buildBreadcrumb(Folder $pagefolder, Page $oPage=null) {
+
+		$breadcrumbFac = new BreadcrumbFactory($pagefolder, Conf::get('general.cmsurl.www') . '/page');
+		$breadcrumb = $breadcrumbFac->build();
+
+		if ($oPage !== null) {
+
+			$breadcrumbname = Lang::get('page.breadcrumb.editpage', $oPage->getName());
+			if ($oPage->getID() == 0) {
+				$breadcrumbname = Lang::get('page.breadcrumb.newpage');
+			}
+
+			$breadcrumb->addItem(new MenuItem(false, $breadcrumbname));
+		}
+
+		return $breadcrumb;
+	}
+	
+	/**
+	 *
+	 * @param Page $page
+	 * @param array $templates
+	 * @param array $userGroups 
+	 */
+	private function getEditPageForm(Page $page, $templates, $userGroups) {
+		if ($this->form === null) {
+			$this->form = new PageEditForm($page);
+			$this->form->addTemplates($templates);
+			$this->form->addUserGroups($userGroups);
+		}
+
+		if ($this->formMapper === null) {
+			$this->formMapper = new PageMapper();
+		}
 	}
 
 }

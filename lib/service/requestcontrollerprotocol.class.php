@@ -54,6 +54,7 @@ class RequestControllerProtocol implements ServiceProtocol {
 		try {
 			$oReflMethod = $reflection->getMethod($method);
 			if ($oReflMethod->isPrivate() || $oReflMethod->isProtected()) {
+				// sorry this method is not accessable
 				throw new ReflectionException('Not allowed to access this method');
 			}
 		} catch (ReflectionException $e) {
@@ -74,6 +75,7 @@ class RequestControllerProtocol implements ServiceProtocol {
 			$aArguments = explode('/', str_replace($this->controller . '/' . $method . '/', '', $this->arguments['url']));
 		}
 		$this->result = $oReflMethod->invokeArgs($controller, $aArguments);
+//		$this->result = $oReflMethod->invokeArgs($controller, array());
 	}
 
 	public function decode($newData) {

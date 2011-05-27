@@ -13,7 +13,7 @@
 class ViewParser {
 	const MOD_PATTERN = '/<\?php\s+echo\s+\$([a-zA-Z0-9]+)_([a-zA-Z0-9_]+);?\s?\?>/';
 
-	const MOD_NEW_PATTERN = '/\[\[((.+):([a-zA-Z_]+)\s?(.*)?)\]\]/';
+	const MOD_NEW_PATTERN = '/\[\[(([A-Za-z0-9]+):([A-Za-z0-9_-]+)\s?([a-zA-Z=\-_."\s0-9]+)?)\]\]/';
 
 	const MOD_PARAM_PATTERN = '/([a-zA-Z_-]+)=\"([a-zA-Z0-9\s_-]+)\"/';
 

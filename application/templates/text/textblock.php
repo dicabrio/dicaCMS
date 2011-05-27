@@ -10,7 +10,7 @@ if (isset($htmlEditor) && $htmlEditor == true) {
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/menu/menu-min.js');
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/editor/editor-min.js');
 
-	$this->addScript(Conf::get('general.url.js').'/editors.js');
+	$this->addScript(Conf::get('general.url.js').'/cms/editors.js');
 }
 
 ?>

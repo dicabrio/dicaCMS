@@ -15,7 +15,7 @@
 		<?php endif; ?>
 		<div style="float: left;width: 400px;">
 			<p>
-				Het bestand mag niet groter zijn dan <?php echo Conf::get('imageupload.allowedsize.width'); ?>px breed en <?php echo Conf::get('imageupload.allowedsize.height'); ?>px hoog.
+				De afbeelding moet exact <?php echo $maxwidth; ?>px pixels hoog bij <?php echo $maxheight; ?>px pixels breed zijn
 				<br />
 				<br />
 				<br />

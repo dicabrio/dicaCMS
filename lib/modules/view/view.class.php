@@ -121,7 +121,7 @@ class View {
 	public function replace($variable, $value) {
 
 		$pattern = '[['.$variable.']]';
-		test($pattern);
+//		test($pattern);
 		$arrayPosition = array_search($pattern, $this->replaceStrings);
 
 		if ($arrayPosition === FALSE)
