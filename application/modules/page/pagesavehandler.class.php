@@ -48,7 +48,7 @@ class PageSaveHandler implements FormHandler {
 				$this->formmapper->getModel('description'),
 				$this->formmapper->getModel('type'));
 
-		$this->page->setActive($this->formmapper->getModel('active'));
+		$this->page->setActive(intval("".$this->formmapper->getModel('active')));
 	}
 
 	/**
