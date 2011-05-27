@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * 
+ */
 class CountryLocator {
 
 	const LOCATOR_API = 'http://api.hostip.info/country.php?ip=';
 
 	/**
 	 *
-	 * @var User
+	 * @var string
 	 */
 	public function getCountryByIP($ip) {
 

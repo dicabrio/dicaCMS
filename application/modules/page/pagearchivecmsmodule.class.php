@@ -33,11 +33,6 @@ class PagearchiveCmsModule implements CmsModuleController {
 	}
 
 	/**
-	 * Load the data for this module
-	 */
-
-
-	/**
 	 * add form mapping
 	 * 
 	 * @param FormMapper $mapper

@@ -52,7 +52,7 @@ class ProductitemsPageModule implements PageModuleController {
 		$appliContent = implode(', ', $appliContent);
 
 		$table = '<tr>';
-		$table .= '<td>'.$p->getName().' ('.$p->getID().')<br /><p style="font-size: 10px">'.$appliContent.'</p></td>';
+		$table .= '<td>'.$p->getName().'<br /><p style="font-size: 10px">'.$appliContent.'</p></td>';
 		$table .= '<td style="width: 45px; padding: 0 0 10px 0;"><a href="'.Conf::get('general.url.www').'/files/MSDS/'.Lang::getLang().'/'.($p->getMsdsFilename()).'"><img src="'.Conf::get('general.url.www').'/images/download.png" alt="'.$p->getMsdsFilename().'" /></a></td>';
 		$table .= '<td><a href="'.Conf::get('general.url.www').'/files/PDS/'.Lang::getLang().'/'.($p->getPdsFilename()).'"><img src="'.Conf::get('general.url.www').'/images/download.png" alt="'.$p->getPdsFilename().'" /></a></td>';
 		$table .= '</tr>';
