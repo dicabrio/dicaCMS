@@ -44,6 +44,10 @@ class Lang
 		self::$l = $lang;
 	}
 
+	public static function getLang() {
+		return self::$l;
+	}
+
 	public static function get( $psFieldname ) {
 		$sLangFile = '';
 

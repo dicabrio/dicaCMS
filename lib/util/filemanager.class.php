@@ -105,7 +105,7 @@ class FileManager {
 	public function setContents($contents) {
 
 		return file_put_contents($this->getFullPath(), $contents);
-		
+
 	}
 
 	/**
@@ -120,7 +120,7 @@ class FileManager {
 
 	/**
 	 * create a file
-	 * 
+	 *
 	 * @param string $pFilename
 	 */
 	private function createFile($pFilename) {

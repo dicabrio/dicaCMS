@@ -15,7 +15,7 @@ class Paragraph extends DomainText {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function cleanUpHTML() {
 		// check if it has paragraph wrapt around it

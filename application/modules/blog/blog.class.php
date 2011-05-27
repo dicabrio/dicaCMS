@@ -11,9 +11,7 @@ class Blog extends Page {
 	public function  __construct($id = null) {
 		parent::__construct($id);
 
-		if ($id > 0) {
-			$this->setAttr('type', 'blog');
-		}
+		$this->setAttr('type', 'blog');
 	}
 
 	public static function findAll() {
