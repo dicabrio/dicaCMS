@@ -9,7 +9,7 @@ class CheckboxInput extends Input {
 
 	private $arrayType = false;
 
-	public function __construct($name, $defaultValue=1) {
+	public function __construct($name, $defaultValue = 1) {
 
 		if (preg_match('/\[.*\]/', $name)) {
 			$this->arrayType = true;
@@ -37,7 +37,10 @@ class CheckboxInput extends Input {
 	}
 
 	public function  setValue($value) {
+		$this->check($value);
+	}
 
+	private function check($value) {
 		$originalValue = parent::getValue();
 		if (is_array($value) && in_array($originalValue, $value)) {
 			$this->checked = true;
@@ -46,7 +49,6 @@ class CheckboxInput extends Input {
 		} else {
 			$this->checked = false;
 		}
-
 	}
 
 	public function getValue() {
@@ -76,6 +78,14 @@ class CheckboxInput extends Input {
 				$this->getName().'[]',
 				parent::getValue(),
 				$checked);
+	}
+
+	/**
+	 *
+	 * @return Boolean
+	 */
+	public function  isSelected() {
+		return $this->checked;
 	}
 
 }

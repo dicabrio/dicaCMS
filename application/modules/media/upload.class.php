@@ -100,18 +100,27 @@ class Upload implements DomainEntity {
 		return ($this->error != UPLOAD_ERR_NO_FILE);
 	}
 
+	/**
+	 * format of allowedTypes: "jpg|jpeg|png|gif|pdf"
+	 * 
+	 * @param string $allowedTypes
+	 * @return boolean
+	 */
 	protected function validateFileType($allowedTypes=null) {
 
 		if (!$this->isUploaded()) {
 			return ;
 		}
-
+		
+		$allowedTypes = explode('|', $allowedTypes);
+		$type = explode('/', $this->type);
+		
 		if ($allowedTypes === null) {
 			return true;
-		} else if (isset($allowedTypes[$this->type])) {
+		} else if (in_array($type[1], $allowedTypes)) {
 			return true;
 		} else {
-			throw new InvalidArgumentException('file-type-not-allowed');
+			throw new InvalidArgumentException('upload.file-type-not-allowed');
 		}
 
 	}
@@ -122,7 +131,7 @@ class Upload implements DomainEntity {
 			return ;
 		}
 		if ($this->size > $filesize) {
-			throw new FileException('uploaded-file-too-big', 100);
+			throw new FileException('upload.uploaded-file-too-big', 100);
 		}
 
 	}

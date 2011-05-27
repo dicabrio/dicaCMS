@@ -37,20 +37,20 @@ class CmsController extends SecureController {
 
 		$this->oBaseView = new BaseView(Conf::get('general.dir.templates').'/baseview.php', $sTitle);
 
-		$this->oMainMenu = new Menu('headerNav');
+		$this->oMainMenu = new ActionMenu('headerNav');
 //		$this->oMainMenu->addItem(new MenuItem('#', '&lt;', '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem('#', '&gt;', '')); // have no function right now
 		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/dashboard', Lang::get('general.dashboard'), '')); // have no function right now
 //		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/settings', Lang::get('general.settings'), '')); // have no function right now
 		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/logout', Lang::get('general.logout'), '')); // have no function right now
-		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.url.www'), Lang::get('general.got-website'), '')); // have no function right now
+		$this->oMainMenu->addItem(new MenuItem(Conf::get('general.cmsurl.www').'/logout', Lang::get('general.website'), '')); // have no function right now
 
 		$aMethod = explode('/', $sMethod);
 		$sActive = $aMethod[0];
 
 		$moduleMenu = Module::getMenu();
 
-		$this->oSubMenu = new Menu('modulesNav');
+		$this->oSubMenu = new ActionMenu('modulesNav');
 		foreach ($moduleMenu as $module) {
 			$menuItem = new MenuItem(
 					Conf::get('general.cmsurl.www').$module->getUrl(),
@@ -64,9 +64,9 @@ class CmsController extends SecureController {
 		$this->oBaseView->addMenu('oMainMenu', $this->oMainMenu);
 		$this->oBaseView->addMenu('oSubMenu', $this->oSubMenu);
 
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/jquery.js');
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/jquery-ui.min.js');
-		$this->oBaseView->addScript(Conf::get('general.url.js').'/general.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/libs/jquery-ui.min.js');
+		$this->oBaseView->addScript(Conf::get('general.url.js').'/cms/general.js');
 
 		$this->oDatabase = DataFactory::getInstance('default');
 	}

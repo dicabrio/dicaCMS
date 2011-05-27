@@ -1,4 +1,5 @@
 <?php
+
 /**
  * FormMapper is a class that maps FormElements to DomainEntities
  * You specify the formelement name as a key and give DomainObject to map to.
@@ -9,31 +10,27 @@
  * $mapper = new FormMapper();
  * $mapper->addFormElementToDomainEntityMapping('name', 'DomainText');
  * try {
- *		$mapper->constructModelsFromForm($form);
+ * 		$mapper->constructModelsFromForm($form);
  * } catch (FormMapperException $e) {
- *		print_r($mapper->getMappingErrors());
+ * 		print_r($mapper->getMappingErrors());
  * }
  *
  * @author robertcabri
  */
 class FormMapper {
 
-
 	/**
 	 * @var Form
 	 */
 	private $oForm;
-
 	/**
 	 * @var array
 	 */
 	private $aConstructedModels = array();
-
 	/**
 	 * @var array
 	 */
 	private $aMappingErrors = array();
-
 	/**
 	 * @var array
 	 */
@@ -51,24 +48,24 @@ class FormMapper {
 	/**
 	 * setup rules for form to domainentities mapping
 	 */
-	protected function defineFormElementToDomainEntityMapping() {}
+	protected function defineFormElementToDomainEntityMapping() {
+		
+	}
 
 	/**
 	 * @param string $sFormElementName
-	 * @param string $sDomainEntity
+	 * @param string $entity
 	 */
-	public function addFormElementToDomainEntityMapping($sFormElementName, $sDomainEntity) {
+	public function addFormElementToDomainEntityMapping($sFormElementName, $entityWithParameters) {
+		
+		$entityInformation = explode(':', $entityWithParameters);
+		$entity = $entityInformation[0];
 
-		if (!class_exists($sDomainEntity, true)) {
-			throw new FormMapperException('The specified domain entity does not exist: '.$sDomainEntity);
+		if (!class_exists($entity, true)) {
+			throw new FormMapperException('The specified domain entity does not exist: ' . $entity);
 		}
 
-		$oReflection = new ReflectionClass($sDomainEntity);
-		if (!$oReflection->implementsInterface('DomainEntity')) {
-			throw new FormMapperException('Given domain entity is not a valid DomainEntity. Formelement:'.$sFormElementName.' to: '.$sDomainEntity);
-		}
-
-		$this->aFormElementsToDomainEntitiesMapping[$sFormElementName] = $sDomainEntity;
+		$this->aFormElementsToDomainEntitiesMapping[$sFormElementName] = $entityWithParameters;
 	}
 
 	/**
@@ -79,19 +76,32 @@ class FormMapper {
 	 */
 	private function constructModelFromFormElement($sFormElementName, $sDomainEntity) {
 
+		$entityWithAdditinalParameters = explode(':', $sDomainEntity);
+		$sDomainEntity = $entityWithAdditinalParameters[0]; // 
+
 		$oFormElement = $this->oForm->getFormElementByName($sFormElementName);
+
+		if (is_array($oFormElement)) {
+			$arguments = array($oFormElement);
+		} else {
+			$arguments = array($oFormElement->getValue());
+		}
+
+		if (count($entityWithAdditinalParameters) == 2) {
+			$additionalParameters = explode(',', $entityWithAdditinalParameters[1]);
+			$arguments = array_merge($arguments, $additionalParameters);
+		}
+
 		try {
 
-			return $this->constructModel($sDomainEntity, array($oFormElement->getValue()));
-			
+			return $this->constructModel($sDomainEntity, $arguments);
 		} catch (Exception $e) {
 
 			$oFormElement->notMapped();
-			$this->aMappingErrors[$sFormElementName] = $sFormElementName.'-'.$e->getMessage();
+			$this->aMappingErrors[$sFormElementName] = $sFormElementName . '-' . $e->getMessage();
 
 			return null;
 		}
-		
 	}
 
 	/**
@@ -156,9 +166,10 @@ class FormMapper {
 		}
 
 		return $this->oForm->getFormElement($sFormElementIdentifier)->getValue();
-
 	}
 
 }
 
-class FormMapperException extends Exception {}
+class FormMapperException extends Exception {
+	
+}

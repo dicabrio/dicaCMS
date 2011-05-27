@@ -25,6 +25,12 @@ class FormElementImpl implements FormElement {
 
 	}
 
+	public function removeAttribute($name) {
+		if (isset($this->attributes[$name])) {
+			unset($this->attributes[$name]);
+		}
+	}
+
 	/**
 	 *
 	 * @return string
@@ -32,9 +38,13 @@ class FormElementImpl implements FormElement {
 	public function __toString() {
 
 		$formElement = "<%s %s />";
+		
 
 		$sAttributes = "";
 		foreach ($this->attributes as $name => $value) {
+			if ($name=="value" && !$this->getType() == 'file') {
+				$value= htmlentities($value, ENT_COMPAT, 'UTF-8');
+			}
 			$sAttributes .= sprintf(' %s="%s"', $name, $value);
 		}
 

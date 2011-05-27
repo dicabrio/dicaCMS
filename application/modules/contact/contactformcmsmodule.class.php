@@ -7,7 +7,7 @@ class ContactformCmsModule implements CmsModuleController {
 	/**
 	 * @var PageModule
 	 */
-	private $oPageModule;
+	private $pageModule;
 
 	/**
 	 * @var PageText
@@ -38,6 +38,12 @@ class ContactformCmsModule implements CmsModuleController {
 	 * @var FormMapper
 	 */
 	private $mapper;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	private $label;
 
 	/**
 	 *
@@ -50,7 +56,7 @@ class ContactformCmsModule implements CmsModuleController {
 	 */
 	public function __construct(PageModule $oMod, Form $form) {
 
-		$this->oPageModule = $oMod;
+		$this->pageModule = $oMod;
 		$this->form = $form;
 
 		// load the data
@@ -60,8 +66,12 @@ class ContactformCmsModule implements CmsModuleController {
 	}
 
 	private function load() {
+		
+		
+		$this->label = 'Contact Form';
+		$this->getParam('label');
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$this->oTextContent = PageText::getByPageModule($this->pageModule);
 
 		$values = explode(',', $this->oTextContent->getContent());
 
@@ -91,7 +101,7 @@ class ContactformCmsModule implements CmsModuleController {
 		// define the mapping
 
 		// Email field
-		$this->emailField = new Input('text', $this->oPageModule->getIdentifier(), $this->email);
+		$this->emailField = new Input('text', $this->pageModule->getIdentifier(), $this->email);
 		$this->emailField->addAttribute('maxlength', self::MAX_LENGTH);
 		$this->form->addFormElement($this->emailField);
 
@@ -112,10 +122,11 @@ class ContactformCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View(Conf::get('general.dir.templates').'/contact/contactconfig.php');
-		$oView->form = $this->form;
-		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		return $oView;
+		$view = new View(Conf::get('general.dir.templates').'/contact/contactconfig.php');
+		$view->assign('form', $this->form);
+		$view->assign('identifier', $this->pageModule->getIdentifier());
+		$view->assign('label', $this->label);
+		return $view;
 
 	}
 
@@ -124,12 +135,12 @@ class ContactformCmsModule implements CmsModuleController {
 	 */
 	public function handleData() {
 
-		$sModIdentifier = $this->oPageModule->getIdentifier();
+		$sModIdentifier = $this->pageModule->getIdentifier();
 		$email = $this->mapper->getModel($sModIdentifier);
 		$thnxpage = $this->mapper->getModel("bedanktpagina");
 
 		$this->oTextContent->setContent($email.','.$thnxpage->getID());
-		$this->oTextContent->setPageModule($this->oPageModule);
+		$this->oTextContent->setPageModule($this->pageModule);
 		$this->oTextContent->save();
 
 		return true;
@@ -141,6 +152,17 @@ class ContactformCmsModule implements CmsModuleController {
 	 */
 	public function getIdentifier() {
 
-		return $this->oPageModule->getIdentifier();
+		return $this->pageModule->getIdentifier();
+	}
+	
+	/**
+	 *
+	 * @param string $name 
+	 */
+	private function getParam($name) {
+		$value = $this->pageModule->getParameter($name);
+		if ($value !== null) {
+			$this->{$name} = $value;
+		}
 	}
 }

@@ -35,8 +35,8 @@
 	<div class="pagemodule">
 		<div class="modulelabel">Actions:</div>
 		<div class="modulecontent">
-			<?php echo $form->getSubmitButton('save')->addAttribute('class', 'button'); ?>
-			<a href="<?php echo Conf::get('general.cmsurl.www').'/page/folder/'.$folderid; ?>" class="button">Cancel</a>
+			<?php echo $form->getSubmitButton('action')->addAttribute('class', 'button'); ?>
+			<a href="<?php echo Conf::get('general.url.cms').'/page/folder/'.$folderid; ?>" class="button">Cancel</a>
 		</div>
 	</div>
 </fieldset>

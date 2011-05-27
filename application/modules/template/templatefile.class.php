@@ -138,7 +138,7 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	/**
 	 * find template files within a given folder
-	 * 
+	 *
 	 * @param TemplateFileFolder $folder
 	 * @return array
 	 */

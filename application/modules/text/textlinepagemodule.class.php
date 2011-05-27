@@ -5,12 +5,12 @@ class TextlinePageModule implements PageModuleController {
 	/**
 	 * @var PageModule
 	 */
-	private $oPageModule;
+	private $pageModule;
 
 	/**
 	 * @var PageText
 	 */
-	private $oTextContent;
+	private $textContent;
 
 	/**
 	 * construct the text line module
@@ -21,14 +21,14 @@ class TextlinePageModule implements PageModuleController {
 	 */
 	public function __construct(PageModule $oMod, Page $page, Request $request) {
 
-		$this->oPageModule = $oMod;
+		$this->pageModule = $oMod;
 		$this->load();
 		
 	}
 
 	private function load() {
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$this->textContent = PageText::getByPageModule($this->pageModule);
 		
 	}
 	
@@ -37,12 +37,12 @@ class TextlinePageModule implements PageModuleController {
 	 */
 	public function getContents() {
 
-		return $this->oTextContent->getContent();
+		return $this->textContent->getContent();
 		
 	}
 
 	public function getIdentifier() {
 
-		return $this->oPageModule->getIdentifier();
+		return $this->pageModule->getIdentifier();
 	}
 }

@@ -134,6 +134,7 @@
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
+			<?php echo $form->getSubmitButton('action_reload'); ?>
 			<?php echo $form->getSubmitButton('action'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
 		</div>

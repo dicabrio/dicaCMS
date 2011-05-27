@@ -22,7 +22,7 @@ class Radio extends FormElementImpl {
 	/**
 	 * Because there can be multiple radiobuttons. The identifier is build out of the
 	 * name and the value
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getIdentifier() {
@@ -37,6 +37,8 @@ class Radio extends FormElementImpl {
 	public function setValue($val) {
 		if ($val == $this->getValue()) {
 			$this->addAttribute('checked', 'checked');
+		} else {
+			$this->removeAttribute('checked');
 		}
 	}
 
@@ -45,8 +47,8 @@ class Radio extends FormElementImpl {
 	 */
 	public function isSelected() {
 
-		return ('checked' == parent::getAttribute('checked'));
-		
+		return ('checked' == $this->getAttribute('checked'));
+
 	}
 
 }

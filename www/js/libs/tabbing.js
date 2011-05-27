@@ -45,25 +45,14 @@ var TabSystem = {
 			self.addListener(className, function (clickedTabElement) {
 				// hide everything
 				$('#tabmenu li').removeClass('active'); // deactivate tab menu item
-				$('fieldset.tab').hide(); // hide panels
+				$('.tab').hide(); // hide panels
 
 				// show only needed
 				$(clickedTabElement).parent().addClass('active');
-				$('fieldset#'+className+"tab.tab").show(); // panel
+				$('#'+className+"tab.tab").show(); // panel
 			});
 		});
 
 		this.enableBehaviour();
 	}
 }
-
-$(function () {
-	TabSystem.init();
-
-	var urlHash = window.location.hash;
-	if (urlHash) {
-		$('#tabmenu li a.'+urlHash.substr(1)).click();
-	} else {
-		$('#tabmenu li.active a').click();
-	}
-})

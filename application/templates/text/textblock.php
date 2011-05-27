@@ -10,21 +10,20 @@ if (isset($htmlEditor) && $htmlEditor == true) {
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/menu/menu-min.js');
 	$this->addScript('http://yui.yahooapis.com/2.8.1/build/editor/editor-min.js');
 
-	$this->addScript(Conf::get('general.url.js').'/editors.js');
+	$this->addScript(Conf::get('general.url.js').'/cms/editors.js');
 }
 
 ?>
-<div class="pagemodule <?php echo $sIdentifier; ?>">
+<div class="pagemodule <?php echo $identifier; ?>">
 	<div class="modulelabel">
-		<h2><?php echo Lang::get('textblock.title'); ?></h2>
-		<p>id: <?php echo $sIdentifier; ?><p>
+		<h2><?php echo $label; ?></h2>
 	</div>
 	<?php if (isset($htmlEditor) && $htmlEditor == true) : ?>
 	<div class="modulecontent yui-skin-sam">
 	<?php else : ?>
 	<div class="modulecontent">
 	<?php endif; ?>
-	<?php echo $form->getFormElement($sIdentifier)->addAttribute('class', 'moduletextblock '.$sIdentifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
+	<?php echo $form->getFormElement($identifier)->addAttribute('class', 'moduletextblock '.$identifier)->addAttribute('rows', 50)->addAttribute('cols', 50); ?>
 	</div>
 	<div class="clear">&nbsp;</div>
 </div>

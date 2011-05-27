@@ -164,7 +164,7 @@ class Page extends DataRecord implements DomainEntity {
 					$pageModule->setPage($this);
 					$pageModule->save();
 				}
-
+				
 				if (!empty($moduleInfo['replacestring'])) {
 					$pageModule->setReplaceString($moduleInfo['replacestring']);
 					foreach ($moduleInfo['params'] as $param) {
@@ -172,7 +172,7 @@ class Page extends DataRecord implements DomainEntity {
 					}
 				}
 
-				
+
 				$tmpModuleArray[$identifier] = $pageModule;
 			}
 
@@ -208,7 +208,7 @@ class Page extends DataRecord implements DomainEntity {
 
 			$content = $oModuleController->getContents();
 
-			// if the replacestring isn't set we just add the module content as 
+			// if the replacestring isn't set we just add the module content as
 			// a plain PHP variable
 			$replaceString = $module->getReplaceString();
 
@@ -432,6 +432,21 @@ class Page extends DataRecord implements DomainEntity {
 		}
 
 		return parent::findAll('Page', parent::ALL, $crit, 'publishtime '.$order, $limit);
+	}
+
+	/**
+	 *
+	 * @param array $pageIDS
+	 * @param string $limit
+	 * @return array
+	 */
+	public static function findIn($pageIDS, $limit=null) {
+		$possiblePageIDS = implode(',',$pageIDS);
+		if (empty($possiblePageIDS)) {
+			return array();
+		}
+		$crit = new Criteria(' id IN ('.$possiblePageIDS.')');
+		return parent::findAll(__CLASS__, parent::ALL, $crit, null, $limit);
 	}
 
 	/**

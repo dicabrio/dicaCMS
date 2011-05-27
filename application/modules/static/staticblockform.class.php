@@ -22,10 +22,14 @@ class StaticBlockForm extends Form {
 
 	protected function defineFormElements() {
 
-		$this->addFormElement(new Input('hidden', 'block_id', $this->block->getID()));
-		$this->addFormElement(new Input('text', 'name', $this->block->getName()));
-		$this->addFormElement(new Input('text', 'identifier', $this->block->getIdentifier()));
-		$this->addFormElement(new TextArea('content', $this->block->getContent()));
+		$blockid = new Input('hidden', 'block_id', $this->block->getID());
+		$this->addFormElement($blockid);
+
+		$blockidentifier = new Input('text', 'identifier', $this->block->getIdentifier());
+		$this->addFormElement($blockidentifier);
+
+		$blockcontent = new TextArea('content', $this->block->getContent());
+		$this->addFormElement($blockcontent);
 
 	}
 

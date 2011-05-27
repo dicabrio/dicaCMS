@@ -1,6 +1,6 @@
 <?php
 
-class Menu {
+class ActionMenu {
 
 	/**
 	 * @var array
@@ -14,12 +14,12 @@ class Menu {
 	/**
 	 * Enter description here...
 	 *
-	 * @param string $sIdentifier
+	 * @param string $identifier
 	 * @param string $sTemplateFilename
 	 */
-	public function __construct($sIdentifier, $sTemplateFilename='') {
+	public function __construct($identifier, $sTemplateFilename='') {
 		$this->oView = new View(Conf::get('general.dir.templates').'/menu/menu.php');
-		$this->oView->assign('sIdentifier', $sIdentifier);
+		$this->oView->assign('identifier', $identifier);
 	}
 
 	/**
