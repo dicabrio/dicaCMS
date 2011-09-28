@@ -28,7 +28,7 @@ var TabSystem = {
 		var self = this;
 		$(tab).click(function (event) {
 			// first hide everything
-			var className = $(this).attr('className');
+			var className = $(this).attr('class');
 			if (self.actions[className]) {
 				for (var j = 0; j < self.actions[className].length; j++) {
 					self.actions[className][j](tab);
@@ -40,7 +40,7 @@ var TabSystem = {
 	init : function () {
 		var self = this;
 		$('#tabmenu li a').each(function () {
-			var className = $(this).attr('className');
+			var className = $(this).attr('class');
 			self.addTab(this);
 			self.addListener(className, function (clickedTabElement) {
 				// hide everything

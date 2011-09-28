@@ -30,27 +30,38 @@ class Relation extends DataRecord {
 		$oRel->save(true);
 	}
 
-	public static function remove($sThis, $sOther, DataRecord $oThis, DataRecord $oOther=null) {
+	public static function remove($sThis, $sOther, DataRecord $oThis=null, DataRecord $oOther=null) {
 		$aRel = Relation::get($sThis, $sOther, $oThis, $oOther);
 		foreach ($aRel as $oRel) {
 			$oRel->delete();
 		}
 	}
 
-	public static function get($sThis, $sOther, DataRecord $oThis, DataRecord $oOther=null) {
+	public static function get($sThis, $sOther, DataRecord $oThis=null, DataRecord $oOther=null) {
 
 		parent::setRetrieveRawData(true);
 
-		$aBindings['thisid'] = $oThis->getID();
+		$where = '1';
+		$aWhere = array();
 		$sRelationTable = $sThis.'_'.$sOther;
 		$sQuery = "	SELECT	*
 					FROM	`".$sRelationTable."`
-					WHERE	".$sThis."_id = :thisid" ;
+					WHERE ";
 
+		if ($oThis instanceof DataRecord) {
+			$aWhere[] = $sThis."_id = :thisid";
+			$aBindings['thisid'] = $oThis->getID();
+		}
+		
 		if ($oOther instanceof DataRecord) {
-			$sQuery .= " AND ".$sOther."_id = :otherid";
+			$aWhere[] = $sOther."_id = :otherid";
 			$aBindings['otherid'] = $oOther->getID();
 		}
+		
+		if (count($aWhere) > 0) {
+			$where = implode(' AND ', $aWhere);
+		}
+		$sQuery .= $where;
 
 		$aResult = parent::findBySql($sRelationTable, $sQuery, $aBindings);
 
