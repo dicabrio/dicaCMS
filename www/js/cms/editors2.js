@@ -36,17 +36,19 @@ $(function () {
 				theme_advanced_buttons3 : "",
 				theme_advanced_toolbar_location : "top",
 				theme_advanced_toolbar_align : "left",
-//				theme_advanced_statusbar_location : "bottom",
+				//				theme_advanced_statusbar_location : "bottom",
 				//theme_advanced_resizing : true,
 
 				// Example content CSS (should be your site CSS)
 				content_css : "css/content.css",
 
 				// Drop lists for link/image/media/template dialogs
-				template_external_list_url : "lists/template_list.js",
-				external_link_list_url : "lists/link_list.js",
-				external_image_list_url : "lists/image_list.js",
-				media_external_list_url : "lists/media_list.js",
+				//				template_external_list_url : "lists/template_list.js",
+				//				external_link_list_url : "lists/link_list.js",
+				//				external_image_list_url : "lists/image_list.js",
+				//				media_external_list_url : "lists/media_list.js",
+				
+				file_browser_callback : myFileBrowser,
 
 				// Replace values for the template plugin
 				template_replace_values : {
@@ -55,57 +57,40 @@ $(function () {
 				}
 			});
 		});
-	/*
-
-		var editors = [];
-
-		$('.yui-skin-sam .moduletextblock').each(function () {
-
-			var myEditor = new YAHOO.widget.Editor($(this).attr('id'), {
-				height: '200px',
-				width: '500px',
-				dompath: false, //Turns on the bar at the bottom
-				animate: true, //Animates the opening, closing and moving of Editor windows
-				toolbar: {
-					titlebar: 'editor',
-					buttonType: 'advanced',
-					buttons: [
-						{group: 'textstyle', label: 'Font Style',
-							buttons: [
-								{type: 'push', label: 'Bold', value: 'bold'},
-								{type: 'push', label: 'Italic', value: 'italic'},
-								{type: 'push', label: 'Underline', value: 'underline'}
-							]
-						},
-						{group: 'indentlist', label: 'Lists',
-							buttons: [
-								{type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist'},
-								{type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist'}
-							]
-						},
-						{group: 'insertitem', label: 'Insert Item',
-							buttons: [
-								{type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true},
-								{type: 'push', label: 'Insert Image', value: 'insertimage'}
-							]
-						}
-					]
-				}
-			});
-			
-			myEditor.render();
-			editors.push(myEditor);
-		});
-
-		YAHOO.util.Event.on('pageform', 'submit', function() {
-			//Put the HTML back into the text area
-			for (var i = 0; i < editors.length; i++) {
-				editors[i].saveHTML();
-			}
-
-			// The var html will now have the contents of the textarea
-			// var html = myEditor.get('element').value;
-		});*/
-
 	});
+	
+	
+	function myFileBrowser (field_name, url, type, win) {
+
+		// alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
+
+		/* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
+       the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
+       These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
+
+		var cmsURL = window.location.toString();    // script URL - use an absolute path!
+		if (cmsURL.indexOf("?") < 0) {
+			//add the type as the only query parameter
+			cmsURL = cmsURL + "?type=" + type;
+		}
+		else {
+			//add the type as an additional query parameter
+			// (PHP session ID is now included if there is one at all)
+			cmsURL = cmsURL + "&type=" + type;
+		}
+
+		tinyMCE.activeEditor.windowManager.open({
+			file : cmsURL,
+			title : 'My File Browser',
+			width : 420,  // Your dimensions may differ - toy around with them!
+			height : 400,
+			resizable : "yes",
+			inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+			close_previous : "no"
+		}, {
+			window : win,
+			input : field_name
+		});
+		return false;
+	}
 });
