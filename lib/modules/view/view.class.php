@@ -167,6 +167,37 @@ class View {
 
 		return ob_get_clean();
 	}
+	
+	/**
+	 *
+	 * @param type $fileName
+	 * @param type $inline
+	 * @return string
+	 */
+	public function render($fileName, $inline=false) {
+		
+		$this->setTemplateFile($fileName);
+		
+		if ($inline !== false) {
+			
+			ob_start();
+		}
+		
+
+		if ($this->m_oParentView !== null) {
+			extract($this->m_oParentView->getGlobals(), EXTR_SKIP);
+		}
+		extract($this->m_aTemplateData, EXTR_SKIP);
+
+		$templateFilename = $this->m_sTemplateFile;
+		include $templateFilename;
+
+		if ($inline !== false) {
+			
+			$output = ob_get_clean();
+			return str_replace($this->replaceStrings, $this->replaceData, $output);
+		}
+	}
 
 	public function __set($sVarname, $sValue) {
 		$this->assign($sVarname, $sValue);
@@ -187,6 +218,77 @@ class View {
 				return $e->getTraceAsString();
 			}
 		}
+	}
+	
+	/**
+	 *
+	 * $anchorInfo = array(
+	 *	'controller' => 'user',
+	 *	'method' => 'show',
+	 *	'params' => array(1),
+	 *	'data => array('key' => 'value')
+	 *	'label' => 'Show user',
+	 *	'class' => 'button',
+	 * )
+	 *
+	 * $anchorInfo = array(
+	 *	'href' => 'user/show/1',
+	 *	'data => array('key' => 'value')
+	 *	'label' => 'Show user',
+	 *	'class' => 'button',
+	 * )
+	 *
+	 * @param array $anchorInfo
+	 */
+	public function getAnchor($anchorInfo=array()) {
+
+		if (!isset($anchorInfo['class'])) {
+			$anchorInfo['class'] = '';
+		}
+
+		$url = array();
+		if (isset($anchorInfo['href'])) {
+//			if (strpos($anchorInfo['href'], 'http://') === false) {
+//				$url[] = $this->app->config('core/routing.base_url');
+//			}
+			$url[] = $anchorInfo['href'];
+
+		} else if (isset($anchorInfo['controller'])) {
+//			$url[] = $this->app->config('core/routing.base_url');
+			$url[] = $anchorInfo['controller'];
+
+			if (isset($anchorInfo['method'])) {
+
+				$url[] = $anchorInfo['method'];
+			} else {
+
+				$url[] = 'index';
+			}
+
+			if (isset($anchorInfo['params'])) {
+
+				foreach ($anchorInfo['params'] as $param) {
+					$url[] = $param;
+				}
+			}
+		}
+
+		$data = '';
+		if (isset($anchorInfo['data']) && is_array($anchorInfo['data'])) {
+			foreach ($anchorInfo['data'] as $item => $value) {
+				$data .= ' data-'.$item.'="'.$value.'"';
+			}
+		}
+
+		$url = implode('/', $url);
+
+		if (isset($anchorInfo['label'])) {
+			$label = $anchorInfo['label'];
+		} else {
+			$label = $url;
+		}
+
+		return '<a href="' . $url. '" class="'.$anchorInfo['class'].'"'.$data.'>' . $label . '</a>';
 	}
 
 }
