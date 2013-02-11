@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The Form
  *
@@ -22,7 +21,7 @@ class Form {
 	/**
 	 * @var string
 	 */
-	private $sFormIdentifier;
+	private $formIdentifier;
 	/**
 	 * @var string
 	 */
@@ -41,6 +40,11 @@ class Form {
 	private $aFormElementsByName = array();
 
 	/**
+	 * @var FormElement
+	 */
+	private $pressedButton;
+
+	/**
 	 * @param string $sAction
 	 * @param string $sMethod
 	 * @param string $sIdentifier
@@ -49,7 +53,7 @@ class Form {
 
 		$this->sFormAction = $sAction;
 		$this->sFormMethod = $sMethod;
-		$this->sFormIdentifier = $sIdentifier;
+		$this->formIdentifier = $sIdentifier;
 
 		$this->defineFormElements();
 	}
@@ -86,25 +90,25 @@ class Form {
 	/**
 	 * this method is only allowed to be called in the defineFormElements method
 	 *
-	 * @param FormElement $oFormElement
+	 * @param FormElement $formElement
 	 */
-	public function addFormElement(FormElement $oFormElement, FormHandler $handler = null) {
+	public function addFormElement(FormElement $formElement, FormHandler $handler = null) {
 
-		$sFormElementIdentifier = $oFormElement->getIdentifier();
+		$formElementIdentifier = $formElement->getIdentifier();
 
-		if ($oFormElement->getType() == 'file') {
+		if ($formElement->getType() == 'file') {
 			$this->sFormEnctype = ' enctype="multipart/form-data"';
 		}
 
-		if ($this->isSubmitted() && $oFormElement->getType() !== 'submit') {
-			$oFormElement->setValue($this->getValueFromRequest($oFormElement));
+		if ($this->isSubmitted() && $formElement->getType() !== 'submit') {
+			$formElement->setValue($this->getValueFromRequest($formElement));
 		}
 
-		$this->aFormElementsByIdentifier[$sFormElementIdentifier] = $oFormElement;
-		$this->aFormElementsByName[$oFormElement->getName()][] = $oFormElement;
+		$this->aFormElementsByIdentifier[$formElementIdentifier] = $formElement;
+		$this->aFormElementsByName[$formElement->getName()][] = $formElement;
 
 		if ($handler !== null) {
-			$this->aSubmitButtonsAndHandlers[$sFormElementIdentifier] = array('FormElement' => $oFormElement, 'FormHandler' => $handler);
+			$this->aSubmitButtonsAndHandlers[$formElementIdentifier] = array('FormElement' => $formElement, 'FormHandler' => $handler);
 		}
 	}
 
@@ -149,10 +153,17 @@ class Form {
 			return current($aElements);
 		}
 
-		foreach ($aElements as $oFormElement) {
-			if ($oFormElement->isSelected()) {
-				return $oFormElement;
+		// is it a redio button or a checkbox.. they have other behaviour
+		$firstElementCheck = reset($aElements);
+		if ($firstElementCheck->getType() == 'radio') {
+			foreach ($aElements as $oFormElement) {
+				if ($oFormElement->isSelected()) {
+					return $oFormElement;
+				}
 			}
+		} else {
+			// it's a checkbox
+			return $aElements;
 		}
 	}
 
@@ -209,9 +220,14 @@ class Form {
 			$oHandler = $aSingleSubmitButtonAndHandler['FormHandler'];
 			$sValueFromRequest = $this->getValueFromRequest($oButton);
 			if ($sValueFromRequest == $oButton->getValue()) {
+				$this->pressedButton = $oButton;
 				$oHandler->handleForm($this);
 			}
 		}
+	}
+
+	public function getPressedButton() {
+		return $this->pressedButton;
 	}
 
 	/**
@@ -231,7 +247,7 @@ class Form {
 	 */
 	public function begin() {
 
-		return '<form id="' . $this->sFormIdentifier . '" method="' . $this->sFormMethod . '" action="' . $this->sFormAction . '"' . $this->sFormEnctype . '>';
+		return '<form id="' . $this->formIdentifier . '" method="' . $this->sFormMethod . '" action="' . $this->sFormAction . '"' . $this->sFormEnctype . '>';
 	}
 
 	/**
@@ -247,14 +263,14 @@ class Form {
 	 */
 	public function getIdentifier() {
 
-		return $this->sFormIdentifier;
+		return $this->formIdentifier;
 	}
 
 	/**
 	 * check if this form is submitted
 	 * @return Boolean
 	 */
-	private function isSubmitted() {
+	public function isSubmitted() {
 
 		if ($this->request instanceof Request) {
 			return ($this->request->method() == Request::POST);
