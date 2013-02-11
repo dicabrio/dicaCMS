@@ -79,6 +79,8 @@ class MediauploadPageModule implements PageModuleController {
 	}
 
 	private function defineForm() {
+		
+		$redirect = Conf::get('general.url.www').'/dropbox';
 
 		$this->form = new Form(Conf::get('general.url.www').'/'.$this->page->getName(), Request::POST, 'uploadMediaForm');
 
@@ -98,7 +100,7 @@ class MediauploadPageModule implements PageModuleController {
 		}
 
 		$this->actionButton = new ActionButton("Opslaan");
-		$this->form->addSubmitButton($this->actionButton, new MediaTagSaveHandler(new FormMapper(), $this->page));
+		$this->form->addSubmitButton($this->actionButton, new MediaTagSaveHandler(new FormMapper(), $this->page, $redirect));
 
 		$this->form->listen($this->request);
 	}
@@ -110,7 +112,6 @@ class MediauploadPageModule implements PageModuleController {
 	 */
 	public function getContents() {
 
-//		$view = new View(Conf::get('general.dir.templates') . '/media/mediatagsoverview.php');
 		$view = new View(Conf::get('general.dir.templates') . '/media/mediauploadpagemodule.php');
 		$view->assign('form', $this->form);
 		$view->assign('wwwurl', Conf::get('general.url.www'));

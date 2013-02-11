@@ -39,7 +39,7 @@ class Tag extends DataRecord {
 	}
 
 	public function getMedia() {
-
+		
 		return Relation::getOther('media', 'tag', null, $this);
 
 	}

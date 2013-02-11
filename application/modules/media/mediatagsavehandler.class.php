@@ -1,6 +1,5 @@
 <?php
 
-
 class MediaTagSaveHandler implements FormHandler {
 
 	/**
@@ -12,42 +11,38 @@ class MediaTagSaveHandler implements FormHandler {
 	 * @var Media
 	 */
 	private $mediaItem;
-
-	/**
-	 * @param FormMapper $formmapper
-	 * @param Page $media
-	 * @param PageFolder $folder
-	 */
-	public function __construct(FormMapper $formmapper) {
-		$this->formmapper = $formmapper;
-	}
-
+	
 	/**
 	 *
-	 * @param FileManager $file
-	 * @param boolean $exception
+	 * @var Page
 	 */
-	private function moveFile(Upload $upload, $exception = false) {
+	private $page;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	private $redirect = '';
 
-		$upload->moveTo(Conf::get('upload.dir.general'));
-		$file = $upload->getFile();
-
-		if ($this->mediaItem->getID() == 0 && $file === null) {
-			throw new FileNotFoundException('no-file-uploaded');
-		}
-
-		$this->mediaItem->update($this->formmapper->getModel('title'), $this->formmapper->getModel('description'), $file);
+	/**
+	 * 
+	 * @param FormMapper $formmapper
+	 * @param Page $page
+	 */
+	public function __construct(FormMapper $formmapper, Page $page, $redirect = '') {
+		$this->formmapper = $formmapper;
+		$this->page = $page;
+		$this->redirect = $redirect;
 	}
 
 	/**
 	 * @param Form $oForm
 	 */
 	public function handleForm(Form $oForm) {
-echo 'test';
-		return '';
+
 		try {
 
-			$data =  DataFactory::getInstance();
+			$data = DataFactory::getInstance();
 			$data->beginTransaction();
 
 			$auth = Authentication::getInstance();
@@ -60,25 +55,65 @@ echo 'test';
 			$this->formmapper->constructModelsFromForm($oForm);
 
 			$upload = $this->formmapper->getModel('media');
-			$this->moveFile($upload);
+			$tagsFactory = $this->formmapper->getModel('tags');
+
+			$this->mediaItem = new Media();
+			$this->moveFileAndUpdateMediaItem($upload);
 			$this->mediaItem->setOwner($auth->getUser());
 			$this->mediaItem->save();
 
-			$data->commit();
-			Util::gotoPage(Conf::get('general.cmsurl.www').'/media/');
+			$this->updateTagsForMediaItem($tagsFactory);
 
+			$data->commit();
+			
+			if (!empty($this->redirect)) {
+				
+				Util::gotoPage($this->redirect);
+			} 
+			else {
+				
+				Util::gotoPage(Conf::get('general.url.www').'/'.$this->page->getName());
+			}
+			
 		} catch (PageRecordException $e) {
 
 			$this->formmapper->addMappingError('media', $e->getMessage());
-
 		} catch (FileNotFoundException $e) {
 
 			$this->formmapper->addMappingError('media', $e->getMessage());
-
 		} catch (FormMapperException $e) {
 
 			$data->rollBack();
+		}
+	}
+	
+	/**
+	 *
+	 * @param FileManager $file
+	 * @param boolean $exception
+	 */
+	private function moveFileAndUpdateMediaItem(Upload $upload, $exception = false) {
 
+		$upload->moveTo(Conf::get('upload.dir.general'));
+		$file = $upload->getFile();
+
+		if ($this->mediaItem->getID() == 0 && $file === null) {
+			throw new FileNotFoundException('no-file-uploaded');
+		}
+
+		$this->mediaItem->update($this->formmapper->getModel('title'), $this->formmapper->getModel('description'), $file);
+	}
+	
+	/**
+	 * 
+	 * @param TagsFactory $tagFactory
+	 */
+	private function updateTagsForMediaItem(TagsFactory $tagFactory) {
+		
+		$this->mediaItem->getID();
+		
+		foreach ($tagFactory->getTags() as $tag) {
+			Relation::add('media', 'tag', $this->mediaItem, $tag);
 		}
 	}
 
