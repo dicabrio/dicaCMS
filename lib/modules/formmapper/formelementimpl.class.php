@@ -6,8 +6,6 @@ class FormElementImpl implements FormElement {
 
 	private $node;
 
-	private $mapping;
-
 	public function __construct($nodename, $name, $value=null) {
 		$this->node = $nodename;
 		$this->addAttribute('name', $name);
@@ -27,6 +25,12 @@ class FormElementImpl implements FormElement {
 
 	}
 
+	public function removeAttribute($name) {
+		if (isset($this->attributes[$name])) {
+			unset($this->attributes[$name]);
+		}
+	}
+
 	/**
 	 *
 	 * @return string
@@ -34,9 +38,12 @@ class FormElementImpl implements FormElement {
 	public function __toString() {
 
 		$formElement = "<%s %s />";
-
+		
 		$sAttributes = "";
 		foreach ($this->attributes as $name => $value) {
+			if ($name == "value" && $this->getType() != 'file') {
+				$value= htmlentities($value, ENT_QUOTES, 'UTF-8');
+			}
 			$sAttributes .= sprintf(' %s="%s"', $name, $value);
 		}
 
