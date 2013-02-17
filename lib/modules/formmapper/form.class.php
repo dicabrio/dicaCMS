@@ -45,11 +45,6 @@ class Form {
 	private $pressedButton;
 
 	/**
-	 * @var FormElement
-	 */
-	private $pressedButton;
-
-	/**
 	 * @param string $sAction
 	 * @param string $sMethod
 	 * @param string $sIdentifier
@@ -231,10 +226,6 @@ class Form {
 		}
 	}
 	
-	public function getPressedButton() {
-		return $this->pressedButton;
-	}
-
 	public function getPressedButton() {
 		return $this->pressedButton;
 	}

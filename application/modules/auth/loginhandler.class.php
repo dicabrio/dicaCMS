@@ -39,6 +39,7 @@ class LoginHandler implements FormHandler {
 				$oSession = Session::getInstance();
 				// your are logged in go to next page
 				$redirect = $oSession->get('front-end-redirect');
+				
 				$oSession->set('front-end-redirect', null);
 
 				if (empty($redirect)) {

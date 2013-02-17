@@ -13,7 +13,7 @@ class SecureController implements Controller {
 
 	/**
 	 *
-	 * @param string $sMethod
+	 * @param string $method
 	 */
 	public function __construct($method) {
 		// we should check for permissions
@@ -34,10 +34,10 @@ class SecureController implements Controller {
 			return;
 		}
 		
+		$uri_string = trim($method, '/');
 		
 		try {
 
-			$uri_string = trim($sMethod, '/');
 			$areaName = $uri_string;
 			if (!empty($uri_string)) {
 

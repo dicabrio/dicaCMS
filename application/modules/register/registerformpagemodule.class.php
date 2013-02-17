@@ -115,7 +115,7 @@ class RegisterformPageModule implements PageModuleController {
 		$button = new Input('submit', 'register-'.$this->page->getName(), Lang::get('general.formsubmit'));
 		$elements = array($name = new Input('text', 'name'),
 				$email = new Input('text', 'email'),
-				$telefoon = new Input('text', 'password'),
+				$telefoon = new Input('password', 'password'),
 		);
 
 		$form = new Form(Conf::get('general.url.www').'/'.$this->page->getName());
@@ -172,7 +172,7 @@ class RegisterformPageModule implements PageModuleController {
 							</tr>
 							<tr>
 								<th>&nbsp;</th>
-								<td>'.$form->getSubmitButton('register-'.$this->page->getName()).'</td>
+								<td>'.$form->getSubmitButton('register-'.$this->page->getName())->addAttribute('class', 'button').'</td>
 							</tr>
 							<tr>
 								<th>&nbsp;</th>

@@ -111,7 +111,7 @@ class User extends DataRecord {
 	 * @param string $name
 	 */
 	public function setName($name) {
-		$this->setAttr('name', $name);
+		$this->setAttr('name', htmlentities($name));
 	}
 
 	/**

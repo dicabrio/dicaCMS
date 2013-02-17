@@ -414,7 +414,8 @@ h1 {
 }
 
 textarea,
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
 	padding: 5px;
 }
 

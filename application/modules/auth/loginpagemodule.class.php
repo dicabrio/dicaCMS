@@ -97,7 +97,7 @@ class LoginPageModule implements PageModuleController {
 		$view->assign('formbegin', $this->loginForm->begin());
 		$view->assign('username', $this->loginForm->getFormElement('username'));
 		$view->assign('password', $this->loginForm->getFormElement('password'));
-		$view->assign('button', $this->loginForm->getFormElement('action'));
+		$view->assign('button', $this->loginForm->getFormElement('action')->addAttribute('class', 'button'));
 		$view->assign('formend', $this->loginForm->end());
 
 		$session->set('flash', null);

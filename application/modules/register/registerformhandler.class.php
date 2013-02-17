@@ -63,7 +63,7 @@ class RegisterformHandler implements FormHandler {
 			$user->setName($name);
 			$user->setUsername(new Username($email->getValue()));
 			$user->setPassword($password);
-			$user->addUserGroup($userGroup);
+			$user->setUserGroup($userGroup);
 			$user->save();
 
 			$activationKey = sha1($user->getID().Conf::get('secure.salt'));
