@@ -159,6 +159,17 @@ class TemplateFile extends DataRecord implements DomainEntity {
 
 	}
 
+	public static function findByTitle($title) {
+		$crit = new Criteria('title = :title', array('title' => $title));
+		$result = parent::findAll(__CLASS__, parent::ALL, $crit);
+
+		if (count($result) > 0) {
+			return reset($result);
+		}
+
+		return new TemplateFile();
+	}
+
 	public function __toString() {
 		return "jemoeder";
 	}

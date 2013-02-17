@@ -34,21 +34,13 @@ class ViewPageController {
 
 		$this->mayShow($oPage);
 
-		$oView = $this->getView($oPage);
-		
+		$oView = $oPage->draw(Conf::get('upload.dir.templates'), $this->request);
 		$oView->assign('wwwurl', Conf::get('general.url.www'));
 		$oView->assign('imagesurl', Conf::get('general.url.images'));
 		$oView->assign('jsurl', Conf::get('general.url.js'));
 		$oView->assign('cssurl', Conf::get('general.url.css'));
 		$oView->assign('uploadurl', Conf::get('general.url.www').Conf::get('upload.url.general'));
 
-		$oView->assign('pagename', $oPage->getName());
-
-		$oView->assign('title', $oPage->getTitle());
-		$oView->assign('description', $oPage->getDescription());
-		$oView->assign('keywords', $oPage->getKeywords());
-		
-		$this->populateViewWithModules($oPage, $oView);
 		return $oView->getContents();
 
 	}
@@ -97,34 +89,4 @@ class ViewPageController {
 		}
 	}
 
-	private function getView(Page $oPage) {
-
-		$oTemplateFile = $oPage->getTemplate();
-		return new View(Conf::get('upload.dir.templates').'/'.$oTemplateFile->getFilename());
-		
-	}
-
-	private function populateViewWithModules(Page $oPage, View $oView) {
-
-		$oTemplateFile = $oPage->getTemplate();
-		$oViewParser = new ViewParser($oTemplateFile);
-
-		foreach ($oViewParser->getLabels() as $aModule) {
-			$sContent = '';
-			$sLabel = ViewParser::constructLabel($aModule['module'], $aModule['id']);
-			$oModule = $oPage->getModule($aModule['id']);
-			
-			if ($oModule instanceof PageModule) {
-
-				$sModuleClass = $oModule->getType().'PageModule';
-				$oReflection = new ReflectionClass($sModuleClass);
-				$oModuleController = new $sModuleClass($oModule, $oPage, $this->request);
-
-				$sContent = $oModuleController->getContents();
-			}
-
-			$oView->assign($sLabel, $sContent);
-		}
-
-	}
 }

@@ -54,13 +54,26 @@ class CheckboxInput extends Input {
 	 * @param string $value
 	 */
 	public function setValue($value) {
+		$this->check($value);
+	}
 
+	private function check($value) {
 		$originalValue = parent::getValue();
 		if (is_array($value) && in_array($originalValue, $value)) {
 			$this->checked = true;
 		} else if ($originalValue == $value) {
 			$this->checked = true;
+		} else {
+			$this->checked = false;
 		}
+	}
+
+	public function getValue() {
+		if ($this->checked == true) {
+			return parent::getValue();
+		}
+
+		return null;
 	}
 
 	/**
@@ -88,6 +101,14 @@ class CheckboxInput extends Input {
 	 */
 	public function isChecked() {
 
+		return $this->checked;
+	}
+
+	/**
+	 *
+	 * @return Boolean
+	 */
+	public function  isSelected() {
 		return $this->checked;
 	}
 

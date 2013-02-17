@@ -31,7 +31,7 @@ class StaticBlockHandler implements FormHandler {
 
 			$this->mapper->constructModelsFromForm($form);
 
-			$this->block->update($this->mapper->getModel('identifier'), $this->mapper->getModel('content'), Conf::get('upload.dir.templates'));
+			$this->block->update($this->mapper->getModel('name'), $this->mapper->getModel('identifier'), $this->mapper->getModel('content'), Conf::get('upload.dir.templates'));
 			$this->block->save();
 
 			$data->commit();

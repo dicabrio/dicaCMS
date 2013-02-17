@@ -31,6 +31,7 @@ class StaticBlock extends DataRecord implements DomainEntity {
 	 */
 	public function defineColumns() {
 
+		parent::addColumn('name', DataTypes::VARCHAR, 255, false);
 		parent::addColumn('identifier', DataTypes::VARCHAR, 255, false);
 		parent::addColumn('content', DataTypes::TEXT, false, false);
 		parent::addColumn('path', DataTypes::TEXT, false, false);
@@ -45,15 +46,20 @@ class StaticBlock extends DataRecord implements DomainEntity {
 	 * @param DomainText $content
 	 * @param string $path
 	 */
-	public function update(RequiredTextLine $identifier, DomainText $content, $path) {
+	public function update(RequiredTextLine $name, TemplateTitle $identifier, DomainText $content, $path) {
 
 		// keep old tplname if
 		$this->oldtplname = $this->getAttr('identifier');
 
+		$this->setAttr('name', $name);
 		$this->setAttr('identifier', $identifier);
 		$this->setAttr('content', $content);
 		$this->setAttr('path', $path);
 		
+	}
+
+	public function getName() {
+		return $this->getAttr('name');
 	}
 
 	/**
@@ -91,6 +97,10 @@ class StaticBlock extends DataRecord implements DomainEntity {
 	 */
 	public static function find() {
 		return parent::findAll(__CLASS__, parent::ALL);
+	}
+
+	public static function findByIdentifier(PageModule $mod) {
+		return parent::findAll(__CLASS__, parent::ALL, new Criteria("identifier = :id", array('id' => $mod->getIdentifier())));
 	}
 
 	/**

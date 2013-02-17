@@ -9,6 +9,8 @@ $lang = array(
 	'email-not-filled' => 'Je hebt geen email ingevuld',
 
 	'emailsubject' => 'Bericht via contactformulier %s',
+
+	'form-send' => 'Bedankt. Uw bericht is verstuurd',
 	
 
 );

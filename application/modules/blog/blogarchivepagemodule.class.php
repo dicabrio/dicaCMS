@@ -14,14 +14,6 @@ class BlogarchivePageModule implements PageModuleController {
 	 * @var Request
 	 */
 	private $request;
-	/**
-	 * @var PageModuleController
-	 */
-	private $imageUploadModule;
-	/**
-	 * @var PageModuleController
-	 */
-	private $textBlockModule;
 
 	/**
 	 *
@@ -45,7 +37,7 @@ class BlogarchivePageModule implements PageModuleController {
 		$pageModule = $blog->getModule('summary');
 		$pageTextSummary = PageText::getByPageModule($pageModule);
 
-		return array('subject' => $pageTextSubject->getContent(), 'name' => $blog->getName(), 'summary' => $pageTextSummary->getContent());
+		return array('title' => $blog->getTitle(), 'subject' => $pageTextSubject->getContent(), 'name' => $blog->getName(), 'summary' => $pageTextSummary->getContent());
 
 	}
 
@@ -59,18 +51,27 @@ class BlogarchivePageModule implements PageModuleController {
 		$oTextContent = PageText::getByPageModule($this->pageModule);
 		$formshizzle = explode(',', $oTextContent->getContent());
 
-		$amountToStart = 0;
 		$amountPerPage = intval($formshizzle[0]);
-		$page = intval($this->request->get('page'));
 
-		if ($page > 1) {
-			$amountToStart = ($page * $amountPerPage) - $amountPerPage;
+		if ($formshizzle[0] == '-1') {
+			// get all articles
+			$activeBlogs = Blog::findActive();
+			$amountOfActiveBlogs = count($activeBlogs);
+			
 		} else {
-			$page = 1;
-		}
+			$amountToStart = 0;
+			$page = intval($this->request->get('page'));
 
-		$activeBlogs = Blog::findActive($amountPerPage, $amountToStart);
-		$amountOfActiveBlogs = Blog::countAllActive();
+			if ($page > 1) {
+				$amountToStart = ($page * $amountPerPage) - $amountPerPage;
+			} else {
+				$page = 1;
+			}
+
+			$activeBlogs = Blog::findActive($amountPerPage, $amountToStart);
+			$amountOfActiveBlogs = Blog::countAllActive();
+		}
+		
 
 		$blogArticlesForTemplate = array();
 		foreach ($activeBlogs as $blog) {
@@ -82,20 +83,13 @@ class BlogarchivePageModule implements PageModuleController {
 			$tplFile = new TemplateFile($formshizzle[1]);
 			$view = new View(Conf::get('upload.dir.templates').'/'.$tplFile->getFilename());
 			$view->assign('wwwurl', Conf::get('general.url.www'));
+			$view->assign('pagename', $this->page->getName());
 			$view->assign('articles', $blogArticlesForTemplate);
-//			$view->assign('pages', ceil($amountOfActiveBlogs / $amountPerPage));
-//			$view->assign('page', $page);
 			
 			return $view;
 		} catch (Exception $e) {
 
-			$str = '<ul id="blogrecent">';
-			foreach ($activeBlogs as $blog) {
-				$str .= '<li><a href="'.$blog->getName().'">'.$blog->getTitle().'</a></li>';
-			}
-			$str .= '</ul>';
-
-			return $str;
+			return '';
 		}
 	}
 

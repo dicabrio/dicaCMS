@@ -14,11 +14,8 @@ class PageEditForm extends Form {
 	public function __construct(Page $page) {
 		$this->page = $page;
 
-		$redirect = 'savepage';
-		if ($page->getID() == 0) {
-			$redirect = 'saveeditpage';
-		}
-		parent::__construct(Conf::get('general.cmsurl.www').'/page/'.$redirect.'/'.$page->getID(), Request::POST, 'pageform');
+		$redirect = 'editpage';
+		parent::__construct(Conf::get('general.url.cms') . '/page/' . $redirect . '/' . $page->getID(), Request::POST, 'pageform');
 	}
 
 	/**
@@ -30,6 +27,16 @@ class PageEditForm extends Form {
 		$elPageID->setValue($this->page->getID());
 
 		parent::addFormElement($elPageID);
+
+		$elPageType = new Select('type');
+		$pageTypes = PageType::findAll();
+		foreach ($pageTypes as $pageType) {
+
+			$elPageType->addOption($pageType->getName(), $pageType->getLabel());
+		}
+		$elPageType->setValue($this->page->getType());
+
+		parent::addFormElement($elPageType);
 
 		$elPagename = new Input('text', 'pagename');
 		$elPagename->setValue($this->page->getName());
@@ -70,12 +77,6 @@ class PageEditForm extends Form {
 		$elActive->setValue($this->page->isActive());
 
 		parent::addFormElement($elActive);
-
-		$button = new ActionButton(Lang::get('general.button.save'));
-		$button->addAttribute('class', 'save button');
-
-		parent::addFormElement($button);
-
 	}
 
 	public function addTemplates($templates) {
@@ -95,9 +96,10 @@ class PageEditForm extends Form {
 
 	public function addUserGroups($allUserGroups, $selectedUserGroups = array()) {
 		foreach ($allUserGroups as $userGroup) {
-			$formField = new CheckboxInput('usergroup_'.$userGroup->getID());
+			$formField = new CheckboxInput('usergroup_' . $userGroup->getID());
 
 			parent::addFormElement($formField);
 		}
 	}
+
 }

@@ -15,10 +15,11 @@ class SecureController implements Controller {
 	 *
 	 * @param string $sMethod
 	 */
-	public function __construct($sMethod) {
+	public function __construct($method) {
 		// we should check for permissions
 		$this->session = Session::getInstance();
-		$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
+		$oAuth = Authentication::getInstance();
+		$user = $oAuth->getUser();
 
 //		if (!$oAuth->isLoggedIn() && !($this instanceof LoginController)) {
 //

@@ -9,9 +9,10 @@ class Input extends FormElementImpl {
 	 * @param string $name
 	 */
 	public function __construct($sType, $name, $value=null) {
-		parent::__construct('input', $name, $value);
 
+		parent::__construct('input', $name, $value);
 		parent::addAttribute('type', $sType);
+		
 	}
 	
 }

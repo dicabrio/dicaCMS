@@ -5,12 +5,12 @@ class TextblockCmsModule implements CmsModuleController {
 	/**
 	 * @var PageModule
 	 */
-	private $oPageModule;
+	private $pageModule;
 
 	/**
 	 * @var PageText
 	 */
-	private $oTextContent;
+	private $textContent;
 
 	/**
 	 * @var Form
@@ -34,6 +34,18 @@ class TextblockCmsModule implements CmsModuleController {
 	 * @var Bool
 	 */
 	private $htmlEditor;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	private $label;
+	
+	/**
+	 *
+	 * @var int
+	 */
+	private $maxlength;
 
 	/**
 	 * construct the text line module
@@ -44,9 +56,11 @@ class TextblockCmsModule implements CmsModuleController {
 	 */
 	public function __construct(PageModule $oMod, Form $form) {
 
-		$this->oPageModule = $oMod;
+		$this->pageModule = $oMod;
 		$this->form = $form;
 		$this->htmlEditor = false;
+		$this->label = 'Text block : '.$oMod->getIdentifier();
+		$this->maxlength = 0;
 
 		// load the data
 		$this->load();
@@ -57,10 +71,13 @@ class TextblockCmsModule implements CmsModuleController {
 	 */
 	private function load() {
 
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
+		$this->textContent = PageText::getByPageModule($this->pageModule);
 		
-		$this->textArea = new TextArea($this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->textArea = new TextArea($this->pageModule->getIdentifier(), $this->textContent->getContent());
 		$this->form->addFormElement($this->textArea);
+		
+		$this->getParam('label');
+		$this->getParam('maxlength');
 
 	}
 
@@ -73,58 +90,71 @@ class TextblockCmsModule implements CmsModuleController {
 
 		$this->mapper = $mapper;
 		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'Paragraph');
-//		$mapper->addFormElementToDomainEntityMapping($this->textArea->getName(), 'DomainText');
 
 	}
 
 	/**
-	 * @return void
+	 * 
 	 */
 	protected function enableHtmlEditor() {
 		$this->htmlEditor = true;
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see modules/Module#getEditor()
+	 *
+	 * @return View 
 	 */
 	public function getEditor() {
 
-		$oView = new View(Conf::get('general.dir.templates').'/text/textblock.php');
-		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		$oView->form = $this->form;
-		$oView->htmlEditor = $this->htmlEditor;
+		$view = new View(Conf::get('general.dir.templates').'/text/textblock.php');
+		$view->assign('identifier', $this->pageModule->getIdentifier());
+		$view->assign('form', $this->form);
+		$view->assign('htmlEditor', $this->htmlEditor);
+		$view->assign('label', $this->label);
 		
-		return $oView;
+		return $view;
 
 	}
 
 	/**
 	 *
-	 * @param $oReq
-	 * @return boolean
 	 */
 	public function handleData() {
 
-		$sModIdentifier = $this->oPageModule->getIdentifier();
+		$sModIdentifier = $this->pageModule->getIdentifier();
 		$text = $this->mapper->getModel($sModIdentifier);
-
+		
 		if ($this->htmlEditor === true) {
 			$text->cleanUpHTML();
 		}
 
-		if ($this->oTextContent === null) {
-			$this->oTextContent = new PageText();
+		if ($this->textContent === null) {
+			$this->textContent = new PageText();
 		}
 
-		$this->oTextContent->setContent((string)$text);
-		$this->oTextContent->setPageModule($this->oPageModule);
-		$this->oTextContent->save();
+		$this->textContent->setContent((string)$text);
+		$this->textContent->setPageModule($this->pageModule);
+		$this->textContent->save();
 
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getIdentifier() {
 
-		return $this->oPageModule->getIdentifier();
+		return $this->pageModule->getIdentifier();
+	}
+	
+	/**
+	 *
+	 * @param string $name 
+	 */
+	private function getParam($name) {
+		$value = $this->pageModule->getParameter($name);
+		if ($value !== null) {
+			$this->{$name} = $value;
+		}
 	}
 }

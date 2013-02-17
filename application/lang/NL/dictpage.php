@@ -25,7 +25,7 @@ $lang = array(
 	'label' => array(
 		'pagename' => 'Pagina-url',
 		'template' => 'Template',
-		'publishtime' => 'Publiseer datum',
+		'publishtime' => 'Publiceer datum',
 		'expiretime' => 'Verval datum',
 		'title' => 'Paginatitel',
 		'keywords' => 'Pagina termen',
@@ -35,6 +35,7 @@ $lang = array(
 		'actions' => 'Acties',
 		'nomodules' => 'Er zijn geen modules beschikbaar voor deze pagina',
 		'nousergroups' => 'Er zijn geen gebruikersgroepen beschikbaar',
+		'pagetype' => 'Pagina type',
 	),
 
 	'tab' => array(

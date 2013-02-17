@@ -7,12 +7,12 @@ class TextlineCmsModule implements CmsModuleController {
 	/**
 	 * @var PageModule
 	 */
-	private $oPageModule;
+	private $pageModule;
 
 	/**
 	 * @var PageText
 	 */
-	private $oTextContent;
+	private $textContent;
 
 	/**
 	 * @var Form
@@ -24,21 +24,31 @@ class TextlineCmsModule implements CmsModuleController {
 	 */
 	private $mapper;
 
+	/**
+	 *
+	 * @var int
+	 */
+	private $maxlength;
+	
+	/**
+	 *
+	 * @var Input
+	 */
 	private $contentFormElement;
 
 	/**
 	 * construct the imageupload module
 	 *
-	 * @param PageModule $oMod
+	 * @param PageModule $module
 	 * @param Form $form
 	 * @param FormMapper $mapper
 	 * @param CmsController $oCmsController
 	 *
 	 * @return void
 	 */
-	public function __construct(PageModule $oMod, Form $form) {
+	public function __construct(PageModule $module, Form $form) {
 
-		$this->oPageModule = $oMod;
+		$this->pageModule = $module;
 		$this->form = $form;
 
 		// load the data
@@ -46,10 +56,15 @@ class TextlineCmsModule implements CmsModuleController {
 	}
 
 	private function load() {
-
-		$this->oTextContent = PageText::getByPageModule($this->oPageModule);
 		
-		$this->contentFormElement = new Input('text', $this->oPageModule->getIdentifier(), $this->oTextContent->getContent());
+		$this->maxlength = 255;
+		$this->label = 'Text Line : '.$this->pageModule->getIdentifier();
+		
+		$this->getParam('maxlength');
+		$this->getParam('label');
+		
+		$this->textContent = PageText::getByPageModule($this->pageModule);
+		$this->contentFormElement = new Input('text', $this->pageModule->getIdentifier(), $this->textContent->getContent());
 		$this->form->addFormElement($this->contentFormElement);
 		
 
@@ -69,29 +84,28 @@ class TextlineCmsModule implements CmsModuleController {
 	 */
 	public function getEditor() {
 
-		$oView = new View(Conf::get('general.dir.templates').'/text/textline.php');
-		$oView->sMaxLength = self::MAX_LENGTH;
-		$oView->sIdentifier = $this->oPageModule->getIdentifier();
-		$oView->form = $this->form;
+		$view = new View(Conf::get('general.dir.templates').'/text/textline.php');
+		$view->assign('maxlength', $this->maxlength);
+		$view->assign('identifier', $this->pageModule->getIdentifier());
+		$view->assign('form', $this->form);
+		$view->assign('label', $this->label);
 		
-		return $oView;
+		return $view;
 	}
 
 	/**
-	 *
-	 * @param $oReq
-	 * @return boolean
+	 * @todo substract the additional information when exceeds maxlength
+	 * 
 	 */
 	public function handleData() {
+		
+		$modIdentifier = $this->pageModule->getIdentifier();
+		$text = $this->mapper->getModel($modIdentifier);
 
-		$sModIdentifier = $this->oPageModule->getIdentifier();
-		$text = $this->mapper->getModel($sModIdentifier);
+		$this->textContent->setContent($text);
+		$this->textContent->setPageModule($this->pageModule);
+		$this->textContent->save();
 
-		$this->oTextContent->setContent($text);
-		$this->oTextContent->setPageModule($this->oPageModule);
-		$this->oTextContent->save();
-
-		return true;
 	}
 
 	/**
@@ -100,6 +114,17 @@ class TextlineCmsModule implements CmsModuleController {
 	 */
 	public function getIdentifier() {
 
-		return $this->oPageModule->getIdentifier();
+		return $this->pageModule->getIdentifier();
+	}
+	
+	/**
+	 *
+	 * @param string $name 
+	 */
+	private function getParam($name) {
+		$value = $this->pageModule->getParameter($name);
+		if ($value !== null) {
+			$this->{$name} = $value;
+		}
 	}
 }

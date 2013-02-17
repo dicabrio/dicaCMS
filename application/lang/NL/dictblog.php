@@ -2,10 +2,12 @@
 
 $lang = array(
 
-	'menuname' => 'Weblog',
-	'title' => 'Weblog',
+	'menuname' => 'Blog',
+	'title' => 'Blog',
+	'explanation' => 'Aantal blogs',
+	'blogtemplate' => 'Blogmenutemplate',
 	'button' => array(
-		'newblog' => 'Nieuw blogartikel',
+		'newblog' => 'Nieuwe Blog',
 	)
 
 );

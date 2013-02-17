@@ -4,7 +4,8 @@ class StaticBlockMapper extends FormMapper {
 
 	protected function defineFormElementToDomainEntityMapping() {
 
-		$this->addFormElementToDomainEntityMapping('identifier', 'RequiredTextLine');
+		$this->addFormElementToDomainEntityMapping('name', 'RequiredTextLine');
+		$this->addFormElementToDomainEntityMapping('identifier', 'TemplateTitle');
 		$this->addFormElementToDomainEntityMapping('content', 'DomainText');
 
 	}

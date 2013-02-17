@@ -12,15 +12,22 @@ class MediaSaveHandler implements FormHandler {
 	 * @var Media
 	 */
 	private $mediaItem;
+	
+	/**
+	 *
+	 * @var MediaFolder
+	 */
+	private $folder;
 
 	/**
 	 * @param FormMapper $formmapper
 	 * @param Page $page
 	 * @param PageFolder $folder
 	 */
-	public function __construct(FormMapper $formmapper, Media $page) {
+	public function __construct(FormMapper $formmapper, Media $page, MediaFolder $folder) {
 		$this->formmapper = $formmapper;
 		$this->mediaItem = $page;
+		$this->folder = $folder;
 	}
 
 	/**
@@ -53,6 +60,7 @@ class MediaSaveHandler implements FormHandler {
 
 			$this->formmapper->addFormElementToDomainEntityMapping('title', 'RequiredTextLine');
 			$this->formmapper->addFormElementToDomainEntityMapping('description', 'DomainText');
+			$this->formmapper->addFormElementToDomainEntityMapping('mediafolder', 'MediaFolder');
 			$this->formmapper->addFormElementToDomainEntityMapping('media', 'Upload');
 
 			$this->formmapper->constructModelsFromForm($oForm);
@@ -60,6 +68,7 @@ class MediaSaveHandler implements FormHandler {
 			$upload = $this->formmapper->getModel('media');
 			$this->moveFile($upload);
 			$this->mediaItem->setOwner($auth->getUser());
+			$this->mediaItem->setFolder($this->formmapper->getModel('mediafolder'));
 			$this->mediaItem->save();
 
 			$data->commit();

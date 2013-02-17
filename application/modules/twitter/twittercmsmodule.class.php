@@ -106,9 +106,9 @@ class TwitterCmsModule implements CmsModuleController {
 		foreach ($this->options as $templateOption) {
 			$this->selectElement->addOption($templateOption->getID(), $templateOption->getTitle());
 		}
-		$this->form->addFormElement($this->twitterAccountName->getName(), $this->twitterAccountName);
-		$this->form->addFormElement($this->twitterAmount->getName(), $this->twitterAmount);
-		$this->form->addFormElement($this->selectElement->getName(), $this->selectElement);
+		$this->form->addFormElement($this->twitterAccountName);
+		$this->form->addFormElement($this->twitterAmount);
+		$this->form->addFormElement($this->selectElement);
 
 	}
 

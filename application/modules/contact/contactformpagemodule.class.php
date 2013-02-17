@@ -136,6 +136,11 @@ class ContactformPageModule implements PageModuleController {
 			$errors .='</ul>';
 		}
 
+		if ($form->isSubmitted() && count($this->aErrors) == 0) {
+			$view = '<p>'.Lang::get('contact.form-send').'</p>';
+			return $view;
+		}
+
 
 		$view = $errors.$form->begin().'
 						<table class="formtable">

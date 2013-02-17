@@ -67,7 +67,14 @@ class Page extends DataRecord implements DomainEntity {
 	 * @param String $keywords
 	 * @param String $description
 	 */
-	public function update($pagename, TemplateFile $template, Date $publishtime=null, Date $expiretime=null, $title="", $keywords="", $description="") {
+	public function update($pagename,
+			TemplateFile $template,
+			Date $publishtime=null,
+			Date $expiretime=null,
+			$title="",
+			$keywords="",
+			$description="",
+			$type="basic") {
 
 		if ($publishtime == '') {
 			$publishtime = new Date("now");
@@ -82,6 +89,13 @@ class Page extends DataRecord implements DomainEntity {
 		$this->setAttr('title', $title);
 		$this->setAttr('keywords', $keywords);
 		$this->setAttr('description', $description);
+		$this->setAttr('type', $type);
+	}
+
+	public function getType() {
+
+		return $this->getAttr('type');
+
 	}
 
 	/**
@@ -132,25 +146,33 @@ class Page extends DataRecord implements DomainEntity {
 
 			$moduleLabels = array();
 			foreach ($parsedModuleLabels as $moduleLabel) {
-				$this->aModules[$moduleLabel['id']] = $moduleLabel['module'];
+				$this->aModules[$moduleLabel['id']] = $moduleLabel;
 			}
 
 			$storedModules = PageModule::getByPage($this);
 
 			$tmpModuleArray = array();
-			foreach ($this->aModules as $identifier => $moduleType) {
+			foreach ($this->aModules as $identifier => $moduleInfo) {
 
-				if (isset($storedModules[$identifier]) && $moduleType == $storedModules[$identifier]->getType()) {
+				if (isset($storedModules[$identifier]) && $moduleInfo['module'] == $storedModules[$identifier]->getType()) {
 					$pageModule = $storedModules[$identifier];
 					unset($storedModules[$identifier]);
 				} else {
 					$pageModule = new PageModule();
-					$pageModule->setType($moduleType);
+					$pageModule->setType($moduleInfo['module']);
 					$pageModule->setIdentifier($identifier);
 					$pageModule->setPage($this);
 					$pageModule->save();
 				}
 				
+				if (!empty($moduleInfo['replacestring'])) {
+					$pageModule->setReplaceString($moduleInfo['replacestring']);
+					foreach ($moduleInfo['params'] as $param) {
+						$pageModule->setParameter($param['name'], $param['value']);
+					}
+				}
+
+
 				$tmpModuleArray[$identifier] = $pageModule;
 			}
 
@@ -163,6 +185,41 @@ class Page extends DataRecord implements DomainEntity {
 		}
 
 		return $this->aModules;
+	}
+
+	public function draw($templateLocation, Request $request) {
+
+
+		$modules = $this->getModules();
+		$view = new View($templateLocation.'/'.$this->oTemplate->getFilename());
+		// plain PHP variables
+		$view->assign('pagename', $this->getAttr('name'));
+		$view->assign('title', $this->getAttr('title'));
+		$view->assign('description', $this->getAttr('description'));
+		$view->assign('keywords', $this->getAttr('keywords'));
+
+		foreach ($modules as $module) {
+			$content = '';
+			$label = ViewParser::constructLabel($module->getType(), $module->getIdentifier());
+
+			$sModuleClass = $module->getType().'PageModule';
+			$oReflection = new ReflectionClass($sModuleClass);
+			$oModuleController = new $sModuleClass($module, $this, $request);
+
+			$content = $oModuleController->getContents();
+
+			// if the replacestring isn't set we just add the module content as
+			// a plain PHP variable
+			$replaceString = $module->getReplaceString();
+
+			if (empty($replaceString)) {
+				$view->assign($label, $content);
+			} else {
+				$view->replace($replaceString, $content);
+			}
+		}
+
+		return $view;
 	}
 
 	/**
@@ -178,7 +235,7 @@ class Page extends DataRecord implements DomainEntity {
 			return $this->aModules[$sModuleIdentifier];
 		}
 
-		return null;
+		return new PageModule();
 	}
 
 	/**
@@ -245,6 +302,10 @@ class Page extends DataRecord implements DomainEntity {
 
 		$this->setAttr('folder_id', $folder->getID());
 		$this->parent = $folder;
+	}
+
+	public function setType($type) {
+		$this->setAttr('type', $type);
 	}
 
 	public function setTemplate(TemplateFile $template) {
@@ -328,6 +389,66 @@ class Page extends DataRecord implements DomainEntity {
 		return null;
 	}
 
+	public static function findByNameActive($name) {
+		$now = date('Y-m-d H:i:s');
+		$crit = new Criteria("name = :name
+			AND active = :active
+			AND publishtime < :time
+			AND (expiretime = '0000-00-00 00:00:00' OR expiretime > :time)", array('active' => 1, 'time' => $now, 'name' => $name));
+
+		$aPages = parent::findAll('Page', parent::ALL, $crit);
+		if (count($aPages) > 0) {
+			return reset($aPages);
+		}
+
+		return null;
+	}
+
+	public static function findActive($numberIncrement=-1, $numberStart=0, $type = null, $order = 'ASC') {
+
+		$numberIncrement = intval($numberIncrement);
+		if ($numberIncrement == 0) {
+			$numberIncrement = 10;
+		}
+
+		$now = date('Y-m-d H:i:s');
+		$bind = array('active' => 1, 'time' => $now);
+		$query = " active = :active AND publishtime < :time AND (expiretime = '0000-00-00 00:00:00' OR expiretime > :time)";
+
+		if ($type != 'all' && !empty($type)) {
+			$query .= " AND type = :type ";
+			$bind['type'] = $type;
+		}
+
+		$crit = new Criteria($query, $bind);
+
+		$limit = null;
+		if ($numberIncrement != -1) {
+			$limit = intval($numberStart).','.$numberIncrement;
+		}
+
+		if ($order != 'ASC' || $order != 'DESC') {
+			$order = 'ASC';
+		}
+
+		return parent::findAll('Page', parent::ALL, $crit, 'publishtime '.$order, $limit);
+	}
+
+	/**
+	 *
+	 * @param array $pageIDS
+	 * @param string $limit
+	 * @return array
+	 */
+	public static function findIn($pageIDS, $limit=null) {
+		$possiblePageIDS = implode(',',$pageIDS);
+		if (empty($possiblePageIDS)) {
+			return array();
+		}
+		$crit = new Criteria(' id IN ('.$possiblePageIDS.')');
+		return parent::findAll(__CLASS__, parent::ALL, $crit, null, $limit);
+	}
+
 	/**
 	 * Get every page that is placed in the given folder. When nothing is there this method will return an empty array
 	 *
@@ -343,9 +464,9 @@ class Page extends DataRecord implements DomainEntity {
 	 *
 	 * @return array
 	 */
-	public static function findActive() {
-		return parent::findAll('Page', parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
-	}
+//	public static function findActive() {
+//		return parent::findAll('Page', parent::ALL, new Criteria(' active = :active ', array('active' => 1)));
+//	}
 
 }
 

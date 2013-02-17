@@ -1,0 +1,4 @@
+.pagelist .template{display:none;}
+.pagelist .row{clear:left;height:30px;width:400px;}.pagelist .row select{float:left;margin:0 10px 0 0;}
+.pagelist .row a{-moz-box-shadow:0px 1px 2px #ffffff;-webkit-box-shadow:0px 1px 2px #ffffff;box-shadow:0px 1px 2px #ffffff;float:left;width:20px;height:20px;border-radius:10px;margin:0 5px 0 0;color:#fff;text-decoration:none;font-weight:bold;text-align:center;line-height:18px;border:1px solid rgba(0, 0, 0, 0.1);background-image:-webkit-gradient(linear, left bottom, left top, color-stop(0, #7c919a), color-stop(1, #96a9b1));background-image:-moz-linear-gradient(center bottom, #7c919a 0%, #96a9b1 100%);}
+.pagelist .row a.hide{display:none;}

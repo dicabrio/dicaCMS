@@ -38,6 +38,11 @@ class Form {
 	 * @var array
 	 */
 	private $aFormElementsByName = array();
+	
+	/**
+	 * @var FormElement
+	 */
+	private $pressedButton;
 
 	/**
 	 * @var FormElement
@@ -224,6 +229,10 @@ class Form {
 				$oHandler->handleForm($this);
 			}
 		}
+	}
+	
+	public function getPressedButton() {
+		return $this->pressedButton;
 	}
 
 	public function getPressedButton() {

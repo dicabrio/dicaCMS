@@ -3,14 +3,14 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Genereertijd: 11 Jan 2011 om 11:19
+-- Genereertijd: 29 Mei 2011 om 20:37
 -- Serverversie: 5.1.38
--- PHP-Versie: 5.3.3
+-- PHP-Versie: 5.3.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
--- Database: `dicabrio_com`
+-- Database: `kitchenart`
 --
 
 -- --------------------------------------------------------
@@ -90,8 +90,36 @@ CREATE TABLE IF NOT EXISTS `media` (
   `created` datetime NOT NULL,
   `folder_id` int(11) NOT NULL,
   `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `menuitem`
+--
+
+CREATE TABLE IF NOT EXISTS `menuitem` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `menu_id` int(10) unsigned NOT NULL,
+  `page_id` int(10) unsigned NOT NULL,
+  `menuname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `url` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -107,6 +135,24 @@ CREATE TABLE IF NOT EXISTS `module` (
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `news`
+--
+
+CREATE TABLE IF NOT EXISTS `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  `publishtime` datetime NOT NULL,
+  `expiretime` datetime NOT NULL,
+  `summary` text COLLATE utf8_unicode_ci NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -143,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `pageextend` (
   `page_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -185,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_staticblock` (
   `staticblock_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`staticblock_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -199,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `pagemodule_templatefile` (
   `templatefile_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pagemodule_id` (`pagemodule_id`,`templatefile_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -217,6 +263,40 @@ CREATE TABLE IF NOT EXISTS `pagetext` (
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `pagetype`
+--
+
+CREATE TABLE IF NOT EXISTS `pagetype` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `product`
+--
+
+CREATE TABLE IF NOT EXISTS `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  `publishtime` datetime NOT NULL,
+  `expiretime` datetime NOT NULL,
+  `summary` text COLLATE utf8_unicode_ci NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image_id` int(11) NOT NULL,
+  `detailimage_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `quote`
 --
 
@@ -225,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `quote` (
   `quote` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `source` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -252,8 +332,9 @@ CREATE TABLE IF NOT EXISTS `staticblock` (
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -290,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `tweet` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `tweet_id` (`tweet_id`),
   UNIQUE KEY `tweet_id_2` (`tweet_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -304,6 +385,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` char(32) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `active` int(4) NOT NULL DEFAULT '0',
+  `activationkey` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -333,14 +416,3 @@ CREATE TABLE IF NOT EXISTS `user_usergroup` (
   `usergroup_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
-
-INSERT INTO `module` (`id`, `name`, `template`, `active`, `url`) VALUES
-(1, 'page', 1, 1, '/page/'),
-(2, 'template', 0, 1, '/template/'),
-(3, 'staticblock', 0, 1, '/staticblock/'),
-(4, 'media', 0, 1, '/media/'),
-(5, 'twitter', 1, 1, ''),
-(7, 'blog', 0, 1, '/blog/');

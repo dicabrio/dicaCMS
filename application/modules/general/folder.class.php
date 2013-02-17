@@ -367,6 +367,28 @@ class Folder extends DataRecord implements IFolder {
 
 		return null;
 	}
+	
+	public static function findAll($className) {
+		parent::setRetrieveRawData(true);
+
+		$result = parent::findAll('Folder', parent::ALL);
+
+		parent::setRetrieveRawData(false);
+	
+
+		$folders = array();
+		foreach ($result as $folderrecord) {
+			$folder = new $className();
+			
+			foreach ($folderrecord as $key => $value) {
+				$folder->setAttr($key, $value);
+			}
+
+			$folders[] = $folder;
+		}
+
+		return $folders;
+	}
 }
 
 class FolderException extends RecordException {}

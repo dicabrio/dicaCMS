@@ -1,6 +1,6 @@
 <?php 
 
-	$this->addScript(Conf::get('general.url.js').'/tabbing.js');
+//	$this->addScript(Conf::get('general.url.js').'/cms/tabbing.js');
 
 ?>
 <?php if (isset($breadcrumb)) : ?>
@@ -26,6 +26,13 @@
 <?php endif; ?>
 
 <fieldset class="tab" id="pageinfotab">
+	<div class="pagemodule">
+		<div class="modulelabel"><?php echo Lang::get('page.label.pagetype'); ?>:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('type'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.pagename'); ?>:</div>
 		<div class="modulecontent">
@@ -127,13 +134,9 @@
 	<div class="pagemodule">
 		<div class="modulelabel"><?php echo Lang::get('page.label.actions'); ?>:</div>
 		<div class="modulecontent">
-			<?php echo $form->getFormElement('action'); ?>
-
-			<?php if ($pagesavedredirect !== null) : ?>
-			<a href="<?php echo Conf::get('general.cmsurl.www').'/'.$pagesavedredirect; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
-			<?php else : ?>
+			<?php echo $form->getSubmitButton('action_reload'); ?>
+			<?php echo $form->getSubmitButton('action'); ?>
 			<a href="<?php echo Conf::get('general.cmsurl.www').'/page/folder/'.$folderid; ?>" class="button"><?php echo Lang::get('general.button.cancel'); ?></a>
-			<?php endif; ?>
 		</div>
 	</div>
 </fieldset>

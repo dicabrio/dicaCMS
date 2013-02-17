@@ -40,3 +40,24 @@ function test($pVar) {
 	}
 	echo '</pre>';
 }
+
+/**
+ * debug_backtrace() info is needed
+ * @param array $array
+ */
+function caller($array) {
+	foreach ($array as $item) {
+
+		if (isset($item['class'])) {
+			echo '' . $item['class'] . '->';
+		}
+
+		if (isset($item['function'])) {
+			echo '' . $item['function'] . '(...) - ';
+		}
+
+		if (isset($item['file']) && isset($item['line'])) {
+			echo $item['file'] . ' : ' . $item['line'] . "\n";
+		}
+	}
+}

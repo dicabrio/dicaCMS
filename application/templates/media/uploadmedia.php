@@ -27,6 +27,14 @@
 	</div>
 
 	<div class="pagemodule">
+		<div class="modulelabel">Folder:</div>
+		<div class="modulecontent">
+			<?php echo $form->getFormElement('mediafolder'); ?>
+		</div>
+		<div class="clear">&nbsp;</div>
+	</div>
+	
+	<div class="pagemodule">
 		<div class="modulelabel">Description:</div>
 		<div class="modulecontent">
 			<?php echo $form->getFormElement('description'); ?>
