@@ -26,7 +26,7 @@
 				<tr>
 					<th>Tags</th>						
 					<td>			
-						<ul>						
+						<ul class="tag-values">						
 						<?php foreach ($tags as $tag) : ?>
 							<li><?php echo $form->getFormElement('tags_' . $tag->getName()); ?> <?php echo $tag->getName(); ?></li>
 						<?php endforeach; ?>

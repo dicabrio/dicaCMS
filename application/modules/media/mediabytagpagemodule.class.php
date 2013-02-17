@@ -58,12 +58,15 @@ class MediabytagPageModule implements PageModuleController {
 		$this->mediaItems = array();
 		foreach ($mediaItems as $mediaItem) {
 			$file = $mediaItem->getFile();
+			$owner = $mediaItem->getOwner();
 			$this->mediaItems[] = array(
 				'title' => $mediaItem->getTitle(),
 				'editable' => $user->equals($mediaItem->getOwner()),
 				'description' => $mediaItem->getDescription(),
 				'filelocation' => Conf::get('general.url.www').'/upload/'.$file->getFilename(),
 				'filename' => $file->getFilename(),
+				'owner' => $owner->getName(),
+				'fileicon' => Conf::get('general.url.images').'/file-placeholder.png',
 				'tags' => array()
 			);
 		}

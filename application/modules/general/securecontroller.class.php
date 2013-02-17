@@ -52,14 +52,11 @@ class SecureController implements Controller {
 			}
 
 			$user = $oAuth->getUser();
-//			$user = User::loadFromSession($this->app->getSession());
 			$user->watch($area);
 			$this->user = $user;
 
 		} catch (Exception $e) {
 			
-			test($e->getMessage());
-
 			$this->getSession()->set(CmsController::KEY_CMS_REDIRECT, $uri_string);
 			Util::gotoPage(Conf::get('general.url.cms').'/'.$area->getUrl()); // @todo add redirect method
 		}

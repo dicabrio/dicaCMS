@@ -52,6 +52,13 @@ class User extends DataRecord {
 	public function getUsername() {
 		return $this->getAttr('username');
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function getName() {
+		return $this->getAttr('name');
+	}
 
 	/**
 	 *
