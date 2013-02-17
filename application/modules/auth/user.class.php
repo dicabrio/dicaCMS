@@ -14,7 +14,7 @@ class User extends DataRecord {
 	 *
 	 * @var array
 	 */
-	private $userGroups = null;
+	private $userGroup = null;
 
 	/**
 	 * constructor
@@ -55,22 +55,27 @@ class User extends DataRecord {
 
 	/**
 	 *
-	 * @return array
+	 * @return UserGroup
 	 */
-	public function getUserGroups() {
+	public function getUserGroup() {
 
-		if ($this->userGroups === null) {
-			$this->userGroups = UserGroup::findByUser($this);
+		if ($this->userGroup === null) {
+			$groups = UserGroup::findByUser($this);
+			if (count($groups) > 0) {
+				$this->userGroup = reset($groups);
+			}
 		}
 
-		return $this->userGroups;
+		return $this->userGroup;
 	}
 
-	public function addUserGroup(UserGroup $group) {
+	/**
+	 *
+	 * @param UserGroup $group
+	 */
+	public function setUserGroup(UserGroup $group) {
 
-		$this->getUserGroups();
-		$this->userGroups[] = $group;
-		
+		$this->userGroup = $group;
 	}
 
 	/**
@@ -136,13 +141,21 @@ class User extends DataRecord {
 	public function save() {
 
 		parent::save();
-		// we need the ID of the user first
-		if (is_array($this->userGroups)) {
-			foreach ($this->userGroups as $userGroup) {
-				Relation::remove('user', 'usergroup', $this);
-				Relation::add('user', 'usergroup', $this, $userGroup);
-			}
+		if ($this->userGroup !== null) {
+			Relation::remove('user', 'usergroup', $this);
+			Relation::add('user', 'usergroup', $this, $this->userGroup);
 		}
+	}
+	
+	public function delete() {
+		
+		if ($this->getID() == 0) {
+			return;
+		}
+
+		Relation::remove('user', 'usergroup', $this);
+
+		parent::delete();
 	}
 
 	/**
@@ -158,9 +171,15 @@ class User extends DataRecord {
 		}
 	}
 	
+	/**
+	 *
+	 * @param array $userGroupsOfArea
+	 */
 	private function inAllowedUserGroup($userGroupsOfArea) {
 
-		if (count($this->getUserGroups()) == 0 || count(array_intersect_key($this->getUserGroups(), $userGroupsOfArea)) == 0) {
+		$group = $this->getUserGroup();
+
+		if ($group == null || count($userGroupsOfArea) == 0 || count(array_intersect_key(array($group->getID() => $group), $userGroupsOfArea)) == 0) {
 			//check if you have a similar usergroup
 			throw new UserException('no-rights');
 		}

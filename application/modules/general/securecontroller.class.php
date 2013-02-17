@@ -1,6 +1,8 @@
 <?php
 
 class SecureController implements Controller {
+	
+	const KEY_CMS_REDIRECT = 'cms.redirect';
 
 	protected $arguments;
 
@@ -18,13 +20,17 @@ class SecureController implements Controller {
 		$this->session = Session::getInstance();
 		$oAuth = Authentication::getInstance(Authentication::C_AUTH_SESSIONNAME);
 
-		if (!$oAuth->isLoggedIn() && !($this instanceof LoginController)) {
-
-			$sMethod = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $sMethod);
-			// set a redirect
-			$this->session->set('redirect', $sMethod);
-
-			$this->_redirect('login');
+//		if (!$oAuth->isLoggedIn() && !($this instanceof LoginController)) {
+//
+//			$sMethod = str_replace(array(RequestControllerProtocol::ACTION_DEFAULT, RequestControllerProtocol::ACTION_INDEX), '', $sMethod);
+//			// set a redirect
+//			$this->session->set('redirect', $sMethod);
+//
+//			$this->_redirect('login');
+//		}
+		
+		if ($this instanceof LoginController || $this instanceof ApiController) {
+			return;
 		}
 		
 		
@@ -51,22 +57,25 @@ class SecureController implements Controller {
 			$this->user = $user;
 
 		} catch (Exception $e) {
+			
+			test($e->getMessage());
 
 			$this->getSession()->set(CmsController::KEY_CMS_REDIRECT, $uri_string);
-			$this->getResponse()->redirect($this->app->config('core/routing.base_url').'/'.$area->getUrl()); // @todo add redirect method
+			Util::gotoPage(Conf::get('general.url.cms').'/'.$area->getUrl()); // @todo add redirect method
 		}
 	}
 	
 	private function createArea(Area $area, $method) {
 
+		$this->pdo = DataFactory::getInstance()->getConnection();
 		$this->pdo->beginTransaction();
 
 		try {
 
-			$defaultGroup = UserGroup::findByName($this->app->config('area/area.default_user_group'));
+			$defaultGroup = UserGroup::findByName(Conf::get('area.default_user_group'));
 			$area->setName($method);
-			$area->setUrl($this->app->config('area/area.default_redirect'));
-			$area->setType($this->app->config('area/area.area_type_cms')); //
+			$area->setUrl(Conf::get('area.default_redirect'));
+			$area->setType(Conf::get('area.area_type_cms')); //
 			$area->addUserGroup($defaultGroup);
 			$area->save();
 
