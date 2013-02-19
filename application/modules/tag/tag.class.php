@@ -27,7 +27,7 @@ class Tag extends DataRecord {
 	 * @return string
 	 */
 	public function getName() {
-
+		
 		return $this->getAttr('name');
 		
 	}
@@ -48,9 +48,8 @@ class Tag extends DataRecord {
 	 * @return string
 	 */
 	public function  __toString() {
-
-		return $this->getName();
-
+		
+		return"".$this->getName();
 	}
 
 	/**

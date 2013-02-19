@@ -188,7 +188,19 @@ class Media extends DataRecord implements DomainEntity {
 	public static function find() {
 
 		return parent::findAll(__CLASS__, parent::ALL);
+	}
+	
+	public static function findWithTags() {
 
+		$sql = "	SELECT DISTINCT		m.* 
+					FROM				`media` AS m 
+					
+						LEFT JOIN		`media_tag` as mt 
+							ON			m.id = mt.media_id 
+							
+					WHERE				mt.media_id IS NOT NULL";
+		
+		return parent::findBySql(__CLASS__, $sql);
 	}
 	
 	/**

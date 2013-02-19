@@ -61,7 +61,7 @@ class MediauploadPageModule implements PageModuleController {
 		if ($this->selectedTag instanceof Tag) {
 			$mediaItems = $this->selectedTag->getMedia();
 		} else {
-			$mediaItems = Media::find();
+			$mediaItems = Media::findWithTags();
 		}
 
 		$this->mediaItems = array();
